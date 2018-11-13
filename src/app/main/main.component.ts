@@ -1,5 +1,5 @@
 import { Cast } from './../models/cast.model';
-import { EntityState } from '@ngrx/entity';
+import { EntityState, Dictionary } from '@ngrx/entity';
 import { Component, OnInit } from '@angular/core';
 import { AppState } from '../store/app.reducer';
 import { Store, select } from '@ngrx/store';
@@ -11,10 +11,10 @@ import { Observable } from 'rxjs';
   styleUrls: ['./main.component.css']
 })
 export class MainComponent implements OnInit {
-  casts$: Observable<Cast[]>;
+  casts$: Dictionary<Cast>;
   constructor(private store: Store<AppState>) {}
 
   ngOnInit() {
-    this.casts$ = this.store.pipe(select('casts'));
+    this.casts$ = this.store.select('casts');
   }
 }

@@ -11,12 +11,15 @@ import { castReducer } from './store/cast.reducer';
 import { appReducer } from './store/app.reducer';
 import { HttpClientModule } from '@angular/common/http';
 import { EffectsModule } from '@ngrx/effects';
-
+import { MatTableModule } from '@angular/material/table';
+import { CdkTableModule } from '@angular/cdk/table';
 @NgModule({
   declarations: [AppComponent, NavComponent, MainComponent],
   imports: [
     BrowserModule,
     HttpClientModule,
+    MatTableModule,
+    CdkTableModule,
     MDBBootstrapModule.forRoot(),
     StoreModule.forRoot({ app: appReducer, casts: castReducer }),
     EffectsModule.forRoot([CastEffect])
