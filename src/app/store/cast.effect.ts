@@ -10,6 +10,8 @@ import { map, switchMap, catchError, mergeMap } from 'rxjs/operators';
 import { of, Observable } from 'rxjs';
 import * as fromCastActions from '../store/cast.action';
 import { Client } from 'elasticsearch-browser';
+import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 @Injectable()
 export class CastEffect {
   esURL = 'http://localhost:9200';
@@ -17,7 +19,9 @@ export class CastEffect {
     private actions$: Actions,
     private http: HttpClient,
     private elastic: ElasticService,
-    private store: Store<AppState>
+    private store: Store<AppState>,
+    private location: Location,
+    private router: Router
   ) {}
 
   @Effect() castRequested$ = this.actions$
@@ -28,8 +32,8 @@ export class CastEffect {
       switchMap(action => {
         return this.http.get(this.esURL + '/podcasts/_search?from=0&size=100');
       }),
-      , map((res: {}) => res.hits.hits)  
-      , map(hits => {
+      map((res: any) => res.hits.hits),
+      map(hits => {
         console.log('hits', hits);
         const casts = [];
         hits.map(itm => {
@@ -37,13 +41,13 @@ export class CastEffect {
           casts.push({
             id: itm._id,
             name: src.name,
-			category: src.category,
-			provider: src.provider,
+            category: src.category,
+            provider: src.provider ? src.provider : 'iTunes',
             feedURL: src.url,
-			imageURL: src.image,
-			lastPub: src.lastPub,
-			episodeCount: src.episodeCount,
-			author: src.author
+            imageURL: src.image,
+            lastPub: src.lastPub ? src.lastPub : null,
+            episodeCount: src.episodeCount ? src.episodeCount : null,
+            author: src.author ? src.author : null
           });
         });
         return {
@@ -69,21 +73,41 @@ export class CastEffect {
   );
 
   @Effect() categoryRequested$ = this.actions$.pipe(
-    ofType<fromCastActions.CategoryRequested>(fromCastActions.CastActionTypes.CATEGORY_REQUESTED)
-    , switchMap((action) => {
-      const reqBody = JSON.parse(`{ "size": 0, "aggs": { "uniq_provider": { "terms": { "field": "category.keyword" } } } }`);
+    ofType<fromCastActions.CategoryRequested>(
+      fromCastActions.CastActionTypes.CATEGORY_REQUESTED
+    ),
+    switchMap(action => {
+      const reqBody = JSON.parse(
+        `{ "size": 0, "aggs": { "uniq_provider": { "terms": { "field": "category.keyword" } } } }`
+      );
       console.log(reqBody, this.elastic);
       return this.elastic.search('podcasts', reqBody);
-    })
-    , map((res: any) => res.aggregations.uniq_provider.buckets)
-    , map(buckets => {
-      console.log("buckets", buckets);
+    }),
+    map((res: any) => res.aggregations.uniq_provider.buckets),
+    map(buckets => {
+      console.log('buckets', buckets);
       return {
         type: fromCastActions.CastActionTypes.CATEGORY_LOADED,
         payload: buckets
-      }
+      };
     })
+  );
 
-
-  )
+  @Effect() castUpdate$ = this.actions$.pipe(
+    ofType<fromCastActions.CastUpdate>(
+      fromCastActions.CastActionTypes.CAST_UPDATE
+    ),
+    switchMap(action => {
+      const doc_id = action.payload.cast.id;
+      delete action.payload.cast.id;
+      console.log(action.payload.cast);
+      return this.elastic.update('podcasts', doc_id, action.payload.cast);
+    }),
+    map(res => {
+      this.router.navigateByUrl(this.location.path().replace('/edit', ''));
+      return {
+        type: fromCastActions.CastActionTypes.CAST_UPDATED
+      };
+    })
+  );
 }

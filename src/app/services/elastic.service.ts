@@ -23,4 +23,16 @@ export class ElasticService {
       body: qry
     });
   }
+
+  update(idx: string, id: string, params: {}) {
+    console.log(idx, id, params);
+    return this.client.update({
+      index: idx,
+      id: id,
+      type: 'doc',
+      body: {
+        doc: params
+      }
+    });
+  }
 }

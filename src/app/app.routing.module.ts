@@ -1,3 +1,4 @@
+import { CastReadComponent } from './cast-read/cast-read.component';
 import { CastEditComponent } from './cast-edit/cast-edit.component';
 import { MainComponent } from './main/main.component';
 import { RouterModule, Routes } from '@angular/router';
@@ -8,7 +9,10 @@ const appRoutes: Routes = [
   {
     path: 'casts',
     component: MainComponent,
-    children: [{ path: ':id/edit', component: CastEditComponent }]
+    children: [
+      { path: ':id', component: CastReadComponent, pathMatch: 'full' },
+      { path: ':id/edit', component: CastEditComponent }
+    ]
   }
 ];
 

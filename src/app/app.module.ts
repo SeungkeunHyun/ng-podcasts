@@ -22,6 +22,7 @@ import { DataTablesModule } from 'angular-datatables';
 import { CastEditComponent } from './cast-edit/cast-edit.component';
 import { AppRouterModule } from './app.routing.module';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { CastReadComponent } from './cast-read/cast-read.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
     NavComponent,
     MainComponent,
     CastDetailComponent,
-    CastEditComponent
+    CastEditComponent,
+    CastReadComponent
   ],
   imports: [
     BrowserModule,

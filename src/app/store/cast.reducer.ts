@@ -39,6 +39,13 @@ export function castReducer(state = initialCastState, action) {
       return castAdapter.removeAll(state);
     case fromCastActions.CastActionTypes.CAST_LOADED:
       return castAdapter.addAll(action.payload.casts, state);
+    case fromCastActions.CastActionTypes.CAST_UPDATE:
+      return castAdapter.updateOne(
+        { id: action.payload.cast.id, changes: action.payload.cast },
+        state
+      );
+    case fromCastActions.CastActionTypes.CAST_UPDATED:
+      return state;
     default:
       return state;
   }

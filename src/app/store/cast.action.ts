@@ -4,6 +4,8 @@ import { Action } from '@ngrx/store';
 export enum CastActionTypes {
   CAST_REQUESTED = '[Cast API] CAST REQUESTED',
   CAST_LOADED = '[Cast API] CAST LOADED',
+  CAST_UPDATE = '[Cast API] CAST UPDATE',
+  CAST_UPDATED = '[Cast API] CAST UPDATED',
   CATEGORY_REQUESTED = '[Cast API] CATEGORY REQUESTED',
   CATEGORY_LOADED = '[Cast API] CATEGORY LOADED',
   EPISODES_REQUESTED = '[Cast API] EPISODES REQUESTED',
@@ -18,6 +20,16 @@ export class CastRequested implements Action {
 export class CastLoaded implements Action {
   readonly type = CastActionTypes.CAST_LOADED;
   constructor(public payload: { casts: Cast[] }) {}
+}
+
+export class CastUpdate implements Action {
+  readonly type = CastActionTypes.CAST_UPDATE;
+  constructor(public payload: { cast: Cast }) {}
+}
+
+export class CastUpdated implements Action {
+  readonly type = CastActionTypes.CAST_UPDATED;
+  constructor(public payload: { cast: Cast }) {}
 }
 
 export class CategoryRequested implements Action {
@@ -45,6 +57,8 @@ export class EpisodesLoadError implements Action {
 export type CastActions =
   | CastRequested
   | CastLoaded
+  | CastUpdate
+  | CastUpdated
   | EpisodesRequested
   | EpisodesLoaded
   | CategoryRequested

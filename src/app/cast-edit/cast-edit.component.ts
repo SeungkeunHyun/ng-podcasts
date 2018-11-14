@@ -7,6 +7,7 @@ import { Store } from '@ngrx/store';
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AppState } from '../store/app.reducer';
+import * as fromActions from '../store/cast.action';
 import {
   NgForm,
   FormBuilder,
@@ -15,7 +16,6 @@ import {
   Validators
 } from '@angular/forms';
 import * as selectors from '../store/cast.selectors';
-import { clearResolutionOfComponentResourcesQueue } from '@angular/core/src/metadata/resource_loading';
 
 @Component({
   selector: 'app-cast-edit',
@@ -36,13 +36,16 @@ export class CastEditComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.id = params['id'];
       this.store.select(selectors.getCastById(this.id)).subscribe(cast => {
-		this.cast = cast;
-		this.castForm.setValue(this.cast);  
+        this.cast = cast;
+        this.castForm.setValue(this.cast);
       });
     });
   }
 
   onSubmit(f) {
     console.log(this.castForm.value);
+    this.store.dispatch(
+      new fromActions.CastUpdate({ cast: this.castForm.value })
+    );
   }
 }
