@@ -1,1 +1,28 @@
-<table mat-table></table>
+<!--
+  <table #table mat-table [dataSource]="dataSource">
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{ row.name }}</mat-cell>
+    </ng-container>
+  </table>
+-->
+<div class='container'>
+  <div class='row'>
+    <div class='col-md-6'>
+      <table datatable class='table' [dtOptions]="dtOptions" class="row-border hover">
+        <thead>
+          <th>Category</th>
+          <th>Cast</th>
+        </thead>
+        <tbody>
+          <tr *ngFor='let id of (casts$ | async).ids'>
+            <app-cast-detail [cast]="(casts$ | async).entities[id]"></app-cast-detail>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class='col-md-6'>
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

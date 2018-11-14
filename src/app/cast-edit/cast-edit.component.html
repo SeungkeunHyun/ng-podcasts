@@ -1,0 +1,43 @@
+<div class='container'>
+  <h1>Edit Cast</h1>
+  <form class='form' (ngSubmit)="onSubmit(f)" #f="ngForm">
+    <div class='form-group form-inline'>
+      <label class='col-sm-2'>Name</label>
+      <input name='name' class='form-control col-sm-10' required type="text" [(ngModel)]='name'/>
+    </div>
+    <div class='form-group form-inline'>
+      <label class='col-sm-2'>Provider</label>
+    <input ngModel name='provider' class='form-control col-sm-10' type="text" required  /> 
+    </div>
+    <div class='form-group form-inline'>
+      <label class='col-sm-2'>Category</label>
+      <select name='category' required class='form-control'>
+        <option ngModel *ngFor="let id of (categories | async).ids">
+          {{ (categories | async).entities[id].key }} ({{ (categories | async).entities[id].doc_count }})</option>
+      </select>
+    </div>
+    <div class='form-group form-inline'>
+      <label class='col-sm-2'>Feed URL</label>
+      <input name='feedURL' type="text" ngModel required name='feedURL' class='form-control col-sm-10' />
+    </div>
+    <div class='media'>
+      <img class='col-sm-2' src='{{ imageURL.value }}' width='100px' class='responsive mr-3'>
+      <input #imageURL ngModel type="text" class='media-heading' required name='imageURL' class='form-control col-sm-10' />
+    </div>
+    <div class='form-group form-inline'>
+      <label class='col-sm-2'>Last published</label>
+      <input type="date" ngModel name='lastPub' class='form-control col-sm-10' />
+    </div>
+    <div class='form-group form-inline'>
+      <label class='col-sm-2'>Episodes</label>
+      <input type="number" ngModel name='episodeCount' class='form-control col-sm-10' />
+    </div>
+    <div class='form-group form-inline'>
+      <label class='col-sm-2'>Author</label>
+      <input type="number" ngModel name='author' class='form-control col-sm-10' />
+    </div>
+    <div class='form-group form-inline'>
+      <button type='submit' [disabled]="castForm.invalid" class="btn btn-primary form-control">Submit</button>
+    </div> 
+  </form>
+</div>

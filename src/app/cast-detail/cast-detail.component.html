@@ -1,0 +1,8 @@
+<td>
+  <span class='badge badge-secondary'>{{ cast.category }}</span>
+</td>
+<td [routerLink]="[cast.id, 'edit']">
+  <img [src]="cast.imageURL" width='80px'>
+  {{ cast.name }}
+</td>
+<td>Episodes</td>

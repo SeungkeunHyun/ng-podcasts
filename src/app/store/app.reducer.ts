@@ -1,6 +1,8 @@
-import { CastState } from './cast.reducer';
+import { CastState, EpisodeState, CategoryState } from './cast.reducer';
 export interface AppState {
-  cast: CastState;
+  casts: CastState;
+  episodes: EpisodeState;
+  categories: CategoryState;
 }
 
 export function appReducer(state, action) {
