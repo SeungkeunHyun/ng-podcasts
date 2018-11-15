@@ -1,20 +1,19 @@
-import { CategoryState } from './../store/cast.reducer';
-import { Observable } from 'rxjs';
-import { EntityState } from '@ngrx/entity';
+import { Observable, Subscription } from 'rxjs';
 import { Category } from './../models/category.model';
 import { Cast } from './../models/cast.model';
 import { Store } from '@ngrx/store';
-import { Component, ViewChild, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import {
+  Component,
+  ViewChild,
+  OnInit,
+  OnDestroy,
+  AfterViewInit
+} from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AppState } from '../store/app.reducer';
 import * as fromActions from '../store/cast.action';
-import {
-  NgForm,
-  FormBuilder,
-  FormGroup,
-  FormControl,
-  Validators
-} from '@angular/forms';
+import * as fromCastReducer from '../store/cast.reducer';
+import { FormGroup } from '@angular/forms';
 import * as selectors from '../store/cast.selectors';
 
 @Component({
@@ -22,24 +21,43 @@ import * as selectors from '../store/cast.selectors';
   templateUrl: './cast-edit.component.html',
   styleUrls: ['./cast-edit.component.css']
 })
-export class CastEditComponent implements OnInit {
+export class CastEditComponent implements OnInit, OnDestroy, AfterViewInit {
   id: string;
   cast: Cast;
-  categories: Observable<CategoryState>;
+  categories$: Observable<Category[]>;
+  subsParam: Subscription;
+  subsCast: Subscription;
   @ViewChild('f')
   castForm: FormGroup;
-  constructor(private route: ActivatedRoute, private store: Store<AppState>) {}
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private store: Store<AppState>
+  ) {}
 
   ngOnInit() {
     console.log(this.castForm);
-    this.categories = this.store.select('categories');
-    this.route.params.subscribe(params => {
+    this.categories$ = this.store.select(selectors.selectCategories);
+    this.subsParam = this.route.params.subscribe(params => {
       this.id = params['id'];
-      this.store.select(selectors.getCastById(this.id)).subscribe(cast => {
-        this.cast = cast;
-        this.castForm.setValue(this.cast);
-      });
+      this.subsCast = this.store
+        .select(selectors.getCastById(this.id))
+        .subscribe(cast => {
+          if (!cast) {
+            console.log('Category was not fetched yet');
+            return this.router.navigate(['casts']);
+          }
+          this.cast = cast;
+          this.castForm.setValue(cast);
+        });
     });
+  }
+
+  ngAfterViewInit() {}
+
+  ngOnDestroy() {
+    this.subsParam.unsubscribe();
+    this.subsCast.unsubscribe();
   }
 
   onSubmit(f) {

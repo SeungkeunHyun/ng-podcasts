@@ -9,16 +9,7 @@
 <div class='container'>
   <div class='row'>
     <div class='col-md-6'>
-      <table datatable class='table' [dtOptions]="dtOptions" class="row-border hover">
-        <thead>
-          <th>Category</th>
-          <th>Cast</th>
-        </thead>
-        <tbody>
-          <tr *ngFor='let id of (casts$ | async).ids'>
-            <app-cast-detail [cast]="(casts$ | async).entities[id]"></app-cast-detail>
-          </tr>
-        </tbody>
+      <table *ngIf="(casts$ | async)" datatable class='table' [dtOptions]="dtOptions" class="row-border hover">
       </table>
     </div>
     <div class='col-md-6'>

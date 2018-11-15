@@ -25,46 +25,48 @@ export const castAdapter = createEntityAdapter<Cast>({
 
 export const episodeAdapter = createEntityAdapter<string>({});
 
-const initialCastState: CastState = castAdapter.getInitialState({
-  loaded: false
-});
-
-const initialEPState: EpisodeState = episodeAdapter.getInitialState({
-  loaded: false
-});
-
-export function castReducer(state = initialCastState, action) {
+export function castReducer(
+  state = castAdapter.getInitialState({ loaded: false }),
+  action
+) {
   switch (action.type) {
     case fromCastActions.CastActionTypes.CAST_REQUESTED:
       return castAdapter.removeAll(state);
     case fromCastActions.CastActionTypes.CAST_LOADED:
-      return castAdapter.addAll(action.payload.casts, state);
+      return castAdapter.addAll(action.payload.casts, {
+        ...state,
+        loaded: true
+      });
     case fromCastActions.CastActionTypes.CAST_UPDATE:
+      console.log('state before update', state);
       return castAdapter.updateOne(
         { id: action.payload.cast.id, changes: action.payload.cast },
-        state
+        { ...state }
       );
     case fromCastActions.CastActionTypes.CAST_UPDATED:
-      return state;
+      console.log('state after update', state);
+      return { ...state };
     default:
-      return state;
+      return { ...state };
   }
 }
 
 export function categoryReducer(
-  state = categoryAdapter.getInitialState(),
+  state = categoryAdapter.getInitialState({ loaded: false }),
   action
 ) {
   switch (action.type) {
     case fromCastActions.CastActionTypes.CATEGORY_REQUESTED:
       return categoryAdapter.removeAll(state);
     case fromCastActions.CastActionTypes.CATEGORY_LOADED:
-      console.log(action);
-      return categoryAdapter.addAll(action.payload, state);
+      return categoryAdapter.addAll(action.payload, { ...state, loaded: true });
   }
 }
 
-export function episodeReducer(state = initialEPState, action) {
+export function episodeReducer(
+  state = episodeAdapter.getInitialState({ loaded: false }),
+  action
+) {
   switch (action.type) {
     case fromCastActions.CastActionTypes.EPISODES_REQUESTED:
       return episodeAdapter.removeAll(state);
@@ -84,3 +86,11 @@ export const {
   selectIds,
   selectTotal
 } = castAdapter.getSelectors();
+
+/* export const {
+  selectAll,
+  selectEntities,
+  selectIds,
+  selectTotal
+} = categoryAdapter.getSelectors();
+ */

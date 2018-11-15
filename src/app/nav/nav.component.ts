@@ -1,4 +1,4 @@
-import { CastRequested } from './../store/cast.action';
+import { CastRequested, CategoryRequested } from './../store/cast.action';
 import { Component, OnInit } from '@angular/core';
 import { AppState } from '../store/app.reducer';
 import { Store } from '@ngrx/store';
@@ -13,5 +13,6 @@ export class NavComponent implements OnInit {
 
   ngOnInit() {
     this.store.dispatch(new CastRequested());
+    this.store.dispatch(new CategoryRequested());
   }
 }
