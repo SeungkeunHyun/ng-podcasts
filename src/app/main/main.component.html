@@ -1,15 +1,7 @@
-<!--
-  <table #table mat-table [dataSource]="dataSource">
-    <ng-container matColumnDef="name">
-      <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
-      <mat-cell *matCellDef="let row">{{ row.name }}</mat-cell>
-    </ng-container>
-  </table>
--->
 <div class='container'>
   <div class='row'>
     <div class='col-md-6'>
-      <table *ngIf="(casts$ | async)" datatable class='table' [dtOptions]="dtOptions" class="row-border hover">
+      <table *ngIf="dtReady" datatable="" id="dtCasts" [dtTrigger]="dtTrigger" class='table' [dtOptions]="dtOptions" class="row-border hover">
       </table>
     </div>
     <div class='col-md-6'>

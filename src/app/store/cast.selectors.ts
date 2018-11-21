@@ -32,7 +32,7 @@ export const selectAllCastsWereLoaded = createSelector(
 export const selectAllCategoriesWereLoaded = createSelector(
   selectCategoryState,
   catState => {
-    if (catState) {
+    if (catState && catState.ids) {
       return catState.loaded;
     }
     return false;

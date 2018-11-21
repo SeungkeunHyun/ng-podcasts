@@ -13,6 +13,5 @@ export class NavComponent implements OnInit {
 
   ngOnInit() {
     this.store.dispatch(new CastRequested());
-    this.store.dispatch(new CategoryRequested());
   }
 }

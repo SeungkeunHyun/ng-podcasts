@@ -42,11 +42,34 @@ export class CastEffect {
       ),
       filter(([action, loadedFlag]) => !loadedFlag),
       switchMap(action => {
-        return this.http.get(this.esURL + '/podcasts/_search?from=0&size=100');
+        const reqBody = {
+          from: 0,
+          size: 100,
+          query: {
+            has_child: {
+              type: 'episode',
+              query: {
+                match_all: {}
+              },
+              inner_hits: {
+                from: 0,
+                size: 10,
+                sort: [{ pubDate: { order: 'desc' } }]
+              }
+            }
+          }
+        };
+        console.log(reqBody);
+        return this.elastic.search('casts', reqBody);
       }),
       map((res: any) => res.hits.hits),
       map(hits => {
-        console.log('hits', hits);
+        console.log(
+          'hits',
+          hits,
+          'episodes',
+          hits[0].inner_hits.episode.hits.hits
+        );
         const casts = [];
         hits.map(itm => {
           const src = itm._source;
@@ -57,11 +80,16 @@ export class CastEffect {
             provider: src.provider ? src.provider : 'iTunes',
             feedURL: src.url,
             imageURL: src.image,
-            lastPub: src.lastPub ? src.lastPub : null,
-            episodeCount: src.episodeCount ? src.episodeCount : null,
+            lastPub: itm.inner_hits
+              ? itm.inner_hits.episode.hits.hits[0]._source.pubDate
+              : null,
+            episodeCount: itm.inner_hits
+              ? itm.inner_hits.episode.hits.total
+              : null,
             author: src.author ? src.author : null
           });
         });
+        console.log(casts);
         return {
           type: fromCastActions.CastActionTypes.CAST_LOADED,
           payload: { casts: casts }
@@ -100,7 +128,7 @@ export class CastEffect {
         `{ "size": 0, "aggs": { "uniq_provider": { "terms": { "field": "category.keyword" } } } }`
       );
       console.log(reqBody, this.elastic);
-      return this.elastic.search('podcasts', reqBody);
+      return this.elastic.search('casts', reqBody);
     }),
     map((res: any) => res.aggregations.uniq_provider.buckets),
     map(buckets => {
@@ -120,7 +148,7 @@ export class CastEffect {
       const doc_id = action.payload.cast.id;
       delete action.payload.cast.id;
       console.log(action.payload.cast);
-      return this.elastic.update('podcasts', doc_id, action.payload.cast);
+      return this.elastic.update('casts', doc_id, action.payload.cast);
     }),
     map(res => {
       this.router.navigateByUrl(this.location.path().replace('/edit', ''));

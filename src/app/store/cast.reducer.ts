@@ -33,6 +33,7 @@ export function castReducer(
     case fromCastActions.CastActionTypes.CAST_REQUESTED:
       return castAdapter.removeAll(state);
     case fromCastActions.CastActionTypes.CAST_LOADED:
+      console.log('casts loaded', action.payload);
       return castAdapter.addAll(action.payload.casts, {
         ...state,
         loaded: true

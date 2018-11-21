@@ -1,3 +1,4 @@
+import { CategoryRequested } from './../store/cast.action';
 import { Observable, Subscription } from 'rxjs';
 import { Category } from './../models/category.model';
 import { Cast } from './../models/cast.model';
@@ -36,6 +37,7 @@ export class CastEditComponent implements OnInit, OnDestroy, AfterViewInit {
   ) {}
 
   ngOnInit() {
+    this.store.dispatch(new CategoryRequested());
     console.log(this.castForm);
     this.categories$ = this.store.select(selectors.selectCategories);
     this.subsParam = this.route.params.subscribe(params => {
@@ -65,5 +67,6 @@ export class CastEditComponent implements OnInit, OnDestroy, AfterViewInit {
     this.store.dispatch(
       new fromActions.CastUpdate({ cast: this.castForm.value })
     );
+    return false;
   }
 }
