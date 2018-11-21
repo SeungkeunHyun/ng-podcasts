@@ -1,3 +1,4 @@
+import { Episode } from './../models/episode.model';
 import { ElasticService } from './../services/elastic.service';
 import { CastActionTypes } from './cast.action';
 import { AppState } from './app.reducer';
@@ -31,6 +32,23 @@ export class CastEffect {
     private location: Location,
     private router: Router
   ) {}
+
+  mapEpisodes(items: {}[]): Episode[] {
+    let episodes = [];
+    for(let item of items) {
+      const ep = {
+        id: item._id,
+        castID: item._source.join_field.parent,
+        title: item._source.title,
+        description: item._source.subtitle,
+        duration: item._source.duration,
+        mediaURL: item._source.mediaURL,
+        pubDate: item._source.pubDate;
+      }
+      episodes.push(ep);
+    }
+    return episodes;
+  }
 
   @Effect() castRequested$ = this.actions$
     .ofType<fromCastActions.CastRequested>(
@@ -73,6 +91,13 @@ export class CastEffect {
         const casts = [];
         hits.map(itm => {
           const src = itm._source;
+          if (itm.inner_hits) {
+            this.store.dispatch(
+              new fromCastActions.EpisodesLoaded({
+                episodes: this.mapEpisodes(itm.inner_hits.episode.hits.hits)
+              })
+            );
+          }
           casts.push({
             id: itm._id,
             name: src.name,

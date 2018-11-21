@@ -72,7 +72,7 @@ export function episodeReducer(
     case fromCastActions.CastActionTypes.EPISODES_REQUESTED:
       return episodeAdapter.removeAll(state);
     case fromCastActions.CastActionTypes.EPISODES_LOADED:
-      return episodeAdapter.addAll(action.payload.episodes, state);
+      return episodeAdapter.addMany(action.payload.episodes, { ...state });
     case fromCastActions.CastActionTypes.EPISODES_LOAD_ERROR:
       console.error(action.payload);
       return state;
