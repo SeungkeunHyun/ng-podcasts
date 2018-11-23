@@ -1,7 +1,6 @@
-import { CategoryRequested } from './../store/cast.action';
 import { Observable, Subscription } from 'rxjs';
-import { Category } from './../models/category.model';
-import { Cast } from './../models/cast.model';
+import { Category } from './../../models/category.model';
+import { Cast } from './../../models/cast.model';
 import { Store } from '@ngrx/store';
 import {
   Component,
@@ -11,11 +10,10 @@ import {
   AfterViewInit
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AppState } from '../store/app.reducer';
-import * as fromActions from '../store/cast.action';
-import * as fromCastReducer from '../store/cast.reducer';
+import { AppState } from '../../store/app.reducer';
+import * as fromActions from '../../store/cast.action';
 import { FormGroup } from '@angular/forms';
-import * as selectors from '../store/cast.selectors';
+import * as selectors from '../../store/cast.selectors';
 
 @Component({
   selector: 'app-cast-edit',
@@ -37,8 +35,6 @@ export class CastEditComponent implements OnInit, OnDestroy, AfterViewInit {
   ) {}
 
   ngOnInit() {
-    this.store.dispatch(new CategoryRequested());
-    console.log(this.castForm);
     this.categories$ = this.store.select(selectors.selectCategories);
     this.subsParam = this.route.params.subscribe(params => {
       this.id = params['id'];
@@ -63,7 +59,6 @@ export class CastEditComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   onSubmit(f) {
-    console.log(this.castForm.value);
     this.store.dispatch(
       new fromActions.CastUpdate({ cast: this.castForm.value })
     );

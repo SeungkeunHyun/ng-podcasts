@@ -17,7 +17,6 @@ export class ElasticService {
   }
 
   search(idx: string, qry: {}) {
-    console.log(idx, qry);
     return this.client.search({
       index: idx,
       body: qry
@@ -25,7 +24,6 @@ export class ElasticService {
   }
 
   update(idx: string, id: string, params: {}) {
-    console.log(idx, id, params);
     return this.client.update({
       index: idx,
       id: id,

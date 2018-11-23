@@ -33,7 +33,6 @@ export function castReducer(
     case fromCastActions.CastActionTypes.CAST_REQUESTED:
       return castAdapter.removeAll(state);
     case fromCastActions.CastActionTypes.CAST_LOADED:
-      console.log('casts loaded', action.payload);
       return castAdapter.addAll(action.payload.casts, {
         ...state,
         loaded: true
@@ -57,10 +56,21 @@ export function categoryReducer(
   action
 ) {
   switch (action.type) {
+    /*
     case fromCastActions.CastActionTypes.CATEGORY_REQUESTED:
-      return categoryAdapter.removeAll(state);
+      if (state.loaded) {
+        console.log(state);
+        return { ...state };
+      }
+      return categoryAdapter.removeAll({ ...state, loaded: false });
+    */
     case fromCastActions.CastActionTypes.CATEGORY_LOADED:
-      return categoryAdapter.addAll(action.payload, { ...state, loaded: true });
+      console.log('category loaded', action);
+      categoryAdapter.removeAll(state);
+      return categoryAdapter.addAll(action.payload, {
+        ...state,
+        loaded: true
+      });
   }
 }
 

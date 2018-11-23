@@ -1,0 +1,12 @@
+<h1>Latest episode</h1>
+<ol>
+  <li *ngFor='let ep of (latestEpisodes | async)'>
+    <div class="media">
+      <app-board-thumb catId="{{ep.castID}}"></app-board-thumb>
+      <div class="media-body">
+        <h5 class="mt-0 font-weight-bold">{{ep.pubDate | slice:0:10}}</h5>
+        {{ ep.title }} <br/> {{ ep.duration }}
+      </div>
+    </div>
+  </li>
+</ol>

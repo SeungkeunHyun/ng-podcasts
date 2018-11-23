@@ -1,11 +1,9 @@
-import { CategoryRequested } from './../store/cast.action';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Cast } from './../models/cast.model';
+import { Cast } from './../../models/cast.model';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { AppState } from '../store/app.reducer';
+import { AppState } from '../../store/app.reducer';
 import { Store } from '@ngrx/store';
 import { Subject, Subscription } from 'rxjs';
-import * as selectors from '../store/cast.selectors';
 
 @Component({
   selector: 'app-main',
@@ -60,7 +58,6 @@ export class MainComponent implements OnInit, OnDestroy {
       // (see https://github.com/l-lin/angular-datatables/issues/87)
       $('td', row).unbind('click');
       $('td', row).bind('click', () => {
-        console.log(data);
         this.router.navigate([data.id, 'edit'], { relativeTo: this.route });
       });
       return row;
@@ -77,7 +74,6 @@ export class MainComponent implements OnInit, OnDestroy {
     this.subscription = this.casts$.subscribe(casts => {
       const tabData: Cast[] = [];
       casts.ids.forEach(id => {
-        console.log(id, casts.entities[id]);
         tabData.push(casts.entities[id]);
       });
       this.dtOptions.data = tabData;

@@ -1,23 +1,20 @@
 import { Episode } from './../models/episode.model';
 import { ElasticService } from './../services/elastic.service';
-import { CastActionTypes } from './cast.action';
 import { AppState } from './app.reducer';
 import { Store, select } from '@ngrx/store';
-import { Cast } from './../models/cast.model';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {
   map,
   switchMap,
-  catchError,
-  mergeMap,
   withLatestFrom,
-  filter
+  filter,
+  take,
+  startWith,
+  mergeMap
 } from 'rxjs/operators';
-import { of, Observable } from 'rxjs';
 import * as fromCastActions from '../store/cast.action';
-import { Client } from 'elasticsearch-browser';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import * as selectors from '../store/cast.selectors';
@@ -33,22 +30,28 @@ export class CastEffect {
     private router: Router
   ) {}
 
-  mapEpisodes(items: {}[]): Episode[] {
-    let episodes = [];
-    for(let item of items) {
-      const ep = {
-        id: item._id,
-        castID: item._source.join_field.parent,
-        title: item._source.title,
-        description: item._source.subtitle,
-        duration: item._source.duration,
-        mediaURL: item._source.mediaURL,
-        pubDate: item._source.pubDate;
+  private castQuery = {
+    from: 0,
+    size: 100,
+    query: {
+      has_child: {
+        type: 'episode',
+        query: {
+          match_all: {}
+        },
+        inner_hits: {
+          from: 0,
+          size: 10,
+          sort: [{ pubDate: { order: 'desc' } }]
+        }
       }
-      episodes.push(ep);
     }
-    return episodes;
-  }
+  };
+
+  private categoryQuery = {
+    size: 0,
+    aggs: { uniq_provider: { terms: { field: 'category.keyword' } } }
+  };
 
   @Effect() castRequested$ = this.actions$
     .ofType<fromCastActions.CastRequested>(
@@ -58,63 +61,15 @@ export class CastEffect {
       withLatestFrom(
         this.store.pipe(select(selectors.selectAllCastsWereLoaded))
       ),
-      filter(([action, loadedFlag]) => !loadedFlag),
-      switchMap(action => {
-        const reqBody = {
-          from: 0,
-          size: 100,
-          query: {
-            has_child: {
-              type: 'episode',
-              query: {
-                match_all: {}
-              },
-              inner_hits: {
-                from: 0,
-                size: 10,
-                sort: [{ pubDate: { order: 'desc' } }]
-              }
-            }
-          }
-        };
-        console.log(reqBody);
-        return this.elastic.search('casts', reqBody);
+      filter(([action, loadedFlag]) => {
+        return !loadedFlag;
       }),
-      map((res: any) => res.hits.hits),
-      map(hits => {
-        console.log(
-          'hits',
-          hits,
-          'episodes',
-          hits[0].inner_hits.episode.hits.hits
-        );
-        const casts = [];
-        hits.map(itm => {
-          const src = itm._source;
-          if (itm.inner_hits) {
-            this.store.dispatch(
-              new fromCastActions.EpisodesLoaded({
-                episodes: this.mapEpisodes(itm.inner_hits.episode.hits.hits)
-              })
-            );
-          }
-          casts.push({
-            id: itm._id,
-            name: src.name,
-            category: src.category,
-            provider: src.provider ? src.provider : 'iTunes',
-            feedURL: src.url,
-            imageURL: src.image,
-            lastPub: itm.inner_hits
-              ? itm.inner_hits.episode.hits.hits[0]._source.pubDate
-              : null,
-            episodeCount: itm.inner_hits
-              ? itm.inner_hits.episode.hits.total
-              : null,
-            author: src.author ? src.author : null
-          });
-        });
-        console.log(casts);
+      switchMap(action => {
+        return this.elastic.search('casts', this.castQuery);
+      }),
+      map(results => {
+        const casts = this.mapCasts(results);
+        this.store.dispatch(new fromCastActions.CategoryRequested());
         return {
           type: fromCastActions.CastActionTypes.CAST_LOADED,
           payload: { casts: casts }
@@ -126,7 +81,6 @@ export class CastEffect {
       fromCastActions.CastActionTypes.EPISODES_REQUESTED
     ),
     switchMap((action: fromCastActions.EpisodesRequested) => {
-      console.log(action);
       return this.http.get(action.payload.feedURL);
     }),
     map(res => {
@@ -145,15 +99,10 @@ export class CastEffect {
       this.store.pipe(select(selectors.selectAllCategoriesWereLoaded))
     ),
     filter(([action, flag]) => {
-      console.log('category filter', action, flag);
       return !flag;
     }),
     switchMap(action => {
-      const reqBody = JSON.parse(
-        `{ "size": 0, "aggs": { "uniq_provider": { "terms": { "field": "category.keyword" } } } }`
-      );
-      console.log(reqBody, this.elastic);
-      return this.elastic.search('casts', reqBody);
+      return this.elastic.search('casts', this.categoryQuery);
     }),
     map((res: any) => res.aggregations.uniq_provider.buckets),
     map(buckets => {
@@ -172,14 +121,59 @@ export class CastEffect {
     switchMap(action => {
       const doc_id = action.payload.cast.id;
       delete action.payload.cast.id;
-      console.log(action.payload.cast);
       return this.elastic.update('casts', doc_id, action.payload.cast);
     }),
     map(res => {
       this.router.navigateByUrl(this.location.path().replace('/edit', ''));
+      this.store.dispatch(new fromCastActions.CategoryRequested());
       return {
         type: fromCastActions.CastActionTypes.CAST_UPDATED
       };
     })
   );
+
+  mapCasts(results) {
+    const casts = [];
+    results.hits.hits.map((itm: any) => {
+      const src = itm._source;
+      if (itm.inner_hits) {
+        this.store.dispatch(
+          new fromCastActions.EpisodesLoaded({
+            episodes: this.mapEpisodes(itm.inner_hits.episode.hits.hits)
+          })
+        );
+      }
+      casts.push({
+        id: itm._id,
+        name: src.name,
+        category: src.category,
+        provider: src.provider ? src.provider : 'iTunes',
+        feedURL: src.url,
+        imageURL: src.image,
+        lastPub: itm.inner_hits
+          ? itm.inner_hits.episode.hits.hits[0]._source.pubDate
+          : null,
+        episodeCount: itm.inner_hits ? itm.inner_hits.episode.hits.total : null,
+        author: src.author ? src.author : null
+      });
+    });
+    return casts;
+  }
+
+  mapEpisodes(items): Episode[] {
+    const episodes = [];
+    for (let item of items) {
+      const ep = {
+        id: item._id,
+        castID: item._source.join_field.parent,
+        title: item._source.title,
+        description: item._source.subtitle,
+        duration: item._source.duration,
+        mediaURL: item._source.mediaURL,
+        pubDate: item._source.pubDate
+      };
+      episodes.push(ep);
+    }
+    return episodes;
+  }
 }

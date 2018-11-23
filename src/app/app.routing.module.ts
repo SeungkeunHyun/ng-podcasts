@@ -1,11 +1,13 @@
-import { CastReadComponent } from './cast-read/cast-read.component';
-import { CastEditComponent } from './cast-edit/cast-edit.component';
-import { MainComponent } from './main/main.component';
+import { CastReadComponent } from './casts/cast-read/cast-read.component';
+import { CastEditComponent } from './casts/cast-edit/cast-edit.component';
+import { MainComponent } from './casts/main/main.component';
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
+import { DashboardComponent } from './home/dashboard/dashboard.component';
 
 const appRoutes: Routes = [
-  { path: '', redirectTo: 'casts', pathMatch: 'full' },
+  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+  { path: 'dashboard', component: DashboardComponent },
   {
     path: 'casts',
     component: MainComponent,
