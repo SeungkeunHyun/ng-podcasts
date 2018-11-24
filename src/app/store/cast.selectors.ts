@@ -1,8 +1,10 @@
 import { Episode } from './../models/episode.model';
 import { AppState } from './app.reducer';
-import { createSelector } from '@ngrx/store';
+import { createSelector, State } from '@ngrx/store';
+import { Dictionary } from '@ngrx/entity';
+import { Cast } from '../models/cast.model';
 
-export const selectCasts = (state: AppState) => state.casts.entities;
+export const selectCasts = (state: AppState) => state.casts;
 export const selectCategoryState = (state: AppState) => state.categories;
 export const selectCastState = (state: AppState) => state.casts;
 export const getCastById = id =>
@@ -10,9 +12,24 @@ export const getCastById = id =>
     selectCasts,
     allCasts => {
       console.log(id, allCasts);
-      return allCasts[id];
+      return allCasts.entities[id];
     }
   );
+
+export const selectAllCasts = createSelector(
+  selectCasts,
+  castDic => {
+    if (!castDic.loaded) {
+      return null;
+    }
+    console.log('casts are', castDic);
+    const allCasts = [];
+    for (const id of castDic.ids) {
+      allCasts.push(castDic.entities[id]);
+    }
+    return allCasts;
+  }
+);
 
 export const selectEpisodes = (state: AppState) => state.episodes;
 

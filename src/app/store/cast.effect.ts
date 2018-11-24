@@ -99,6 +99,7 @@ export class CastEffect {
       this.store.pipe(select(selectors.selectAllCategoriesWereLoaded))
     ),
     filter(([action, flag]) => {
+      console.log(flag);
       return !flag;
     }),
     switchMap(action => {

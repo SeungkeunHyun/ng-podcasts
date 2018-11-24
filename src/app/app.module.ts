@@ -1,3 +1,4 @@
+import { CastMainComponent } from './casts/cast-main/cast-main.component';
 import { CastEffect } from './store/cast.effect';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
@@ -34,6 +35,7 @@ import { BoardThumbComponent } from './home/board-thumb/board-thumb.component';
     AppComponent,
     NavComponent,
     MainComponent,
+    CastMainComponent,
     CastDetailComponent,
     CastEditComponent,
     CastReadComponent,

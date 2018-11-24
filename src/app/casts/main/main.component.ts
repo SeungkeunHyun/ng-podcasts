@@ -1,26 +1,42 @@
 import { Router, ActivatedRoute } from '@angular/router';
 import { Cast } from './../../models/cast.model';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  AfterViewInit,
+  ViewChild,
+  ChangeDetectorRef
+} from '@angular/core';
 import { AppState } from '../../store/app.reducer';
 import { Store } from '@ngrx/store';
 import { Subject, Subscription } from 'rxjs';
+import * as selectors from '../../store/cast.selectors';
+import { DataTableDirective } from 'angular-datatables';
+import * as $ from 'jquery';
+import 'datatables.net';
 
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.css']
 })
-export class MainComponent implements OnInit, OnDestroy {
+export class MainComponent implements OnInit, OnDestroy, AfterViewInit {
+  @ViewChild(DataTableDirective)
+  dtElement: DataTableDirective;
+
   casts$: any;
-  dtTrigger = new Subject();
+  subject = new Subject<Cast[]>();
   dtReady = false;
-  subscription: Subscription;
-  dtOptions: DataTables.Settings = {
+  subscriptions: Subscription[] = [];
+  dtOptions: DataTables.Settings;
+
+  dtOptionTemplate = {
     destroy: true,
     ordering: true,
     paging: true,
-    responsive: true,
     data: [],
+    responsive: true,
     columns: [
       { data: 'category', title: 'Category' },
       {
@@ -54,8 +70,6 @@ export class MainComponent implements OnInit, OnDestroy {
     order: [[4, 'desc']],
     rowCallback: (row: Node, data: Cast, index: number) => {
       const self = this;
-      // Unbind first in order to avoid any duplicate handler
-      // (see https://github.com/l-lin/angular-datatables/issues/87)
       $('td', row).unbind('click');
       $('td', row).bind('click', () => {
         this.router.navigate([data.id, 'edit'], { relativeTo: this.route });
@@ -63,26 +77,43 @@ export class MainComponent implements OnInit, OnDestroy {
       return row;
     }
   };
+
   constructor(
     private store: Store<AppState>,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private chRef: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
-    this.casts$ = this.store.select('casts');
-    this.subscription = this.casts$.subscribe(casts => {
-      const tabData: Cast[] = [];
-      casts.ids.forEach(id => {
-        tabData.push(casts.entities[id]);
-      });
-      this.dtOptions.data = tabData;
-      this.dtReady = true;
-      this.dtTrigger.next();
+    this.casts$ = this.store.select(selectors.selectAllCasts);
+    this.chRef.detectChanges();
+    if (sessionStorage.getItem('dtData')) {
+      const dtData = JSON.parse(sessionStorage.getItem('dtData'));
+      this.dtOptionTemplate.data = dtData;
+      console.log(this.dtOptionTemplate);
+      $('#dtCasts').DataTable(this.dtOptionTemplate);
+      this.dtOptions = this.dtOptionTemplate;
+      this.subject.next(dtData);
+    }
+    this.casts$.subscribe(data => {
+      if (this.dtOptionTemplate.data === data) {
+        return;
+      }
+      // this.chRef.detectChanges();
+      this.dtOptionTemplate.data = data;
+      $('#dtCasts').DataTable(this.dtOptionTemplate);
+      sessionStorage.setItem('dtData', JSON.stringify(data));
+      this.subject.next(data);
     });
   }
 
+  ngAfterViewInit() {
+    console.log(this.subject);
+  }
+
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.subscriptions.forEach(sub => sub.unsubscribe);
+    this.subject.unsubscribe();
   }
 }
