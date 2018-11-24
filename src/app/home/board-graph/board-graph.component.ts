@@ -1,3 +1,4 @@
+import { Cast } from './../../models/cast.model';
 import { Subscription, Observable } from 'rxjs';
 import { Category } from './../../models/category.model';
 import { Component, OnInit, OnDestroy } from '@angular/core';
@@ -13,6 +14,7 @@ import * as selectors from '../../store/cast.selectors';
 export class BoardGraphComponent implements OnInit, OnDestroy {
   categories: Category[];
   catSubs: Subscription;
+  castsOfCategory$: Observable<Cast[]>;
   public chartData: Array<any> = [];
   public chartLabels: Array<any> = [];
   public chartColors: Array<any> = null;
@@ -50,8 +52,27 @@ export class BoardGraphComponent implements OnInit, OnDestroy {
     console.log('chart data loaded', this.chartColors);
   }
 
-  public chartClicked(e: any): void {}
+  public chartClicked(e: any): void {
+    const data = this.getDataOfEvent(e);
+    this.castsOfCategory$ = this.store.select(
+      selectors.getCastsByCategory(data.label)
+    );
+  }
+
   public chartHovered(e: any): void {}
+
+  getDataOfEvent(e: any) {
+    if (e.active) {
+      const eventData = {
+        label: e.active[0]._chart.config.data.labels[e.active[0]._index],
+        data:
+          e.active[0]._chart.config.data.datasets[0].data[e.active[0]._index]
+      };
+      console.log(eventData);
+      return eventData;
+    }
+    return null;
+  }
 
   getRandomColor() {
     const letters = '0123456789ABCDEF';

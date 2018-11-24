@@ -1,4 +1,4 @@
-    <div style="display: block">
+<div style="display: block">
 <canvas *ngIf="chartLoaded" mdbChart
           chartType="doughnut"
           [data]="chartData"
@@ -9,4 +9,12 @@
           (chartHover)="chartHovered($event)"
           (chartClick)="chartClicked($event)">
 </canvas>
+</div>
+<div class='row'>
+  <ul>
+    <li *ngFor="let cast of (castsOfCategory$ | async)">
+      <div class="media"><img class="d-flex mr-3" width="100px" src="{{ cast.imageURL }}" alt="{{ cast.name }}">
+        <div class="media-body"><h5>{{ cast.name }}</h5> Episodes: {{ cast.episodeCount }}, Last published: {{ cast.lastPub }} </div></div>
+    </li>
+  </ul>
 </div>

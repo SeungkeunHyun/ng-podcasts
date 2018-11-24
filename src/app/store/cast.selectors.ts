@@ -16,6 +16,27 @@ export const getCastById = id =>
     }
   );
 
+export const getCastsByCategory = cat =>
+  createSelector(
+    selectCasts,
+    allCasts => {
+      console.log(allCasts);
+      const casts = [];
+      for (const id of allCasts.ids) {
+        if (allCasts.entities[id].category === cat) {
+          casts.push(allCasts.entities[id]);
+        }
+      }
+      casts.sort((c1: Cast, c2: Cast) => {
+        if (c1.lastPub === c2.lastPub) {
+          return 0;
+        }
+        return c1.lastPub > c2.lastPub ? -1 : 1;
+      });
+      return casts;
+    }
+  );
+
 export const selectAllCasts = createSelector(
   selectCasts,
   castDic => {
