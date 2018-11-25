@@ -33,6 +33,7 @@ import { BoardThumbComponent } from './home/board-thumb/board-thumb.component';
 import { BoardCastsComponent } from './home/board-casts/board-casts.component';
 import { CastEpisodesComponent } from './casts/cast-episodes/cast-episodes.component';
 import { ModalComponent } from './home/modal/modal.component';
+import { FooterComponent } from './home/footer/footer.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -48,7 +49,8 @@ import { ModalComponent } from './home/modal/modal.component';
     BoardThumbComponent,
     BoardCastsComponent,
     CastEpisodesComponent,
-    ModalComponent
+    ModalComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,

@@ -83,6 +83,20 @@ export const selectAllCategoriesWereLoaded = createSelector(
   }
 );
 
+export const getCastEpisodes = castID =>
+  createSelector(
+    selectEpisodes,
+    allEpisodes => {
+      const episodes = [];
+      for (const id of allEpisodes.ids) {
+        if (castID === allEpisodes.entities[id]['castID']) {
+          episodes.push(allEpisodes.entities[id]);
+        }
+      }
+      return episodes;
+    }
+  );
+
 export const selectLatestEpisodes = createSelector(
   selectEpisodes,
   allEpisodes => {

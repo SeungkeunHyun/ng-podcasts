@@ -9,11 +9,13 @@
         <img class="d-flex mr-3" width="100px" src="{{ (cast$ | async).imageURL }}" alt="{{ (cast$ | async).name }}">
       <div class="media-body">
         <div class="media-body"><h5 class='modal-title w-100'>{{ (cast$ | async).name }} <span class='badge badge-primary pull-right'>{{ (cast$ | async).episodeCount }}</span></h5>
-        <p>Episodes: {{ (cast$ | async).episodeCount }}, Last published: {{ (cast$ | async).lastPub }}</p> </div></div>
+        <p>Episodes: {{ (cast$ | async).episodeCount }}, Last published: {{ (cast$ | async).lastPub }}</p>
+        <i class="fa fa-cloud-download" (click)='getAllEpisodes()' aria-hidden="true">전체보기</i>
+        </div></div>
     </div>
       </div>
       <div class="modal-body">
-        ...
+        <table id='tabEpisodes' class='table table-hover'></table>
       </div>
       <div class="modal-footer">
         <button type="button" mdbBtn color="secondary" class="waves-light" aria-label="Close" (click)="closeModal($event)" mdbWavesEffect>Close</button>
