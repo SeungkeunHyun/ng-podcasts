@@ -33,4 +33,27 @@ export class ElasticService {
       }
     });
   }
+
+  childrenOfParent(
+    idx: string,
+    parentType: string,
+    parentID: string,
+    sortField: string,
+    sortDir: string
+  ) {
+    const qry = {
+      from: 0,
+      size: 10,
+      query: {
+        has_parent: {
+          parent_type: parentType,
+          query: {
+            term: { _id: parentID }
+          }
+        }
+      },
+      sort: [{ sortField: { order: sortDir } }]
+    };
+    this.search(idx, qry);
+  }
 }

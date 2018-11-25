@@ -4,10 +4,16 @@ import { CastMainComponent } from './casts/cast-main/cast-main.component';
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { DashboardComponent } from './home/dashboard/dashboard.component';
+import { CastEpisodesComponent } from './casts/cast-episodes/cast-episodes.component';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   { path: 'dashboard', component: DashboardComponent },
+  {
+    path: 'popup/:id',
+    component: CastEpisodesComponent,
+    outlet: 'modal'
+  },
   {
     path: 'casts',
     component: CastMainComponent,

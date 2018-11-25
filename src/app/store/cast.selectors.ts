@@ -11,7 +11,7 @@ export const getCastById = id =>
   createSelector(
     selectCasts,
     allCasts => {
-      console.log(id, allCasts);
+      console.log(id, allCasts, allCasts.entities[id]);
       return allCasts.entities[id];
     }
   );

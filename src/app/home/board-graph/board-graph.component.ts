@@ -14,7 +14,7 @@ import * as selectors from '../../store/cast.selectors';
 export class BoardGraphComponent implements OnInit, OnDestroy {
   categories: Category[];
   catSubs: Subscription;
-  castsOfCategory$: Observable<Cast[]>;
+  selectedCategory: string;
   public chartData: Array<any> = [];
   public chartLabels: Array<any> = [];
   public chartColors: Array<any> = null;
@@ -54,9 +54,8 @@ export class BoardGraphComponent implements OnInit, OnDestroy {
 
   public chartClicked(e: any): void {
     const data = this.getDataOfEvent(e);
-    this.castsOfCategory$ = this.store.select(
-      selectors.getCastsByCategory(data.label)
-    );
+    this.selectedCategory = data.label;
+    console.log(this.selectedCategory);
   }
 
   public chartHovered(e: any): void {}
@@ -68,7 +67,6 @@ export class BoardGraphComponent implements OnInit, OnDestroy {
         data:
           e.active[0]._chart.config.data.datasets[0].data[e.active[0]._index]
       };
-      console.log(eventData);
       return eventData;
     }
     return null;

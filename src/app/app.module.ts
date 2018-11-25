@@ -30,6 +30,9 @@ import { ChartsModule } from 'angular-bootstrap-md';
 import { BoardGraphComponent } from './home/board-graph/board-graph.component';
 import { BoardLatestComponent } from './home/board-latest/board-latest.component';
 import { BoardThumbComponent } from './home/board-thumb/board-thumb.component';
+import { BoardCastsComponent } from './home/board-casts/board-casts.component';
+import { CastEpisodesComponent } from './casts/cast-episodes/cast-episodes.component';
+import { ModalComponent } from './home/modal/modal.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -42,7 +45,10 @@ import { BoardThumbComponent } from './home/board-thumb/board-thumb.component';
     DashboardComponent,
     BoardGraphComponent,
     BoardLatestComponent,
-    BoardThumbComponent
+    BoardThumbComponent,
+    BoardCastsComponent,
+    CastEpisodesComponent,
+    ModalComponent
   ],
   imports: [
     BrowserModule,

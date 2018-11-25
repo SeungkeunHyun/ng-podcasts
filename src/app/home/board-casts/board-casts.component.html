@@ -1,0 +1,8 @@
+<ul class='list-unstyled'>
+    <li class='media' (click)="showCast(cast.id)" *ngFor="let cast of (castsOfCategory$ | async)">
+      <img class="d-flex mr-3" width="100px" src="{{ cast.imageURL }}" alt="{{ cast.name }}">
+      <div class="media-body">
+        <div class="media-body"><h5>{{ cast.name }} <span class='badge badge-primary pull-right'>{{ cast.episodeCount }}</span></h5>
+        <p>Episodes: {{ cast.episodeCount }}, Last published: {{ cast.lastPub }}</p> </div></div>
+    </li>
+  </ul>
