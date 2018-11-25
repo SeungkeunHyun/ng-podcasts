@@ -163,10 +163,10 @@ export class CastEffect {
 
   mapEpisodes(items): Episode[] {
     const episodes = [];
-    for (let item of items) {
+    for (const item of items) {
       const ep = {
         id: item._id,
-        castID: item._source.join_field.parent,
+        castID: item._source.cast_episode.parent,
         title: item._source.title,
         description: item._source.subtitle,
         duration: item._source.duration,

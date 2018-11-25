@@ -11,10 +11,12 @@
 </canvas>
 </div>
 <div class='row'>
-  <ul>
-    <li *ngFor="let cast of (castsOfCategory$ | async)">
-      <div class="media"><img class="d-flex mr-3" width="100px" src="{{ cast.imageURL }}" alt="{{ cast.name }}">
-        <div class="media-body"><h5>{{ cast.name }}</h5> Episodes: {{ cast.episodeCount }}, Last published: {{ cast.lastPub }} </div></div>
+  <ul class='list-unstyled'>
+    <li class='media' *ngFor="let cast of (castsOfCategory$ | async)">
+      <img class="d-flex mr-3" width="100px" src="{{ cast.imageURL }}" alt="{{ cast.name }}">
+      <div class="media-body">
+        <div class="media-body"><h5>{{ cast.name }} <span class='badge badge-primary pull-right'>{{ cast.episodeCount }}</span></h5>
+        <p>Episodes: {{ cast.episodeCount }}, Last published: {{ cast.lastPub }}</p> </div></div>
     </li>
   </ul>
 </div>
