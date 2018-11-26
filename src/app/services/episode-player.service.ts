@@ -9,6 +9,7 @@ import { Subject } from 'rxjs';
 export class EpisodePlayerService {
   private episodeHistory: Episode[];
   subject: Subject<Episode> = new Subject();
+  subAll: Subject<Episode[]> = new Subject();
 
   constructor() {
     this.episodeHistory = [];
@@ -17,5 +18,9 @@ export class EpisodePlayerService {
   setEpisode(ep) {
     this.episodeHistory.push(ep);
     this.subject.next(ep);
+  }
+
+  fillEpisodes(episodes: Episode[]) {
+    this.subAll.next(episodes);
   }
 }

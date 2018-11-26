@@ -1,7 +1,6 @@
 import { Episode } from './../models/episode.model';
 import { AppState } from './app.reducer';
 import { createSelector, State } from '@ngrx/store';
-import { Dictionary } from '@ngrx/entity';
 import { Cast } from '../models/cast.model';
 
 export const selectCasts = (state: AppState) => state.casts;
@@ -11,7 +10,6 @@ export const getCastById = id =>
   createSelector(
     selectCasts,
     allCasts => {
-      console.log(id, allCasts, allCasts.entities[id]);
       return allCasts.entities[id];
     }
   );
@@ -20,7 +18,6 @@ export const getCastsByCategory = cat =>
   createSelector(
     selectCasts,
     allCasts => {
-      console.log(allCasts);
       const casts = [];
       for (const id of allCasts.ids) {
         if (allCasts.entities[id].category === cat) {
@@ -43,7 +40,6 @@ export const selectAllCasts = createSelector(
     if (!castDic.loaded) {
       return null;
     }
-    console.log('casts are', castDic);
     const allCasts = [];
     for (const id of castDic.ids) {
       allCasts.push(castDic.entities[id]);

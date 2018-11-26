@@ -1,5 +1,5 @@
 <div class='border rounded media mt-3' *ngIf="episode">
-  <img src='{{(cast$ | async).imageURL}}' width='100px' class='responsive mt-3 ml-3 mr-3 rounded'>
+  <img src='{{(cast$ | async).imageURL}}' width='80px' class='responsive mt-3 ml-3 mr-3 rounded'>
   <div class='media-body mt-3'><h5>{{episode.title}}</h5><br>{{episode.subtitle}}
   <audio autoplay controls src='{{ episode.mediaURL }}'></audio>
   </div>

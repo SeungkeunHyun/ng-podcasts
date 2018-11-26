@@ -1,7 +1,7 @@
 import { EpisodePlayerService } from './../../services/episode-player.service';
 import { Episode } from './../../models/episode.model';
 import { Cast } from './../../models/cast.model';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
 import {
   Component,
@@ -25,12 +25,14 @@ import * as fromActions from '../../store/cast.action';
 export class CastEpisodesComponent implements OnInit, OnDestroy, AfterViewInit {
   @Output() modalClose: EventEmitter<any> = new EventEmitter<any>();
   @ViewChild('basicModal') basicModal;
+  dtSubject: Subject<Episode[]>;
   cast$: Observable<Cast>;
   castID: string;
   episodes$: Observable<Episode[]>;
   subscriptions: Subscription[] = [];
   dtOptions = {
     destroy: true,
+    retrieve: true,
     responsive: true,
     columns: [
       { data: 'pubDate', title: '등록일' },
@@ -56,10 +58,10 @@ export class CastEpisodesComponent implements OnInit, OnDestroy, AfterViewInit {
     private router: Router,
     private route: ActivatedRoute,
     private store: Store<AppState>,
-    private playService: EpisodePlayerService,
-    private dispatcher: Dispatcher
+    private playService: EpisodePlayerService
   ) {
     console.log(this.route);
+    this.dtSubject = new Subject();
   }
 
   ngOnInit() {
@@ -97,6 +99,13 @@ export class CastEpisodesComponent implements OnInit, OnDestroy, AfterViewInit {
 
   getAllEpisodes() {
     this.store.dispatch(new fromActions.CastEpisodesRequested(this.castID));
+    this.playService.subAll.subscribe(data => {
+      console.log('fetched all episodes', data);
+      this.dtOptions.data = data;
+      const $dt = $('#tabEpisodes').DataTable(this.dtOptions);
+      console.log($dt);
+      this.dtSubject.next(data);
+    });
   }
 
   ngOnDestroy() {

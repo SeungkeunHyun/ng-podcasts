@@ -1,3 +1,4 @@
+import { EpisodePlayerService } from './../services/episode-player.service';
 import { Episode } from './../models/episode.model';
 import { ElasticService } from './../services/elastic.service';
 import { AppState } from './app.reducer';
@@ -27,7 +28,8 @@ export class CastEffect {
     private elastic: ElasticService,
     private store: Store<AppState>,
     private location: Location,
-    private router: Router
+    private router: Router,
+    private playService: EpisodePlayerService
   ) {}
 
   private castQuery = {
@@ -162,7 +164,7 @@ export class CastEffect {
         delete ep.cast_episode;
         episodes.push(ep);
       });
-      console.log(episodes);
+      this.playService.fillEpisodes(episodes);
       return {
         type: fromCastActions.CastActionTypes.CAST_EPISODES_LOADED,
         payload: { episodes: episodes }

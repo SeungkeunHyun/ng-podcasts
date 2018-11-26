@@ -54,7 +54,7 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit {
         data: 'imageURL',
         title: 'Thumbnail',
         render: (val, type, row, meta) => {
-          return `<img src='${val}' width='100px' title='${row.name}'>`;
+          return `<img src='${val}' width='80px' title='${row.name}'>`;
         }
       },
       {
