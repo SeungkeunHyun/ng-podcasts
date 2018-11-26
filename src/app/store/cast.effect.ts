@@ -133,6 +133,43 @@ export class CastEffect {
     })
   );
 
+  @Effect() castEpisodeRequested$ = this.actions$.pipe(
+    ofType<fromCastActions.CastEpisodesRequested>(
+      fromCastActions.CastActionTypes.CAST_EPISODES_REQUESTED
+    ),
+    switchMap(action => {
+      const doc_id = action.payload;
+      return this.elastic.search('casts', {
+        from: 0,
+        size: 1500,
+        query: {
+          has_parent: {
+            parent_type: 'cast',
+            query: {
+              term: { _id: doc_id }
+            }
+          }
+        },
+        sort: [{ pubDate: { order: 'desc' } }]
+      });
+    }),
+    map((res: any) => {
+      const hits = res.hits.hits;
+      const episodes = [];
+      hits.forEach(itm => {
+        const ep = itm._source;
+        ep['id'] = itm._id;
+        delete ep.cast_episode;
+        episodes.push(ep);
+      });
+      console.log(episodes);
+      return {
+        type: fromCastActions.CastActionTypes.CAST_EPISODES_LOADED,
+        payload: { episodes: episodes }
+      };
+    })
+  );
+
   /*   @Effect() episodePlay$ = this.actions$.pipe(
     ofType<fromCastActions.EpisodePlay>(
       fromCastActions.CastActionTypes.EPISODE_PLAY

@@ -15,6 +15,7 @@ import {
 import { Router, ActivatedRoute } from '@angular/router';
 import { AppState } from 'src/app/store/app.reducer';
 import * as selectors from '../../store/cast.selectors';
+import * as fromActions from '../../store/cast.action';
 
 @Component({
   selector: 'app-cast-episodes',
@@ -25,6 +26,7 @@ export class CastEpisodesComponent implements OnInit, OnDestroy, AfterViewInit {
   @Output() modalClose: EventEmitter<any> = new EventEmitter<any>();
   @ViewChild('basicModal') basicModal;
   cast$: Observable<Cast>;
+  castID: string;
   episodes$: Observable<Episode[]>;
   subscriptions: Subscription[] = [];
   dtOptions = {
@@ -54,7 +56,8 @@ export class CastEpisodesComponent implements OnInit, OnDestroy, AfterViewInit {
     private router: Router,
     private route: ActivatedRoute,
     private store: Store<AppState>,
-    private playService: EpisodePlayerService
+    private playService: EpisodePlayerService,
+    private dispatcher: Dispatcher
   ) {
     console.log(this.route);
   }
@@ -65,6 +68,7 @@ export class CastEpisodesComponent implements OnInit, OnDestroy, AfterViewInit {
         if (!params['id']) {
           return;
         }
+        this.castID = params['id'];
         console.log(params);
         this.cast$ = this.store.select(selectors.getCastById(params['id']));
         this.episodes$ = this.store.select(
@@ -83,7 +87,7 @@ export class CastEpisodesComponent implements OnInit, OnDestroy, AfterViewInit {
         $('#tabEpisodes')
           .find('tbody tr td.sorting_2')
           .on('click', function(e) {
-            pservice.subject.next(dt.row(this.parentElement).data());
+            pservice.subject.next(<Episode>dt.row(this.parentElement).data());
           });
         console.log(dt);
       })
@@ -91,7 +95,9 @@ export class CastEpisodesComponent implements OnInit, OnDestroy, AfterViewInit {
     this.basicModal.show();
   }
 
-  getAllEpisodes() {}
+  getAllEpisodes() {
+    this.store.dispatch(new fromActions.CastEpisodesRequested(this.castID));
+  }
 
   ngOnDestroy() {
     this.subscriptions.forEach(sub => sub.unsubscribe());

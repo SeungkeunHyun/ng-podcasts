@@ -7,6 +7,8 @@ export enum CastActionTypes {
   CAST_LOADED = '[Cast API] CAST LOADED',
   CAST_UPDATE = '[Cast API] CAST UPDATE',
   CAST_UPDATED = '[Cast API] CAST UPDATED',
+  CAST_EPISODES_REQUESTED = '[Cast API] CAST EPISODES REQUESTED',
+  CAST_EPISODES_LOADED = '[Cast API] CAST EPISODES LOADED',
   CATEGORY_REQUESTED = '[Cast API] CATEGORY REQUESTED',
   CATEGORY_LOADED = '[Cast API] CATEGORY LOADED',
   EPISODES_REQUESTED = '[Cast API] EPISODES REQUESTED',
@@ -61,6 +63,16 @@ export class EpisodePlay implements Action {
   constructor(public payload: Episode) {}
 }
 
+export class CastEpisodesRequested implements Action {
+  readonly type = CastActionTypes.CAST_EPISODES_REQUESTED;
+  constructor(public payload: string) {}
+}
+
+export class CastEpisodeLoaded implements Action {
+  readonly type = CastActionTypes.CAST_EPISODES_LOADED;
+  constructor(public payload: { episodes: Episode[] }) {}
+}
+
 export type CastActions =
   | CastRequested
   | CastLoaded
@@ -70,4 +82,5 @@ export type CastActions =
   | EpisodesLoaded
   | CategoryRequested
   | CategoryLoaded
-  | EpisodePlay;
+  | EpisodePlay
+  | CastEpisodesRequested;
