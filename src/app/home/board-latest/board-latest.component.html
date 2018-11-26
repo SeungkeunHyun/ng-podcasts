@@ -1,7 +1,7 @@
 <h2>Latest episode</h2>
 <ol>
   <li *ngFor='let ep of (latestEpisodes | async)'>
-    <div class="media">
+    <div class="media" (click)="playCast(ep)">
       <app-board-thumb catId="{{ep.castID}}"></app-board-thumb>
       <div class="media-body">
         <h5 class="mt-0 font-weight-bold">{{ep.pubDate | slice:0:10}}</h5>

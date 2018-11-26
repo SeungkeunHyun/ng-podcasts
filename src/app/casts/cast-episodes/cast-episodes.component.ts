@@ -1,3 +1,4 @@
+import { EpisodePlayerService } from './../../services/episode-player.service';
 import { Episode } from './../../models/episode.model';
 import { Cast } from './../../models/cast.model';
 import { Observable, Subscription } from 'rxjs';
@@ -47,12 +48,13 @@ export class CastEpisodesComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     ],
     data: [],
-    order: [[0, 'dessc']]
+    order: [[0, 'desc'], [1, 'asc']]
   };
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private store: Store<AppState>
+    private store: Store<AppState>,
+    private playService: EpisodePlayerService
   ) {
     console.log(this.route);
   }
@@ -76,8 +78,13 @@ export class CastEpisodesComponent implements OnInit, OnDestroy, AfterViewInit {
     this.subscriptions.push(
       this.episodes$.subscribe(ep => {
         this.dtOptions.data = ep;
+        const pservice = this.playService;
         const dt = $('#tabEpisodes').DataTable(this.dtOptions);
-        // $('#tabEpisodes').find("tr").on('click')
+        $('#tabEpisodes')
+          .find('tbody tr td.sorting_2')
+          .on('click', function(e) {
+            pservice.subject.next(dt.row(this.parentElement).data());
+          });
         console.log(dt);
       })
     );

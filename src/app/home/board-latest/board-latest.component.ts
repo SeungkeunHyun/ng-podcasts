@@ -1,3 +1,4 @@
+import { EpisodePlayerService } from './../../services/episode-player.service';
 import { Episode } from './../../models/episode.model';
 import { Observable, Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
@@ -13,13 +14,20 @@ import * as selectors from '../../store/cast.selectors';
 export class BoardLatestComponent implements OnInit, OnDestroy {
   latestEpisodes: Observable<Episode[]>;
   subs: Subscription[] = [];
-  constructor(private store: Store<AppState>) {}
+  constructor(
+    private store: Store<AppState>,
+    private playService: EpisodePlayerService
+  ) {}
 
   ngOnInit() {
     const sub = this.store.select('casts').subscribe(casts => {
       this.latestEpisodes = this.store.select(selectors.selectLatestEpisodes);
     });
     this.subs.push(sub);
+  }
+
+  playCast(ep) {
+    this.playService.setEpisode(ep);
   }
 
   ngOnDestroy() {

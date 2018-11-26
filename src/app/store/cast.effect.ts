@@ -133,6 +133,14 @@ export class CastEffect {
     })
   );
 
+  /*   @Effect() episodePlay$ = this.actions$.pipe(
+    ofType<fromCastActions.EpisodePlay>(
+      fromCastActions.CastActionTypes.EPISODE_PLAY
+    ),
+    switchMap(action => {
+
+    }); */
+
   mapCasts(results) {
     const casts = [];
     results.hits.hits.map((itm: any) => {

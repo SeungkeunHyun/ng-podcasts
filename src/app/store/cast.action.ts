@@ -11,7 +11,8 @@ export enum CastActionTypes {
   CATEGORY_LOADED = '[Cast API] CATEGORY LOADED',
   EPISODES_REQUESTED = '[Cast API] EPISODES REQUESTED',
   EPISODES_LOADED = '[Cast API] EPISODES LOADED',
-  EPISODES_LOAD_ERROR = '[Cast API] EPISODES LOAD ERROR'
+  EPISODES_LOAD_ERROR = '[Cast API] EPISODES LOAD ERROR',
+  EPISODE_PLAY = '[Cast API] EPISODE PLAY'
 }
 
 export class CastRequested implements Action {
@@ -55,6 +56,11 @@ export class EpisodesLoadError implements Action {
   constructor(public payload: any) {}
 }
 
+export class EpisodePlay implements Action {
+  readonly type = CastActionTypes.EPISODE_PLAY;
+  constructor(public payload: Episode) {}
+}
+
 export type CastActions =
   | CastRequested
   | CastLoaded
@@ -63,4 +69,5 @@ export type CastActions =
   | EpisodesRequested
   | EpisodesLoaded
   | CategoryRequested
-  | CategoryLoaded;
+  | CategoryLoaded
+  | EpisodePlay;

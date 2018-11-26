@@ -1,6 +1,10 @@
-<footer class="page-footer center-on-small-only pt-0 mt-5 fixed-bottom">
-  <div class='media' *ngIf="mediaURL">
+<div class='media' *ngIf="loaded">
+  <img src='{{(cast$|async).imageURL}}' alt='{{(cast$|async).name}}' width='100px'>
+  <div class='media-body'><h5>{{ episode.title }}</h5>
+  <audio controls autoplay src="{{ episode.mediaURL }}"></audio>
   </div>
+</div>
+<footer class="page-footer center-on-small-only pt-0 mt-5 fixed-bottom">
   <div class="footer-copyright">
     <div class="container-fluid">
     © 2018 Copyright: <a href="https://mysuccess.offyoucode.co.uk/podcast"> 아름드리 </a>
