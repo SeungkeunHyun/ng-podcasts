@@ -68,7 +68,7 @@ export class CastEpisodesRequested implements Action {
   constructor(public payload: string) {}
 }
 
-export class CastEpisodeLoaded implements Action {
+export class CastEpisodesLoaded implements Action {
   readonly type = CastActionTypes.CAST_EPISODES_LOADED;
   constructor(public payload: { episodes: Episode[] }) {}
 }
@@ -83,4 +83,5 @@ export type CastActions =
   | CategoryRequested
   | CategoryLoaded
   | EpisodePlay
-  | CastEpisodesRequested;
+  | CastEpisodesRequested
+  | CastEpisodesLoaded;
