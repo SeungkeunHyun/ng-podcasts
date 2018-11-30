@@ -1,3 +1,4 @@
+import { ModalSearchComponent } from './home/modal-search/modal-search.component';
 import { CastMainComponent } from './casts/cast-main/cast-main.component';
 import { CastEffect } from './store/cast.effect';
 import { BrowserModule } from '@angular/platform-browser';
@@ -8,11 +9,7 @@ import { NavComponent } from './nav/nav.component';
 import { MainComponent } from './casts/main/main.component';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { StoreModule } from '@ngrx/store';
-import {
-  castReducer,
-  episodeReducer,
-  categoryReducer
-} from './store/cast.reducer';
+import { castReducer, episodeReducer, categoryReducer } from './store/cast.reducer';
 import { appReducer } from './store/app.reducer';
 import { HttpClientModule } from '@angular/common/http';
 import { EffectsModule } from '@ngrx/effects';
@@ -36,45 +33,46 @@ import { ModalComponent } from './home/modal/modal.component';
 import { FooterComponent } from './home/footer/footer.component';
 import { PlayerComponent } from './home/player/player.component';
 @NgModule({
-  declarations: [
-    AppComponent,
-    NavComponent,
-    MainComponent,
-    CastMainComponent,
-    CastDetailComponent,
-    CastEditComponent,
-    CastReadComponent,
-    DashboardComponent,
-    BoardGraphComponent,
-    BoardLatestComponent,
-    BoardThumbComponent,
-    BoardCastsComponent,
-    CastEpisodesComponent,
-    ModalComponent,
-    FooterComponent,
-    PlayerComponent
-  ],
-  imports: [
-    BrowserModule,
-    DataTablesModule,
-    FormsModule,
-    ReactiveFormsModule,
-    HttpClientModule,
-    AppRouterModule,
-    MDBBootstrapModule.forRoot(),
-    ChartsModule,
-    StoreModule.forRoot({
-      app: appReducer,
-      casts: castReducer,
-      categories: categoryReducer,
-      episodes: episodeReducer
-    }),
-    EffectsModule.forRoot([CastEffect]),
-    StoreDevtoolsModule.instrument({
-      maxAge: 25
-    })
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+	declarations: [
+		AppComponent,
+		NavComponent,
+		MainComponent,
+		CastMainComponent,
+		CastDetailComponent,
+		CastEditComponent,
+		CastReadComponent,
+		DashboardComponent,
+		BoardGraphComponent,
+		BoardLatestComponent,
+		BoardThumbComponent,
+		BoardCastsComponent,
+		CastEpisodesComponent,
+		ModalComponent,
+		FooterComponent,
+		PlayerComponent,
+		ModalSearchComponent
+	],
+	imports: [
+		BrowserModule,
+		DataTablesModule,
+		FormsModule,
+		ReactiveFormsModule,
+		HttpClientModule,
+		AppRouterModule,
+		MDBBootstrapModule.forRoot(),
+		ChartsModule,
+		StoreModule.forRoot({
+			app: appReducer,
+			casts: castReducer,
+			categories: categoryReducer,
+			episodes: episodeReducer
+		}),
+		EffectsModule.forRoot([ CastEffect ]),
+		StoreDevtoolsModule.instrument({
+			maxAge: 25
+		})
+	],
+	providers: [],
+	bootstrap: [ AppComponent ]
 })
 export class AppModule {}

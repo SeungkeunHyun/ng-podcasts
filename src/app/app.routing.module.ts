@@ -16,7 +16,8 @@ const appRoutes: Routes = [
 		outlet: 'modal'
 	},
 	{
-		path: 'popup/search/:word',
+		path: 'search?term',
+		pathMatch: 'full',
 		component: ModalSearchComponent,
 		outlet: 'modal'
 	},
