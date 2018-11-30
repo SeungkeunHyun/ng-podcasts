@@ -11,12 +11,12 @@
       <li class="nav-item" routerLinkActive='active'>
         <a class="nav-link waves-light" routerLink='dashboard' mdbWavesEffect>Dashboard</a>
       </li>
-      <li class="nav-item" routerLinkActive='active' >
+      <li class="nav-item" routerLinkActive='active'>
         <a class="nav-link waves-light" routerLink='casts' mdbWavesEffect>Casts</a>
       </li>
 
       <!-- Dropdown -->
-      <li class="nav-item dropdown" routerLinkActive='active'  dropdown>
+      <li class="nav-item dropdown" routerLinkActive='active' dropdown>
         <a dropdownToggle mdbWavesEffect type="button" class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
           Machine Learning<span class="caret"></span></a>
         <div *dropdownMenu class="dropdown-menu dropdown dropdown-primary" role="menu">
@@ -34,7 +34,7 @@
     <!-- Search form -->
     <form class="form-inline waves-light" mdbWavesEffect>
       <div class="md-form mt-0">
-        <input class="form-control mr-sm-2" type="text" placeholder="Search">
+        <input class="form-control mr-sm-2" #searchWord (keyup)='searchCast($event)' type="text" placeholder="Search">
       </div>
     </form>
   </links>

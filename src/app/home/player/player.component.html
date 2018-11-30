@@ -1,6 +1,11 @@
-<div class='border rounded media mt-3' *ngIf="episode">
-  <img src='{{(cast$ | async).imageURL}}' width='80px' class='responsive mt-3 ml-3 mr-3 rounded'>
-  <div class='media-body mt-3'><h5>{{episode.title}}</h5><br>{{episode.subtitle}}
-  <audio autoplay controls src='{{ episode.mediaURL }}'></audio>
+<div id="player" class='row border rounded mt-3' *ngIf="episode">
+  <div class='col-lg-1 col-sm-2 col-xs-2'>
+    <img src='{{(cast$ | async).imageURL}}' width='60px' class='responsive mt-3 ml-3 mr-3 rounded'>
+  </div>
+  <div class='mt-2 col-lg-5 col-sm-4 col-xs-4'>
+    <h6>{{episode.title}}</h6><br>{{episode.subtitle}}
+  </div>
+  <div class='col-sm-6 mt-4'>
+    <audio #player autoplay controls src='{{ episode.mediaURL }}'></audio>
   </div>
 </div>
