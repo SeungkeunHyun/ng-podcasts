@@ -12,8 +12,7 @@ export class ModalSearchComponent implements OnInit {
 
 	ngOnInit() {
 		this.route.params.subscribe((params) => {
-			console.log(params['term']);
-			this.search(params['term']);
+			console.log(params);
 		});
 	}
 

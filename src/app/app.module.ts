@@ -18,7 +18,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 import { DataTablesModule } from 'angular-datatables';
 import { CastEditComponent } from './casts/cast-edit/cast-edit.component';
-import { AppRouterModule } from './app.routing.module';
+import { AppRoutingModule } from './app.routing.module';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { CastReadComponent } from './casts/cast-read/cast-read.component';
 import { DashboardComponent } from './home/dashboard/dashboard.component';
@@ -58,7 +58,7 @@ import { PlayerComponent } from './home/player/player.component';
 		FormsModule,
 		ReactiveFormsModule,
 		HttpClientModule,
-		AppRouterModule,
+		AppRoutingModule,
 		MDBBootstrapModule.forRoot(),
 		ChartsModule,
 		StoreModule.forRoot({

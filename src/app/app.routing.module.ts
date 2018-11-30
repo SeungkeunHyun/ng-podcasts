@@ -11,14 +11,13 @@ const appRoutes: Routes = [
 	{ path: '', redirectTo: 'dashboard', pathMatch: 'full' },
 	{ path: 'dashboard', component: DashboardComponent },
 	{
-		path: 'popup/:id',
-		component: CastEpisodesComponent,
+		path: 'srch',
+		component: ModalSearchComponent,
 		outlet: 'modal'
 	},
 	{
-		path: 'search?term',
-		pathMatch: 'full',
-		component: ModalSearchComponent,
+		path: 'popup/:id',
+		component: CastEpisodesComponent,
 		outlet: 'modal'
 	},
 	{
@@ -35,4 +34,4 @@ const appRoutes: Routes = [
 	imports: [ RouterModule.forRoot(appRoutes, { enableTracing: true }) ],
 	exports: [ RouterModule ]
 })
-export class AppRouterModule {}
+export class AppRoutingModule {}

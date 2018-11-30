@@ -21,7 +21,9 @@ export class NavComponent implements OnInit {
 	searchCast(e) {
 		if (e.key === 'Enter' && this.searchWord.nativeElement.value.trim().length > 1) {
 			console.log('start search', this.searchWord.nativeElement.value);
-			this.router.navigateByUrl('search?' + this.searchWord.nativeElement.value.trim());
+			this.router.navigate([ 'srch' ], {
+				queryParams: { term: this.searchWord.nativeElement.value.trim() }
+			});
 		}
 	}
 }
