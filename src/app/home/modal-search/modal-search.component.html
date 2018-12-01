@@ -1,3 +1,8 @@
 <ul>
-  <li *ngFor='let ep of episodes'>{{ep.title}}</li>
+  <li *ngFor='let ep of episodes'>
+    <div>
+      <a (click)='play(ep)' data-toggle='tooltip' title='{{ep.title}}'>{{ep.title | slice:0:15}}</a>
+      [{{ep.pubDate | date:'yyyy.MM.dd'}}]
+    </div>
+  </li>
 </ul>

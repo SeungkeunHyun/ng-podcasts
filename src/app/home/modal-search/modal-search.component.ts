@@ -2,6 +2,7 @@ import { ElasticService } from './../../services/elastic.service';
 import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { Episode } from 'src/app/models/episode.model';
+import * as selectors from '../../store/cast.selectors';
 
 @Component({
 	selector: 'app-modal-search',
@@ -48,5 +49,9 @@ export class ModalSearchComponent implements OnInit {
 				title: hit._source.title
 			});
 		}
+	}
+
+	play(ep: Episode) {
+		console.log(ep);
 	}
 }
