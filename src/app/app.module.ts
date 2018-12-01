@@ -32,6 +32,7 @@ import { CastEpisodesComponent } from './casts/cast-episodes/cast-episodes.compo
 import { ModalComponent } from './home/modal/modal.component';
 import { FooterComponent } from './home/footer/footer.component';
 import { PlayerComponent } from './home/player/player.component';
+
 @NgModule({
 	declarations: [
 		AppComponent,

@@ -12,7 +12,8 @@ const appRoutes: Routes = [
 	{ path: 'dashboard', component: DashboardComponent },
 	{
 		path: 'search',
-		component: ModalSearchComponent
+		component: ModalSearchComponent,
+		outlet: 'modal'
 	},
 	{
 		path: 'popup/:id',

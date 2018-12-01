@@ -5,5 +5,5 @@ export interface Episode {
   description: string;
   duration: number;
   mediaURL: string;
-  pubDate: Date;
+  pubDate: Date; 
 }
