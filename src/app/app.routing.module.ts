@@ -11,9 +11,8 @@ const appRoutes: Routes = [
 	{ path: '', redirectTo: 'dashboard', pathMatch: 'full' },
 	{ path: 'dashboard', component: DashboardComponent },
 	{
-		path: 'srch',
-		component: ModalSearchComponent,
-		outlet: 'modal'
+		path: 'search',
+		component: ModalSearchComponent
 	},
 	{
 		path: 'popup/:id',

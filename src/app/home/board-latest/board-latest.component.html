@@ -4,7 +4,7 @@
     <div class="media" (click)="playCast(ep)">
       <app-board-thumb catId="{{ep.castID}}"></app-board-thumb>
       <div class="media-body">
-        <h5 class="mt-0 font-weight-bold">{{ep.pubDate | slice:0:10}}</h5>
+        <strong class="mt-0 font-weight-bold">{{ep.pubDate | slice:0:10}}</strong>
         {{ ep.title }} <br/> {{ ep.duration }}
       </div>
     </div>
