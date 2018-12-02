@@ -8,6 +8,7 @@ import { Episode } from 'src/app/models/episode.model';
 import * as selectors from '../../store/cast.selectors';
 import { AppState } from '../../store/app.reducer';
 import { Paging } from 'src/app/models/paging.model';
+import { EpisodePlayerService } from 'src/app/services/episode-player.service';
 
 @Component({
 	selector: 'app-modal-search',
@@ -19,14 +20,15 @@ export class ModalSearchComponent implements OnInit, AfterViewInit {
 	@Output() modalClose: EventEmitter<any> = new EventEmitter<any>();
 	searchWord: string;
 	dicCast: {};
-  episodes: Episode[] = [];
-  pagedItems: Episode[];
+	episodes: Episode[] = [];
+	pagedItems: Episode[];
 	paging: Paging = new Paging([]);
 	constructor(
 		private store: Store<AppState>,
 		private route: ActivatedRoute,
 		private elastic: ElasticService,
-		private router: Router
+		private router: Router,
+		private playService: EpisodePlayerService
 	) {}
 
 	ngOnInit() {
@@ -39,15 +41,15 @@ export class ModalSearchComponent implements OnInit, AfterViewInit {
 		console.log(this.basicModal);
 		this.basicModal.show();
 		this.search();
-  }
-  
-  gotoPage(pg: number) {
-    if(pg === this.paging.pageNumber) {
-      return;
-    }
-    this.paging.pageNumber = pg;
-    this.pagedItems = this.getPagedItems();
-  }
+	}
+
+	gotoPage(pg: number) {
+		if (pg === this.paging.pageNumber) {
+			return;
+		}
+		this.paging.pageNumber = pg;
+		this.pagedItems = this.getPagedItems();
+	}
 
 	search() {
 		this.elastic
@@ -97,8 +99,8 @@ export class ModalSearchComponent implements OnInit, AfterViewInit {
 				this.getCast(ep).subscribe((cast) => (this.dicCast[ep.castID] = cast));
 			}
 		}
-    this.paging = new Paging(this.episodes);
-    this.pagedItems = this.getPagedItems();
+		this.paging = new Paging(this.episodes);
+		this.pagedItems = this.getPagedItems();
 	}
 
 	closeModal($event) {
@@ -108,5 +110,6 @@ export class ModalSearchComponent implements OnInit, AfterViewInit {
 
 	play(ep: Episode) {
 		console.log(ep);
+		this.playService.setEpisode(ep);
 	}
 }

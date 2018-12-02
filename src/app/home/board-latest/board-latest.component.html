@@ -1,11 +1,13 @@
 <h2>Latest episode</h2>
 <ol>
-  <li *ngFor='let ep of (latestEpisodes | async)'>
+  <li class='mb-1' *ngFor='let ep of (latestEpisodes | async)'>
     <div class="media" (click)="playCast(ep)">
       <app-board-thumb catId="{{ep.castID}}"></app-board-thumb>
       <div class="media-body">
-        <strong class="mt-0 font-weight-bold">{{ep.pubDate | slice:0:10}}</strong>
-        {{ ep.title }} <br/> {{ ep.duration }}
+        <strong class="mt-0 font-weight-bold">{{ep.pubDate | timeAgo}}</strong>
+        {{ ep.title }} <br /> <span class='pull-right' *ngIf="ep.duration">
+          <fa name="hourglass-start "></fa><small>{{ ep.duration }}</small>
+        </span>
       </div>
     </div>
   </li>

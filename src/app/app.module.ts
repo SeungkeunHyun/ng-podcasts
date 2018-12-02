@@ -32,6 +32,8 @@ import { CastEpisodesComponent } from './casts/cast-episodes/cast-episodes.compo
 import { ModalComponent } from './home/modal/modal.component';
 import { FooterComponent } from './home/footer/footer.component';
 import { PlayerComponent } from './home/player/player.component';
+import { TimeAgoPipe } from 'time-ago-pipe';
+import { AngularFontAwesomeModule } from 'angular-font-awesome';
 
 @NgModule({
 	declarations: [
@@ -51,7 +53,8 @@ import { PlayerComponent } from './home/player/player.component';
 		ModalComponent,
 		FooterComponent,
 		PlayerComponent,
-		ModalSearchComponent
+		ModalSearchComponent,
+		TimeAgoPipe
 	],
 	imports: [
 		BrowserModule,
@@ -71,7 +74,8 @@ import { PlayerComponent } from './home/player/player.component';
 		EffectsModule.forRoot([ CastEffect ]),
 		StoreDevtoolsModule.instrument({
 			maxAge: 25
-		})
+		}),
+		AngularFontAwesomeModule
 	],
 	providers: [],
 	bootstrap: [ AppComponent ]
