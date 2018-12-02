@@ -1,9 +1,8 @@
-import { Cast } from './../../models/cast.model';
-import { getCastById } from './../../store/cast.selectors';
+import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { ElasticService } from './../../services/elastic.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Component, OnInit, AfterViewInit, ViewChild, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { Episode } from 'src/app/models/episode.model';
 import * as selectors from '../../store/cast.selectors';
 import { AppState } from '../../store/app.reducer';
@@ -15,7 +14,7 @@ import { EpisodePlayerService } from 'src/app/services/episode-player.service';
 	templateUrl: './modal-search.component.html',
 	styleUrls: [ './modal-search.component.css' ]
 })
-export class ModalSearchComponent implements OnInit, AfterViewInit {
+export class ModalSearchComponent implements OnInit, AfterViewInit, OnDestroy {
 	@ViewChild('basicModal') basicModal;
 	@Output() modalClose: EventEmitter<any> = new EventEmitter<any>();
 	searchWord: string;
@@ -23,18 +22,27 @@ export class ModalSearchComponent implements OnInit, AfterViewInit {
 	episodes: Episode[] = [];
 	pagedItems: Episode[];
 	paging: Paging = new Paging([]);
+	subs: Subscription[];
 	constructor(
 		private store: Store<AppState>,
 		private route: ActivatedRoute,
 		private elastic: ElasticService,
 		private router: Router,
 		private playService: EpisodePlayerService
-	) {}
+	) {
+		this.subs = [];
+	}
 
 	ngOnInit() {
-		this.route.queryParams.subscribe((params) => {
-			this.searchWord = params['term'];
-		});
+		this.subs.push(
+			this.route.queryParams.subscribe((params) => {
+				this.searchWord = params['term'];
+			})
+		);
+	}
+
+	ngOnDestroy() {
+		this.subs.forEach((sub) => sub.unsubscribe());
 	}
 
 	ngAfterViewInit() {
@@ -96,7 +104,7 @@ export class ModalSearchComponent implements OnInit, AfterViewInit {
 			};
 			this.episodes.push(ep);
 			if (!this.dicCast.hasOwnProperty(ep.castID)) {
-				this.getCast(ep).subscribe((cast) => (this.dicCast[ep.castID] = cast));
+				this.subs.push(this.getCast(ep).subscribe((cast) => (this.dicCast[ep.castID] = cast)));
 			}
 		}
 		this.paging = new Paging(this.episodes);
