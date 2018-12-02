@@ -1,6 +1,6 @@
-<div class='modal' #basicModal='mdbModal' mdbModal class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myBasicModalLabel"
-  aria-hidden="true">
-  <div class="modal-dialog" role="document">
+<div #basicModal='mdbModal' mdbModal class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myBasicModalLabel"
+  aria-hidden="true" style="padding-right: 15px; display: block;">
+  <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
     <div class='modal-content'>
       <div class="modal-header">
         <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal($event)">
@@ -9,7 +9,7 @@
         <h5>Search result for {{this.searchWord}}</h5>
       </div>
       <div class='modal-body container'>
-        <ul>
+        <ul class='list-unstyled'>
           <li *ngFor='let ep of pagedItems' class='mb-1'>
             <div class='row'>
               <div class='col-md-2'>
@@ -36,7 +36,7 @@
             </li>
             <li [ngClass]="{'active': pg === paging.pageNumber}" class="page-item" *ngFor="let pg of paging.pageArray">
               <a (click)='gotoPage(pg)' class="page-link">{{pg}}</a></li>
-            <li class="page-item"> 
+            <li class="page-item">
               <a class="page-link" aria-label="Next">
                 <span aria-hidden="true">&raquo;</span>
                 <span class="sr-only">Next</span>
