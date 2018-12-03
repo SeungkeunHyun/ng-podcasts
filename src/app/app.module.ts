@@ -34,6 +34,7 @@ import { FooterComponent } from './home/footer/footer.component';
 import { PlayerComponent } from './home/player/player.component';
 import { TimeAgoPipe } from 'time-ago-pipe';
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
+import { PagingComponent } from './common/paging/paging.component';
 
 @NgModule({
 	declarations: [
@@ -54,7 +55,8 @@ import { AngularFontAwesomeModule } from 'angular-font-awesome';
 		FooterComponent,
 		PlayerComponent,
 		ModalSearchComponent,
-		TimeAgoPipe
+		TimeAgoPipe,
+		PagingComponent
 	],
 	imports: [
 		BrowserModule,
