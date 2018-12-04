@@ -1,13 +1,13 @@
-import { EpisodePlayerService } from './../../services/episode-player.service';
-import { Episode } from './../../models/episode.model';
-import { Cast } from './../../models/cast.model';
+import { EpisodePlayerService } from './../../_services/episode-player.service';
+import { Episode } from './../../_models/episode.model';
+import { Cast } from './../../_models/cast.model';
 import { Observable, Subscription, Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { Component, OnInit, EventEmitter, Output, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { AppState } from 'src/app/store/app.reducer';
-import * as selectors from '../../store/cast.selectors';
-import * as fromActions from '../../store/cast.action';
+import { AppState } from 'src/app/_store/app.reducer';
+import * as selectors from '../../_store/cast.selectors';
+import * as fromActions from '../../_store/cast.action';
 
 @Component({
 	selector: 'app-cast-episodes',

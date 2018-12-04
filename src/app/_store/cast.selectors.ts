@@ -1,7 +1,7 @@
-import { Episode } from './../models/episode.model';
+import { Episode } from './../_models/episode.model';
 import { AppState } from './app.reducer';
 import { createSelector, State } from '@ngrx/store';
-import { Cast } from '../models/cast.model';
+import { Cast } from '../_models/cast.model';
 
 export const selectCasts = (state: AppState) => state.casts;
 export const selectCategoryState = (state: AppState) => state.categories;

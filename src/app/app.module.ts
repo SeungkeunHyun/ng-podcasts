@@ -1,6 +1,6 @@
 import { ModalSearchComponent } from './home/modal-search/modal-search.component';
 import { CastMainComponent } from './casts/cast-main/cast-main.component';
-import { CastEffect } from './store/cast.effect';
+import { CastEffect } from './_store/cast.effect';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
@@ -9,8 +9,8 @@ import { NavComponent } from './nav/nav.component';
 import { MainComponent } from './casts/main/main.component';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { StoreModule } from '@ngrx/store';
-import { castReducer, episodeReducer, categoryReducer } from './store/cast.reducer';
-import { appReducer } from './store/app.reducer';
+import { castReducer, episodeReducer, categoryReducer } from './_store/cast.reducer';
+import { appReducer } from './_store/app.reducer';
 import { HttpClientModule } from '@angular/common/http';
 import { EffectsModule } from '@ngrx/effects';
 import { CastDetailComponent } from './casts/cast-detail/cast-detail.component';

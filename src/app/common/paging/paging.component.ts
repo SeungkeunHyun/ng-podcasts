@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Paging } from 'src/app/models/paging.model';
+import { Paging } from 'src/app/_models/paging.model';
 import { Subject } from 'rxjs';
 
 @Component({

@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
-import * as fromReducers from '../../store/cast.reducer';
-import { Cast } from './../../models/cast.model';
+import * as fromReducers from '../../_store/cast.reducer';
+import { Cast } from './../../_models/cast.model';
 import { Component, OnInit, Input } from '@angular/core';
-import { AppState } from '../../store/app.reducer';
+import { AppState } from '../../_store/app.reducer';
 
 @Component({
 	selector: 'app-cast-detail',

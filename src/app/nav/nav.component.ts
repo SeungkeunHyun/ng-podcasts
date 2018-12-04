@@ -1,8 +1,7 @@
-import { ElasticService } from './../services/elastic.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CastRequested, CategoryRequested } from './../store/cast.action';
+import { CastRequested, CategoryRequested } from './../_store/cast.action';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { AppState } from '../store/app.reducer';
+import { AppState } from '../_store/app.reducer';
 import { Store } from '@ngrx/store';
 
 @Component({

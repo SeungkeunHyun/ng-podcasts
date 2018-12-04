@@ -1,13 +1,13 @@
+import { map } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { ElasticService } from './../../services/elastic.service';
+import { ElasticService } from './../../_services/elastic.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, AfterViewInit, ViewChild, Output, EventEmitter, OnDestroy } from '@angular/core';
-import { Episode } from 'src/app/models/episode.model';
-import * as selectors from '../../store/cast.selectors';
-import { AppState } from '../../store/app.reducer';
-import { Paging } from 'src/app/models/paging.model';
-import { EpisodePlayerService } from 'src/app/services/episode-player.service';
+import { Episode } from 'src/app/_models/episode.model';
+import * as selectors from '../../_store/cast.selectors';
+import { AppState } from '../../_store/app.reducer';
+import { EpisodePlayerService } from 'src/app/_services/episode-player.service';
 
 @Component({
 	selector: 'app-modal-search',
@@ -34,11 +34,8 @@ export class ModalSearchComponent implements OnInit, AfterViewInit, OnDestroy {
 	}
 
 	ngOnInit() {
-		this.subs.push(
-			this.route.queryParams.subscribe((params) => {
-				this.searchWord = params['term'];
-			})
-		);
+		this.searchWord = this.route.snapshot.queryParams['term'];
+		this.subs.push(this.route.data.subscribe((data) => this.processSearchResult(data.results)));
 	}
 
 	ngOnDestroy() {
@@ -48,9 +45,9 @@ export class ModalSearchComponent implements OnInit, AfterViewInit, OnDestroy {
 	ngAfterViewInit() {
 		console.log(this.basicModal);
 		this.basicModal.show();
-		this.search();
+		// this.search();
 	}
-
+	/*
 	search() {
 		this.elastic
 			.search('casts', {
@@ -65,7 +62,7 @@ export class ModalSearchComponent implements OnInit, AfterViewInit, OnDestroy {
 			})
 			.then((data) => this.processSearchResult(data));
 	}
-
+*/
 	getCast(ep: Episode) {
 		console.log('cast id', ep);
 		const cast = this.store.select(selectors.getCastById(ep.castID));

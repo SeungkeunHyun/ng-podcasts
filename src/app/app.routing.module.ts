@@ -6,6 +6,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { DashboardComponent } from './home/dashboard/dashboard.component';
 import { CastEpisodesComponent } from './casts/cast-episodes/cast-episodes.component';
+import { SearchResolver } from './_resolvers/search-resolver';
 
 const appRoutes: Routes = [
 	{ path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -13,7 +14,8 @@ const appRoutes: Routes = [
 	{
 		path: 'search',
 		component: ModalSearchComponent,
-		outlet: 'modal'
+		outlet: 'modal',
+		resolve: { results: SearchResolver }
 	},
 	{
 		path: 'popup/:id',
