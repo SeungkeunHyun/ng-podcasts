@@ -3,7 +3,15 @@ import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { ElasticService } from './../../_services/elastic.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Component, OnInit, AfterViewInit, ViewChild, Output, EventEmitter, OnDestroy } from '@angular/core';
+import {
+	Component,
+	OnInit,
+	AfterViewInit,
+	ViewChild,
+	Output,
+	EventEmitter,
+	OnDestroy
+} from '@angular/core';
 import { Episode } from 'src/app/_models/episode.model';
 import * as selectors from '../../_store/cast.selectors';
 import { AppState } from '../../_store/app.reducer';
@@ -12,7 +20,7 @@ import { EpisodePlayerService } from 'src/app/_services/episode-player.service';
 @Component({
 	selector: 'app-modal-search',
 	templateUrl: './modal-search.component.html',
-	styleUrls: [ './modal-search.component.css' ]
+	styleUrls: ['./modal-search.component.css']
 })
 export class ModalSearchComponent implements OnInit, AfterViewInit, OnDestroy {
 	@ViewChild('basicModal') basicModal;
@@ -35,11 +43,13 @@ export class ModalSearchComponent implements OnInit, AfterViewInit, OnDestroy {
 
 	ngOnInit() {
 		this.searchWord = this.route.snapshot.queryParams['term'];
-		this.subs.push(this.route.data.subscribe((data) => this.processSearchResult(data.results)));
+		this.subs.push(
+			this.route.data.subscribe(data => this.processSearchResult(data.results))
+		);
 	}
 
 	ngOnDestroy() {
-		this.subs.forEach((sub) => sub.unsubscribe());
+		this.subs.forEach(sub => sub.unsubscribe());
 	}
 
 	ngAfterViewInit() {
@@ -87,18 +97,25 @@ export class ModalSearchComponent implements OnInit, AfterViewInit, OnDestroy {
 				mediaURL: hit._source.mediaURL,
 				pubDate: hit._source.pubDate,
 				title: hit._source.title,
-				description: hit._source.hasOwnProperty('subtitle') ? hit._source.subtitle : null
+				summary: hit._source.hasOwnProperty('summary')
+					? hit._source.summary
+					: null,
+				subtitle: hit._source.hasOwnProperty('subtitle')
+					? hit._source.subtitle
+					: null
 			};
 			this.episodes.push(ep);
 			if (!this.dicCast.hasOwnProperty(ep.castID)) {
-				this.subs.push(this.getCast(ep).subscribe((cast) => (this.dicCast[ep.castID] = cast)));
+				this.subs.push(
+					this.getCast(ep).subscribe(cast => (this.dicCast[ep.castID] = cast))
+				);
 			}
 		}
 		this.searchFinished = true;
 	}
 
 	closeModal($event) {
-		this.router.navigate([ { outlets: { modal: null } } ]);
+		this.router.navigate([{ outlets: { modal: null } }]);
 		this.modalClose.next($event);
 	}
 

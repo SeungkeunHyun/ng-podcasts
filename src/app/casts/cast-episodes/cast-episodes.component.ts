@@ -3,7 +3,15 @@ import { Episode } from './../../_models/episode.model';
 import { Cast } from './../../_models/cast.model';
 import { Observable, Subscription, Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { Component, OnInit, EventEmitter, Output, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  EventEmitter,
+  Output,
+  OnDestroy,
+  ViewChild,
+	AfterViewInit
+} from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AppState } from 'src/app/_store/app.reducer';
 import * as selectors from '../../_store/cast.selectors';
@@ -12,7 +20,7 @@ import * as fromActions from '../../_store/cast.action';
 @Component({
 	selector: 'app-cast-episodes',
 	templateUrl: './cast-episodes.component.html',
-	styleUrls: [ './cast-episodes.component.css' ]
+	styleUrls: ['./cast-episodes.component.css']
 })
 export class CastEpisodesComponent implements OnInit, OnDestroy, AfterViewInit {
 	@Output() modalClose: EventEmitter<any> = new EventEmitter<any>();
@@ -32,7 +40,9 @@ export class CastEpisodesComponent implements OnInit, OnDestroy, AfterViewInit {
 				data: 'title',
 				title: '제목',
 				render: function(val, typ, row, meta) {
-					return `${val} <span class='pull-right'>${row.duration}</span>`;
+					return `${val} <span class='pull-right'>${
+						row.duration ? row.duration : ''
+					}</span>`;
 				}
 			},
 			{
@@ -44,7 +54,7 @@ export class CastEpisodesComponent implements OnInit, OnDestroy, AfterViewInit {
 			}
 		],
 		data: [],
-		order: [ [ 0, 'desc' ], [ 1, 'asc' ] ]
+		order: [[0, 'desc'], [1, 'asc']]
 	};
 	constructor(
 		private router: Router,
@@ -58,27 +68,31 @@ export class CastEpisodesComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	ngOnInit() {
 		this.subscriptions.push(
-			this.route.params.subscribe((params) => {
+			this.route.params.subscribe(params => {
 				if (!params['id']) {
 					return;
 				}
 				this.castID = params['id'];
 				console.log(params);
 				this.cast$ = this.store.select(selectors.getCastById(params['id']));
-				this.episodes$ = this.store.select(selectors.getCastEpisodes(params['id']));
+				this.episodes$ = this.store.select(
+					selectors.getCastEpisodes(params['id'])
+				);
 			})
 		);
 	}
 
 	ngAfterViewInit() {
 		this.subscriptions.push(
-			this.episodes$.subscribe((ep) => {
+			this.episodes$.subscribe(ep => {
 				this.dtOptions.data = ep;
 				const pservice = this.playService;
 				const dt = $('#tabEpisodes').DataTable(this.dtOptions);
-				$('#tabEpisodes').find('tbody tr td.sorting_2').on('click', function(e) {
-					pservice.subject.next(<Episode>dt.row(this.parentElement).data());
-				});
+				$('#tabEpisodes')
+					.find('tbody tr td.sorting_2')
+					.on('click', function(e) {
+						pservice.subject.next(<Episode>dt.row(this.parentElement).data());
+					});
 				console.log(dt);
 			})
 		);
@@ -87,7 +101,7 @@ export class CastEpisodesComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	getAllEpisodes() {
 		this.store.dispatch(new fromActions.CastEpisodesRequested(this.castID));
-		this.playService.subAll.subscribe((data) => {
+		this.playService.subAll.subscribe(data => {
 			console.log('fetched all episodes', data);
 			this.dtOptions.data = data;
 			const $dt = $('#tabEpisodes').DataTable(this.dtOptions);
@@ -97,11 +111,11 @@ export class CastEpisodesComponent implements OnInit, OnDestroy, AfterViewInit {
 	}
 
 	ngOnDestroy() {
-		this.subscriptions.forEach((sub) => sub.unsubscribe());
+		this.subscriptions.forEach(sub => sub.unsubscribe());
 	}
 
 	closeModal($event) {
-		this.router.navigate([ { outlets: { modal: null } } ]);
+		this.router.navigate([{ outlets: { modal: null } }]);
 		this.modalClose.next($event);
 	}
 }

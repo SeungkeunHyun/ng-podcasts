@@ -1,5 +1,4 @@
-<div #basicModal='mdbModal' mdbModal class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myBasicModalLabel"
-  aria-hidden="true" style="padding-right: 15px; display: block;">
+<div #basicModal='mdbModal' mdbModal class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myBasicModalLabel" aria-hidden="true" style="padding-right: 15px; display: block;">
   <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
     <div class='modal-content'>
       <div class="modal-header">
@@ -16,7 +15,7 @@
                 <img src='{{ dicCast[ep.castID] ? dicCast[ep.castID].imageURL : "" }}' width='60px'>
               </div>
               <div class="col-md-8">
-                <a (click)='play(ep)' data-toggle='tooltip' title='{{ep.title}}'>{{ep.title}}</a>
+                <a (click)='play(ep)' data-toggle='tooltip' title='{{ep.summary ? ep.summary : ep.title}}'>{{ep.title}}<br><small>{{ep.subtitle}}</small></a>
               </div>
               <div class='col-md-2'>
                 [{{ep.pubDate | date:'yyyy.MM.dd'}}]
