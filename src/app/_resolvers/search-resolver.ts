@@ -21,6 +21,7 @@ export class SearchResolver implements Resolve<any> {
 			query: {
 				multi_match: {
 					query: route.queryParams['term'],
+					type: 'phrase',
 					fields: ['title', 'subtitle', 'summary']
 				}
 			},
