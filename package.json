@@ -26,6 +26,7 @@
     "@ngrx/entity": "^6.1.2",
     "@ngrx/store": "^6.1.2",
     "@types/chart.js": "^2.7.40",
+    "alertifyjs": "^1.11.2",
     "angular-bootstrap-md": "^6.3.0",
     "angular-datatables": "^7.0.0",
     "angular-font-awesome": "^3.1.2",

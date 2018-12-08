@@ -15,7 +15,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { EffectsModule } from '@ngrx/effects';
 import { CastDetailComponent } from './casts/cast-detail/cast-detail.component';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { environment } from '../environments/environment';
 import { DataTablesModule } from 'angular-datatables';
 import { CastEditComponent } from './casts/cast-edit/cast-edit.component';
 import { AppRoutingModule } from './app.routing.module';
@@ -35,6 +34,7 @@ import { PlayerComponent } from './home/player/player.component';
 import { TimeAgoPipe } from 'time-ago-pipe';
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { PagingComponent } from './common/paging/paging.component';
+import { AlertifyService } from './_services/alertify.service';
 
 @NgModule({
 	declarations: [
