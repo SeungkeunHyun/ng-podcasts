@@ -1,3 +1,4 @@
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { ModalSearchComponent } from './home/modal-search/modal-search.component';
 import { CastMainComponent } from './casts/cast-main/cast-main.component';
 import { CastEffect } from './_store/cast.effect';
@@ -9,7 +10,11 @@ import { NavComponent } from './nav/nav.component';
 import { MainComponent } from './casts/main/main.component';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { StoreModule } from '@ngrx/store';
-import { castReducer, episodeReducer, categoryReducer } from './_store/cast.reducer';
+import {
+	castReducer,
+	episodeReducer,
+	categoryReducer
+} from './_store/cast.reducer';
 import { appReducer } from './_store/app.reducer';
 import { HttpClientModule } from '@angular/common/http';
 import { EffectsModule } from '@ngrx/effects';
@@ -73,13 +78,13 @@ import { PagingComponent } from './common/paging/paging.component';
 			categories: categoryReducer,
 			episodes: episodeReducer
 		}),
-		EffectsModule.forRoot([ CastEffect ]),
+		EffectsModule.forRoot([CastEffect]),
 		StoreDevtoolsModule.instrument({
 			maxAge: 25
 		}),
 		AngularFontAwesomeModule
 	],
-	providers: [],
-	bootstrap: [ AppComponent ]
+	providers: [{ provide: LocationStrategy, useClass: HashLocationStrategy }],
+	bootstrap: [AppComponent]
 })
 export class AppModule {}

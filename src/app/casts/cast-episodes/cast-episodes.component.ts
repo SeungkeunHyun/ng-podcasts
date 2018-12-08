@@ -4,12 +4,12 @@ import { Cast } from './../../_models/cast.model';
 import { Observable, Subscription, Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
 import {
-  Component,
-  OnInit,
-  EventEmitter,
-  Output,
-  OnDestroy,
-  ViewChild,
+	Component,
+	OnInit,
+	EventEmitter,
+	Output,
+	OnDestroy,
+	ViewChild,
 	AfterViewInit
 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -40,9 +40,15 @@ export class CastEpisodesComponent implements OnInit, OnDestroy, AfterViewInit {
 				data: 'title',
 				title: '제목',
 				render: function(val, typ, row, meta) {
-					return `${val} <span class='pull-right'>${
+					return `<a data-toggle='tooltip' title='${
+						row.summary
+							? row.summary.replace(/"/g, '&#34;')
+							: row.subtitle
+							? row.subtitle.replace(/"/g, '&#34;')
+							: ''
+					}'>${val} <span class='pull-right'>${
 						row.duration ? row.duration : ''
-					}</span>`;
+					}</span></a>`;
 				}
 			},
 			{

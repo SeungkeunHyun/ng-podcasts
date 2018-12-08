@@ -7,12 +7,12 @@ import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {
-  map,
-  switchMap,
-  withLatestFrom,
-  filter,
-  take,
-  startWith,
+	map,
+	switchMap,
+	withLatestFrom,
+	filter,
+	take,
+	startWith,
 	mergeMap
 } from 'rxjs/operators';
 import * as fromCastActions from '../_store/cast.action';
@@ -220,7 +220,8 @@ export class CastEffect {
 				id: item._id,
 				castID: item._source.cast_episode.parent,
 				title: item._source.title,
-				description: item._source.subtitle,
+				subtitle: item._source.subtitle,
+				summary: item._source.summary,
 				duration: item._source.duration,
 				mediaURL: item._source.mediaURL,
 				pubDate: item._source.pubDate
