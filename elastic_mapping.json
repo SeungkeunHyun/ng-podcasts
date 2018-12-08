@@ -36,7 +36,7 @@
             }
           }
         },
-        "image": {
+        "imageURL": {
           "type": "text",
           "fields": {
             "keyword": {
@@ -104,15 +104,6 @@
           }
         },
         "title": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        },
-        "url": {
           "type": "text",
           "fields": {
             "keyword": {

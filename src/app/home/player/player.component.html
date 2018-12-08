@@ -6,6 +6,6 @@
     <h6>{{episode.title}}</h6><small *ngIf="episode.subtitle">{{episode.subtitle}}</small>
     <br>
     <audio *ngIf="episode.mediaURL.indexOf('.mp3') > -1" #player id='player' autoplay controls src='{{ episode.mediaURL }}'></audio>
-    <video *ngIf="episode.mediaURL.indexOf('.mp3') == -1" #player id='player' autoplay controls src='{{ episode.mediaURL }}'></video>
+    <video *ngIf="episode.mediaURL.indexOf('.mp3') == -1" #player id='player' height="300px" autoplay controls src='{{ episode.mediaURL }}'></video>
   </div>
 </div>

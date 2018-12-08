@@ -1,8 +1,9 @@
 import { ActivatedRoute, Router } from '@angular/router';
-import { CastRequested, CategoryRequested } from './../_store/cast.action';
+import { CastRequested } from './../_store/cast.action';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AppState } from '../_store/app.reducer';
 import { Store } from '@ngrx/store';
+import { AlertifyService } from '../_services/alertify.service';
 
 @Component({
 	selector: 'app-nav',
@@ -11,9 +12,18 @@ import { Store } from '@ngrx/store';
 })
 export class NavComponent implements OnInit {
 	@ViewChild('searchWord') searchWord;
-	constructor(private store: Store<AppState>, private route: ActivatedRoute, private router: Router) {}
+	constructor(
+		private store: Store<AppState>,
+		private route: ActivatedRoute,
+		private router: Router,
+		private alertify: AlertifyService
+	) {}
 
 	ngOnInit() {
+		this.store.dispatch(new CastRequested());
+	}
+
+	refreshCasts() {
 		this.store.dispatch(new CastRequested());
 	}
 
