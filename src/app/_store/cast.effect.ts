@@ -202,7 +202,7 @@ export class CastEffect {
 				category: src.category,
 				provider: src.provider ? src.provider : 'iTunes',
 				feedURL: src.feedURL,
-				imageURL: src.imageURL,
+				imageURL: (src.imageURL ? src.imageURL : src.image),
 				lastPub: itm.inner_hits
 					? itm.inner_hits.episode.hits.hits[0]._source.pubDate
 					: null,
