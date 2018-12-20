@@ -3,13 +3,13 @@
     <img
       src="{{ (cast$ | async).imageURL }}"
       width="60px"
-      class="responsive mt-3 ml-3 mr-3 rounded"
+      class="responsive mt-2 ml-2 mr-2 rounded"
     />
   </div>
   <div class="mt-2 col-sm-11">
     <h6>{{ episode.title }}</h6>
     <small *ngIf="episode.subtitle">{{ episode.subtitle }}</small>
-    <div id="playerControllers" class="btn-group">
+    <div id="playerControllers" class="btn-group mb-2">
       <button
         *ngFor="let c of controllers"
         mdbBtn
