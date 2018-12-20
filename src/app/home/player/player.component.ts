@@ -25,6 +25,7 @@ export class PlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 	episode: Episode;
 	loaded = false;
 	subs: Subscription;
+	controllers = ['fb', 'b', 'p', 'f', 'ff'];
 	@ViewChild('player') player;
 	constructor(
 		private store: Store<AppState>,
@@ -44,6 +45,28 @@ export class PlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 	ngAfterViewInit() {
 		const buttons = document.querySelectorAll('button.btn');
 		console.log(buttons);
+	}
+
+	getIcon(c: string) {
+		let iconClass = 'fa fa-';
+		switch (c) {
+			case 'fb':
+				iconClass += 'fast-backward';
+				break;
+			case 'b':
+				iconClass += 'backward';
+				break;
+			case 'p':
+				iconClass += 'pause';
+				break;
+			case 'f':
+				iconClass += 'forward';
+				break;
+			case 'ff':
+				iconClass += 'fast-forward';
+				break;
+		}
+		return iconClass;
 	}
 
 	controlPlayer(ctrl) {
