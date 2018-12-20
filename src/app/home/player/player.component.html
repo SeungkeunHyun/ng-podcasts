@@ -1,72 +1,28 @@
 <div class="row border rounded mt-3" *ngIf="episode">
   <div class="col-lg-1 col-sm-1">
-    <img
-      src="{{ (cast$ | async).imageURL }}"
-      width="60px"
-      class="responsive mt-3 ml-3 mr-3 rounded"
-    />
+    <img src="{{ (cast$ | async).imageURL }}" width="60px" class="responsive mt-3 ml-3 mr-3 rounded" />
   </div>
   <div class="mt-2 col-sm-11">
     <h6>{{ episode.title }}</h6>
     <small *ngIf="episode.subtitle">{{ episode.subtitle }}</small>
     <div id="playerControllers" class="btn-group">
-      <button
-        type="button"
-        (click)="controlPlayer('fb')"
-        class="btn btn-rounded"
-        id="ctrlFB"
-      >
+      <button type="button" (click)="controlPlayer('fb')" class="btn btn-rounded" id="ctrlFB">
         <i class="fa fa-fast-backward"></i>
       </button>
-      <button
-        type="button"
-        (click)="controlPlayer('b')"
-        class="btn btn-rounded"
-        id="ctrlB"
-      >
+      <button type="button" (click)="controlPlayer('b')" class="btn btn-rounded" id="ctrlB">
         <i class="fa fa-backward"></i>
       </button>
-      <button
-        type="button"
-        (click)="controlPlayer('p')"
-        class="btn btn-rounded"
-        id="ctrlP"
-      >
+      <button type="button" (click)="controlPlayer('p')" class="btn btn-rounded" id="ctrlP">
         <i class="fa fa-pause"></i>
       </button>
-      <button
-        type="button"
-        (click)="controlPlayer('f')"
-        class="btn btn-rounded"
-        id="ctrlF"
-      >
+      <button type="button" (click)="controlPlayer('f')" class="btn btn-rounded" id="ctrlF">
         <i class="fa fa-forward"></i>
       </button>
-      <button
-        type="button"
-        (click)="controlPlayer('ff')"
-        class="btn btn-rounded"
-        id="ctrlFF"
-      >
+      <button type="button" (click)="controlPlayer('ff')" class="btn btn-rounded" id="ctrlFF">
         <i class="fa fa-fast-backward"></i>
       </button>
     </div>
-    <audio
-      *ngIf="episode.mediaURL.indexOf('.mp3') > -1"
-      #player
-      id="player"
-      autoplay
-      controls
-      src="{{ episode.mediaURL }}"
-    ></audio>
-    <video
-      *ngIf="episode.mediaURL.indexOf('.mp3') == -1"
-      #player
-      id="player"
-      height="300px"
-      autoplay
-      controls
-      src="{{ episode.mediaURL }}"
-    ></video>
+    <audio *ngIf="episode.mediaURL.indexOf('.mp3') > -1" #player id="player" autoplay controls src="{{ episode.mediaURL }}"></audio>
+    <video *ngIf="episode.mediaURL.indexOf('.mp3') == -1" #player id="player" height="300px" autoplay controls src="{{ episode.mediaURL }}"></video>
   </div>
 </div>

@@ -39,6 +39,7 @@ import { PlayerComponent } from './home/player/player.component';
 import { TimeAgoPipe } from 'time-ago-pipe';
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { PagingComponent } from './common/paging/paging.component';
+import { ButtonsModule, WavesModule, CollapseModule } from 'angular-bootstrap-md';
 import { AlertifyService } from './_services/alertify.service';
 
 @NgModule({
@@ -82,7 +83,8 @@ import { AlertifyService } from './_services/alertify.service';
 		StoreDevtoolsModule.instrument({
 			maxAge: 25
 		}),
-		AngularFontAwesomeModule
+		AngularFontAwesomeModule,
+		ButtonsModule, WavesModule, CollapseModule
 	],
 	providers: [{ provide: LocationStrategy, useClass: HashLocationStrategy }],
 	bootstrap: [AppComponent]
