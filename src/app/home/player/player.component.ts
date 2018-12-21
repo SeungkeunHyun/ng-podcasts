@@ -35,28 +35,28 @@ export class PlayerComponent implements OnInit, OnDestroy, AfterViewInit {
     this.setupPlayer();
   }
 
-  ngOnInit() {
-    this.subs = this.playService.subject.subscribe(ep => {
-      this.episode = ep;
-      this.cast$ = this.store.select(
-        selectors.getCastById(this.episode.castID)
-      );
-      this.loaded = true;
-      if (!this.player) {
-        if (this.episode.mediaURL.indexOf('.mp3') > -1) {
-          this.player = document.createElement('audio');
-        } else {
-          this.player = document.createElement('video');
-        }
-        this.player.onloadeddata = () => {
-          this.setupPlayer();
-        };
-      }
-      this.preparePlayer();
-    });
-  }
+	ngOnInit() {
+		this.subs = this.playService.subject.subscribe(ep => {
+			this.episode = ep;
+			this.cast$ = this.store.select(
+				selectors.getCastById(this.episode.castID)
+			);
+			this.loaded = true;
+			if (!this.player) {
+				if (this.episode.mediaURL.indexOf('.mp3') > -1) {
+					this.player = document.createElement('audio');
+				} else {
+					this.player = document.createElement('video');
+				}
+				this.player.onloadeddata = () => {
+					this.setupPlayer();
+				};
+			}
+			this.preparePlayer();
+		});
+	}
 
-  getProgressPct(): number {
+	getProgressPct(): number {
 		return Math.floor((this.player.currentTime / this.player.duration) * 100);
 	}
 
@@ -68,6 +68,9 @@ export class PlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 		if (hist) {
 			this.player.currentTime = hist.pausedAt;
 		}
+		$('#ctrlP i')
+			.removeClass('fa-play')
+			.addClass('fa-pause');
 		this.player.play();
 	}
 
