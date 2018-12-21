@@ -3,7 +3,7 @@ import { AppState } from 'src/app/_store/app.reducer';
 import { Store } from '@ngrx/store';
 import { Episode } from './../../_models/episode.model';
 import { Cast } from './../../_models/cast.model';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, Subject } from 'rxjs';
 import * as $ from 'jquery';
 
 import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
@@ -17,43 +17,47 @@ import * as selectors from '../../_store/cast.selectors';
 export class PlayerComponent implements OnInit, OnDestroy, AfterViewInit {
   cast$: Observable<Cast>;
   episode: Episode;
+  interval = null;
   player: HTMLMediaElement;
+  percent: Subject<number>;
   loaded = false;
   subs: Subscription;
   controllers = ['fb', 'b', 'p', 'f', 'ff'];
-	constructor(
-		private store: Store<AppState>,
-		private playService: EpisodePlayerService
-	) {}
+  constructor(
+    private store: Store<AppState>,
+    private playService: EpisodePlayerService
+  ) {
+    this.percent = new Subject<number>();
+  }
 
-	ngAfterViewInit() {
-		console.log('after view init');
-		this.setupPlayer();
-	}
+  ngAfterViewInit() {
+    console.log('after view init');
+    this.setupPlayer();
+  }
 
-	ngOnInit() {
-		this.subs = this.playService.subject.subscribe(ep => {
-			this.episode = ep;
-			this.cast$ = this.store.select(
-				selectors.getCastById(this.episode.castID)
-			);
-			this.loaded = true;
-			if (!this.player) {
-				if (this.episode.mediaURL.indexOf('.mp3') > -1) {
-					this.player = document.createElement('audio');
-				} else {
-					this.player = document.createElement('video');
-				}
-				this.player.onloadeddata = () => {
-					this.setupPlayer();
-				};
-			}
-			this.preparePlayer();
-		});
-	}
+  ngOnInit() {
+    this.subs = this.playService.subject.subscribe(ep => {
+      this.episode = ep;
+      this.cast$ = this.store.select(
+        selectors.getCastById(this.episode.castID)
+      );
+      this.loaded = true;
+      if (!this.player) {
+        if (this.episode.mediaURL.indexOf('.mp3') > -1) {
+          this.player = document.createElement('audio');
+        } else {
+          this.player = document.createElement('video');
+        }
+        this.player.onloadeddata = () => {
+          this.setupPlayer();
+        };
+      }
+      this.preparePlayer();
+    });
+  }
 
-	getProgressPct(): string {
-		return (this.player.currentTime / this.player.duration) * 100 + '';
+  getProgressPct(): number {
+		return Math.floor((this.player.currentTime / this.player.duration) * 100);
 	}
 
 	preparePlayer() {
@@ -75,7 +79,14 @@ export class PlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 			return;
 		}
 		console.log('player', this.player);
+		this.player.onplay = () => {
+			console.log('player started!');
+		};
+		this.player.ontimeupdate = () => {
+			$('#divProgress').css('width', this.getProgressPct() + '%');
+		};
 		this.player.onpause = () => {
+			console.log('player paused');
 			$('#ctrlP i')
 				.removeClass('fa-pause')
 				.addClass('fa-play');

@@ -12,7 +12,7 @@
     </div>
     <div id="divPlayer"></div>
     <div class="progress mb-2">
-      <div class="progress-bar" role="progressbar" style="width: {{getProgressPct()}}%" [attr.aria-valuenow]="this.player.currentTime" aria-valuemin="0" [attr.aria-valuemax]="this.player.duration"></div>
+      <div id='divProgress' class="progress-bar" role="progressbar" [attr.aria-valuenow]="this.player.currentTime" aria-valuemin="0" [attr.aria-valuemax]="this.player.duration"></div>
     </div>
   </div>
 </div>
