@@ -6,33 +6,30 @@ import { Cast } from './../../_models/cast.model';
 import { Observable, Subscription } from 'rxjs';
 import * as $ from 'jquery';
 
-import {
-	Component,
-	OnInit,
-	ViewChild,
-	OnDestroy,
-	AfterViewInit
-} from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import * as selectors from '../../_store/cast.selectors';
 
 @Component({
-	selector: 'app-player',
-	templateUrl: './player.component.html',
-	styleUrls: ['./player.component.css']
+  selector: 'app-player',
+  templateUrl: './player.component.html',
+  styleUrls: ['./player.component.css']
 })
 export class PlayerComponent implements OnInit, OnDestroy, AfterViewInit {
-	cast$: Observable<Cast>;
-	episode: Episode;
-	loaded = false;
-	subs: Subscription;
-	controllers = ['fb', 'b', 'p', 'f', 'ff'];
-	@ViewChild('player') player;
+  cast$: Observable<Cast>;
+  episode: Episode;
+  player: HTMLMediaElement;
+  loaded = false;
+  subs: Subscription;
+  controllers = ['fb', 'b', 'p', 'f', 'ff'];
 	constructor(
 		private store: Store<AppState>,
 		private playService: EpisodePlayerService
 	) {}
 
-	ngAfterViewInit() {}
+	ngAfterViewInit() {
+		console.log('after view init');
+		this.setupPlayer();
+	}
 
 	ngOnInit() {
 		this.subs = this.playService.subject.subscribe(ep => {
@@ -41,40 +38,62 @@ export class PlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 				selectors.getCastById(this.episode.castID)
 			);
 			this.loaded = true;
+			if (!this.player) {
+				if (this.episode.mediaURL.indexOf('.mp3') > -1) {
+					this.player = document.createElement('audio');
+				} else {
+					this.player = document.createElement('video');
+				}
+				this.player.onloadeddata = () => {
+					this.setupPlayer();
+				};
+			}
+			this.preparePlayer();
 		});
 	}
 
-	setupPlayer(e) {
+	getProgressPct(): string {
+		return (this.player.currentTime / this.player.duration) * 100 + '';
+	}
+
+	preparePlayer() {
+		this.player.src = this.episode.mediaURL;
+		this.player.preload = 'true';
+		const hist = this.getHistory(this.episode.id);
+		console.log(hist, this.player);
+		if (hist) {
+			this.player.currentTime = hist.pausedAt;
+		}
+		this.player.play();
+	}
+
+	setupPlayer() {
+		$('#divPlayer').empty();
+		$('#divPlayer').append(this.player);
+		console.log('setup player');
 		if (!this.player) {
 			return;
 		}
-		const pl = e.target;
-		console.log('player', pl);
-		pl.onpause = () => {
+		console.log('player', this.player);
+		this.player.onpause = () => {
 			$('#ctrlP i')
 				.removeClass('fa-pause')
 				.addClass('fa-play');
 			const history = {
 				episode: this.episode,
-				pausedAt: pl.currentTime,
+				pausedAt: this.player.currentTime,
 				storedAt: new Date().getTime()
 			};
 			this.storePausedEpisode(history);
 		};
-		pl.onabort = () => {
+		this.player.onabort = () => {
 			const history = {
 				episode: this.episode,
-				pausedAt: pl.currentTime,
+				pausedAt: this.player.currentTime,
 				storedAt: new Date().getTime()
 			};
 			this.storePausedEpisode(history);
 		};
-		const hist = this.getHistory(this.episode.id);
-		console.log(hist, this.player);
-		if (hist) {
-			pl.currentTime = hist.pausedAt;
-		}
-		pl.play();
 	}
 
 	getHistory(id) {
@@ -122,30 +141,29 @@ export class PlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	controlPlayer(ctrl) {
 		console.log(ctrl, this.player);
-		const pl = this.player.nativeElement;
 		switch (ctrl) {
 			case 'fb':
-				pl.currentTime -= 30;
+				this.player.currentTime -= 30;
 				break;
 			case 'b':
-				pl.currentTime -= 5;
+				this.player.currentTime -= 5;
 				break;
 			case 'p':
-				if (pl.paused) {
-					pl.play();
+				if (this.player.paused) {
+					this.player.play();
 					$('#ctrlP i').removeClass('fa-play');
 					$('#ctrlP i').addClass('fa-pause');
 				} else {
-					pl.pause();
+					this.player.pause();
 					$('#ctrlP i').removeClass('fa-pause');
 					$('#ctrlP i').addClass('fa-play');
 				}
 				break;
 			case 'f':
-				pl.currentTime += 5;
+				this.player.currentTime += 5;
 				break;
 			case 'ff':
-				pl.currentTime += 30;
+				this.player.currentTime += 30;
 				break;
 		}
 	}
@@ -154,7 +172,7 @@ export class PlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 		if (this.player) {
 			const hist = {
 				episode: this.episode,
-				pausedAt: this.player.nativeElement.currentTime
+				pausedAt: this.player.currentTime
 			};
 			console.log(hist);
 			this.storePausedEpisode(hist);

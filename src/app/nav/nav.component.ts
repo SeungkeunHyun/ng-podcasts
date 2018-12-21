@@ -1,3 +1,4 @@
+import { Episode } from 'src/app/_models/episode.model';
 import { EpisodePlayerService } from 'src/app/_services/episode-player.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CastRequested } from './../_store/cast.action';
@@ -13,7 +14,7 @@ import { AlertifyService } from '../_services/alertify.service';
 })
 export class NavComponent implements OnInit {
 	@ViewChild('searchWord') searchWord;
-	bookmarks: [];
+	bookmarks = null;
 	constructor(
 		private store: Store<AppState>,
 		private route: ActivatedRoute,
@@ -35,7 +36,7 @@ export class NavComponent implements OnInit {
 		const strBookmarks = localStorage.getItem('bookmarks');
 		if (strBookmarks) {
 			const jsonBM = JSON.parse(strBookmarks);
-			for (const k in jsonBM) {
+			for (const k of Object.keys(jsonBM)) {
 				this.bookmarks.push(jsonBM[k]);
 			}
 			console.log(this.bookmarks);
