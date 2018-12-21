@@ -32,6 +32,8 @@ export class PlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 		private playService: EpisodePlayerService
 	) {}
 
+	ngAfterViewInit() {}
+
 	ngOnInit() {
 		this.subs = this.playService.subject.subscribe(ep => {
 			this.episode = ep;
@@ -42,9 +44,58 @@ export class PlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 		});
 	}
 
-	ngAfterViewInit() {
-		const buttons = document.querySelectorAll('button.btn');
-		console.log(buttons);
+	setupPlayer(e) {
+		if (!this.player) {
+			return;
+		}
+		const pl = e.target;
+		console.log('player', pl);
+		pl.onpause = () => {
+			$('#ctrlP i')
+				.removeClass('fa-pause')
+				.addClass('fa-play');
+			const history = {
+				episode: this.episode,
+				pausedAt: pl.currentTime,
+				storedAt: new Date().getTime()
+			};
+			this.storePausedEpisode(history);
+		};
+		pl.onabort = () => {
+			const history = {
+				episode: this.episode,
+				pausedAt: pl.currentTime,
+				storedAt: new Date().getTime()
+			};
+			this.storePausedEpisode(history);
+		};
+		const hist = this.getHistory(this.episode.id);
+		console.log(hist, this.player);
+		if (hist) {
+			pl.currentTime = hist.pausedAt;
+		}
+		pl.play();
+	}
+
+	getHistory(id) {
+		const strBookmarks = localStorage.getItem('bookmarks');
+		if (strBookmarks) {
+			const bookmarks = JSON.parse(strBookmarks);
+			return bookmarks[id];
+		}
+		return null;
+	}
+
+	storePausedEpisode(hist) {
+		const strBookmarks = localStorage.getItem('bookmarks');
+		let bookmarks = {};
+		if (!strBookmarks) {
+			bookmarks = {};
+		} else {
+			bookmarks = JSON.parse(strBookmarks);
+		}
+		bookmarks[hist.episode.id] = hist;
+		localStorage.setItem('bookmarks', JSON.stringify(bookmarks, null, 2));
 	}
 
 	getIcon(c: string) {
@@ -100,6 +151,14 @@ export class PlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 	}
 
 	ngOnDestroy() {
+		if (this.player) {
+			const hist = {
+				episode: this.episode,
+				pausedAt: this.player.nativeElement.currentTime
+			};
+			console.log(hist);
+			this.storePausedEpisode(hist);
+		}
 		this.subs.unsubscribe();
 	}
 }

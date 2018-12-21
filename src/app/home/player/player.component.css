@@ -1,0 +1,12 @@
+.zoom {
+  position: relative;
+  transition: transform .2s;
+  /* Animation */
+  width: 50px;
+  height: 50px;
+  margin: 0 auto;
+}
+
+.zoom:hover {
+  transform: scale(3);
+}

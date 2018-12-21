@@ -1,43 +1,16 @@
 <div class="row border rounded mt-3" *ngIf="episode">
   <div class="col-lg-1 col-sm-1">
-    <img
-      src="{{ (cast$ | async).imageURL }}"
-      width="60px"
-      class="responsive mt-2 ml-2 mr-2 rounded"
-    />
+    <img src="{{ (cast$ | async).imageURL }}" width="60px" class="zoom responsive mt-2 ml-2 mr-2 rounded" />
   </div>
   <div class="mt-2 col-sm-11">
     <h6>{{ episode.title }}</h6>
-    <small *ngIf="episode.subtitle">{{ episode.subtitle }}</small>
+    <span *ngIf="episode.subtitle"><small>{{ episode.subtitle }}</small><br /></span>
     <div id="playerControllers" class="btn-group mb-2">
-      <button
-        *ngFor="let c of controllers"
-        mdbBtn
-        mdbWavesEffect
-        type="button"
-        color="primary"
-        rounded="true"
-        (click)="controlPlayer(c)"
-        class="btn btn-sm"
-        id="ctrl{{ c | uppercase }}"
-      >
+      <button *ngFor="let c of controllers" mdbBtn mdbWavesEffect type="button" color="primary" rounded="true" (click)="controlPlayer(c)" class="btn btn-sm" id="ctrl{{ c | uppercase }}">
         <i [class]="getIcon(c)"></i>
       </button>
     </div>
-    <audio
-      *ngIf="episode.mediaURL.indexOf('.mp3') > -1"
-      #player
-      id="player"
-      autoplay
-      src="{{ episode.mediaURL }}"
-    ></audio>
-    <video
-      *ngIf="episode.mediaURL.indexOf('.mp3') == -1"
-      #player
-      id="player"
-      height="300px"
-      autoplay
-      src="{{ episode.mediaURL }}"
-    ></video>
+    <audio *ngIf="episode.mediaURL.indexOf('.mp3') > -1" #player id="player" (loadeddata)="setupPlayer($event)" src="{{ episode.mediaURL }}"></audio>
+    <video *ngIf="episode.mediaURL.indexOf('.mp3') == -1" #player id="player" height="300px" (loadeddata)="setupPlayer()" src="{{ episode.mediaURL }}"></video>
   </div>
 </div>
