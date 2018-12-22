@@ -17,23 +17,23 @@ import * as selectors from '../../_store/cast.selectors';
 export class PlayerComponent implements OnInit, OnDestroy, AfterViewInit {
   cast$: Observable<Cast>;
   episode: Episode;
-  interval = null;
-  player: HTMLMediaElement;
-  percent: Subject<number>;
-  loaded = false;
-  subs: Subscription;
-  controllers = ['fb', 'b', 'p', 'f', 'ff'];
-  constructor(
-    private store: Store<AppState>,
-    private playService: EpisodePlayerService
-  ) {
-    this.percent = new Subject<number>();
-  }
+	interval = null;
+	player: HTMLMediaElement;
+	percent: Subject<number>;
+	loaded = false;
+	subs: Subscription;
+	controllers = ['fb', 'b', 'p', 'f', 'ff'];
+	constructor(
+		private store: Store<AppState>,
+		private playService: EpisodePlayerService
+	) {
+		this.percent = new Subject<number>();
+	}
 
-  ngAfterViewInit() {
-    console.log('after view init');
-    this.setupPlayer();
-  }
+	ngAfterViewInit() {
+		console.log('after view init');
+		this.setupPlayer();
+	}
 
 	ngOnInit() {
 		this.subs = this.playService.subject.subscribe(ep => {
@@ -88,6 +88,9 @@ export class PlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 		this.player.ontimeupdate = () => {
 			$('#divProgress').css('width', this.getProgressPct() + '%');
 		};
+		this.player.onended = () => {
+			this.deleteEndedEpisode();
+		};
 		this.player.onpause = () => {
 			console.log('player paused');
 			$('#ctrlP i')
@@ -108,6 +111,17 @@ export class PlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 			};
 			this.storePausedEpisode(history);
 		};
+	}
+
+	deleteEndedEpisode() {
+		const strBookmarks = localStorage.getItem('bookmarks');
+		let bookmarks = {};
+		if (!strBookmarks) {
+			return;
+		}
+		bookmarks = JSON.parse(strBookmarks);
+		delete bookmarks[this.episode.id];
+		localStorage.setItem('bookmarks', JSON.stringify(bookmarks, null, 2));
 	}
 
 	getHistory(id) {
