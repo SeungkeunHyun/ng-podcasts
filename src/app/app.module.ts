@@ -1,3 +1,4 @@
+import { DurationPipe } from './_pipes/duration.pipe';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { ModalSearchComponent } from './home/modal-search/modal-search.component';
 import { CastMainComponent } from './casts/cast-main/cast-main.component';
@@ -39,7 +40,11 @@ import { PlayerComponent } from './home/player/player.component';
 import { TimeAgoPipe } from 'time-ago-pipe';
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { PagingComponent } from './common/paging/paging.component';
-import { ButtonsModule, WavesModule, CollapseModule } from 'angular-bootstrap-md';
+import {
+	ButtonsModule,
+	WavesModule,
+	CollapseModule
+} from 'angular-bootstrap-md';
 import { AlertifyService } from './_services/alertify.service';
 
 @NgModule({
@@ -62,7 +67,8 @@ import { AlertifyService } from './_services/alertify.service';
 		PlayerComponent,
 		ModalSearchComponent,
 		TimeAgoPipe,
-		PagingComponent
+		PagingComponent,
+		DurationPipe
 	],
 	imports: [
 		BrowserModule,
@@ -84,7 +90,9 @@ import { AlertifyService } from './_services/alertify.service';
 			maxAge: 25
 		}),
 		AngularFontAwesomeModule,
-		ButtonsModule, WavesModule, CollapseModule
+		ButtonsModule,
+		WavesModule,
+		CollapseModule
 	],
 	providers: [{ provide: LocationStrategy, useClass: HashLocationStrategy }],
 	bootstrap: [AppComponent]

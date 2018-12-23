@@ -9,9 +9,10 @@
       <button *ngFor="let c of controllers" mdbBtn mdbWavesEffect type="button" color="primary" rounded="true" (click)="controlPlayer(c)" class="btn btn-sm" id="ctrl{{ c | uppercase }}">
         <i [class]="getIcon(c)"></i>
       </button>
+      <span class='ml-2 text-justify'>{{this.player.currentTime | duration}} / {{this.player.duration | duration}}</span>
     </div>
     <div id="divPlayer"></div>
-    <div id="divProgressWrapper" class="progress mb-2" (click)="movePlaytime($event)">
+    <div id="divProgressWrapper" class="progress mb-2" (mouseenter)="getCursorTime($event)" (click)="movePlaytime($event)">
       <div id="divProgress" class="progress-bar" role="progressbar" [attr.aria-valuenow]="this.player.currentTime" aria-valuemin="0" [attr.aria-valuemax]="this.player.duration"></div>
     </div>
   </div>

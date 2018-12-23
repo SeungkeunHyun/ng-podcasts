@@ -1,3 +1,4 @@
+import { DurationPipe } from './../../_pipes/duration.pipe';
 import { EpisodePlayerService } from './../../_services/episode-player.service';
 import { AppState } from 'src/app/_store/app.reducer';
 import { Store } from '@ngrx/store';
@@ -22,21 +23,22 @@ export class PlayerComponent implements OnInit, OnDestroy, AfterViewInit {
   percent: Subject<number>;
   loaded = false;
   subs: Subscription;
+  durpipe = new DurationPipe();
   controllers = ['fb', 'b', 'p', 'f', 'ff'];
-  constructor(
-    private store: Store<AppState>,
-    private playService: EpisodePlayerService
-  ) {
-    this.percent = new Subject<number>();
-  }
+	constructor(
+		private store: Store<AppState>,
+		private playService: EpisodePlayerService
+	) {
+		this.percent = new Subject<number>();
+	}
 
-  ngAfterViewInit() {
-    console.log('after view init');
-    this.setupPlayer();
-  }
+	ngAfterViewInit() {
+		console.log('after view init');
+		this.setupPlayer();
+	}
 
-  ngOnInit() {
-    this.subs = this.playService.subject.subscribe(ep => {
+	ngOnInit() {
+		this.subs = this.playService.subject.subscribe(ep => {
 			this.episode = ep;
 			this.cast$ = this.store.select(
 				selectors.getCastById(this.episode.castID)
@@ -123,6 +125,12 @@ export class PlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 		bookmarks = JSON.parse(strBookmarks);
 		delete bookmarks[this.episode.id];
 		localStorage.setItem('bookmarks', JSON.stringify(bookmarks, null, 2));
+	}
+
+	getCursorTime(e) {
+		const pbar: HTMLElement = document.querySelector('#divProgressWrapper');
+		const ctime = this.player.duration * (e.offsetX / pbar.offsetWidth);
+		pbar.title = this.durpipe.transform(ctime);
 	}
 
 	movePlaytime(e) {
