@@ -89,7 +89,10 @@ export class PlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 			console.log('player started!');
 		};
 		this.player.ontimeupdate = () => {
-			$('#divProgress').css('width', this.getProgressPct() + '%');
+			const pct = this.getProgressPct();
+			const $pgbar = $('#divProgress');
+			$pgbar.css('width', pct + '%');
+			$pgbar.text(pct + '%');
 		};
 		this.player.onended = () => {
 			this.deleteEndedEpisode();

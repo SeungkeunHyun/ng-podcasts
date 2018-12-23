@@ -14,7 +14,6 @@ export class DurationPipe implements PipeTransform {
 			(hour > 0 ? (hour > 9 ? hour : '0' + hour) + ':' : '') +
 			(min > 0 ? (min > 9 ? min : '0' + min) + ':' : '') +
 			(sec > 9 ? sec : '0' + sec);
-		console.log(strDur);
 		return strDur;
 	}
 }
