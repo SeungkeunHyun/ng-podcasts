@@ -1,43 +1,74 @@
 <mdb-navbar SideClass="navbar navbar-expand-lg navbar-dark indigo">
-
   <!-- Navbar brand -->
-  <mdb-navbar-brand><a class="navbar-brand" [routerLink]='' href="#">Podcast</a></mdb-navbar-brand>
+  <mdb-navbar-brand
+    ><a class="navbar-brand" [routerLink]="" href="#"
+      >Podcast</a
+    ></mdb-navbar-brand
+  >
 
   <!-- Collapsible content -->
   <links>
-
     <!-- Links -->
     <ul class="navbar-nav mr-auto">
-      <li class="nav-item" routerLinkActive='active'>
-        <a class="nav-link waves-light" routerLink='dashboard' mdbWavesEffect>Dashboard</a>
+      <li class="nav-item" routerLinkActive="active">
+        <a class="nav-link waves-light" routerLink="dashboard" mdbWavesEffect
+          >Dashboard</a
+        >
       </li>
-      <li class="nav-item" routerLinkActive='active'>
-        <a class="nav-link waves-light" routerLink='casts' mdbWavesEffect>Casts</a>
+      <li class="nav-item" routerLinkActive="active">
+        <a class="nav-link waves-light" routerLink="casts" mdbWavesEffect
+          >Casts</a
+        >
       </li>
       <li class="nav-item">
-        <a class="nav-link waves-light" (click)='refreshCasts()' mdbWavesEffect>Refresh</a>
+        <a class="nav-link waves-light" (click)="refreshCasts()" mdbWavesEffect
+          >Refresh</a
+        >
       </li>
 
       <!-- Dropdown -->
-      <li class="nav-item dropdown" routerLinkActive='active' dropdown>
-        <a dropdownToggle mdbWavesEffect type="button" (click)="loadBookmarks()" class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
-          Bookmarks<span class="caret"></span></a>
-        <div *dropdownMenu class="dropdown-menu dropdown dropdown-primary" role="menu">
-          <a class="dropdown-item waves-light" *ngFor="let bm of bookmarks" mdbWavesEffect (click)="playCast(bm)">{{ bm.episode.title }} ({{bm.pausedAt / 60 | number:'1.0-0'}})</a>
+      <li class="nav-item dropdown" routerLinkActive="active" dropdown>
+        <a
+          dropdownToggle
+          mdbWavesEffect
+          type="button"
+          (click)="loadBookmarks()"
+          class="nav-link dropdown-toggle waves-light"
+          mdbWavesEffect
+        >
+          Bookmarks<span class="caret"></span
+        ></a>
+        <div
+          *dropdownMenu
+          class="dropdown-menu dropdown dropdown-primary"
+          role="menu"
+        >
+          <a
+            class="dropdown-item waves-light"
+            *ngFor="let bm of bookmarks"
+            mdbWavesEffect
+            (click)="playCast(bm)"
+            ><span>{{ bm.episode.title }}</span>
+            <span class="pull-right">({{ bm.pausedAt | duration }})</span></a
+          >
         </div>
       </li>
-
     </ul>
     <!-- Links -->
 
     <!-- Search form -->
     <form class="form-inline waves-light" mdbWavesEffect>
       <div class="md-form mt-0">
-        <input class="form-control mr-sm-2" #searchWord (keyup)='searchCast($event)' type="text" placeholder="Search">
+        <input
+          class="form-control mr-sm-2"
+          #searchWord
+          (keyup)="searchCast($event)"
+          type="text"
+          placeholder="Search"
+        />
       </div>
     </form>
   </links>
   <!-- Collapsible content -->
-
 </mdb-navbar>
 <!--/.Navbar-->
