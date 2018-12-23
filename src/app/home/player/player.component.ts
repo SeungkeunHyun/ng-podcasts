@@ -17,26 +17,26 @@ import * as selectors from '../../_store/cast.selectors';
 export class PlayerComponent implements OnInit, OnDestroy, AfterViewInit {
   cast$: Observable<Cast>;
   episode: Episode;
-	interval = null;
-	player: HTMLMediaElement;
-	percent: Subject<number>;
-	loaded = false;
-	subs: Subscription;
-	controllers = ['fb', 'b', 'p', 'f', 'ff'];
-	constructor(
-		private store: Store<AppState>,
-		private playService: EpisodePlayerService
-	) {
-		this.percent = new Subject<number>();
-	}
+  interval = null;
+  player: HTMLMediaElement;
+  percent: Subject<number>;
+  loaded = false;
+  subs: Subscription;
+  controllers = ['fb', 'b', 'p', 'f', 'ff'];
+  constructor(
+    private store: Store<AppState>,
+    private playService: EpisodePlayerService
+  ) {
+    this.percent = new Subject<number>();
+  }
 
-	ngAfterViewInit() {
-		console.log('after view init');
-		this.setupPlayer();
-	}
+  ngAfterViewInit() {
+    console.log('after view init');
+    this.setupPlayer();
+  }
 
-	ngOnInit() {
-		this.subs = this.playService.subject.subscribe(ep => {
+  ngOnInit() {
+    this.subs = this.playService.subject.subscribe(ep => {
 			this.episode = ep;
 			this.cast$ = this.store.select(
 				selectors.getCastById(this.episode.castID)
@@ -77,6 +77,7 @@ export class PlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 	setupPlayer() {
 		$('#divPlayer').empty();
 		$('#divPlayer').append(this.player);
+		// $('#divProgress').on('click', this.movePlaytime);
 		console.log('setup player');
 		if (!this.player) {
 			return;
@@ -122,6 +123,13 @@ export class PlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 		bookmarks = JSON.parse(strBookmarks);
 		delete bookmarks[this.episode.id];
 		localStorage.setItem('bookmarks', JSON.stringify(bookmarks, null, 2));
+	}
+
+	movePlaytime(e) {
+		const pbar: HTMLElement = document.querySelector('#divProgressWrapper');
+		console.log(pbar);
+		const ctime = this.player.duration * (e.offsetX / pbar.offsetWidth);
+		this.player.currentTime = ctime;
 	}
 
 	getHistory(id) {
