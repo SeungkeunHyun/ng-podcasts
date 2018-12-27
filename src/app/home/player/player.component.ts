@@ -44,18 +44,20 @@ export class PlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 				selectors.getCastById(this.episode.castID)
 			);
 			this.loaded = true;
-			if (!this.player) {
-				if (this.episode.mediaURL.indexOf('.mp3') > -1) {
+			if (this.episode.mediaURL.indexOf('.mp3') > -1) {
+				if (!this.player || this.player.tagName !== 'audio') {
 					this.player = document.createElement('audio');
 					this.player.setAttribute('height', '0px');
-				} else {
+				}
+			} else {
+				if (!this.player || this.player.tagName !== 'video') {
 					this.player = document.createElement('video');
 					this.player.setAttribute('height', '400px');
 				}
-				this.player.onloadeddata = () => {
-					this.setupPlayer();
-				};
 			}
+			this.player.onloadeddata = () => {
+				this.setupPlayer();
+			};
 			this.preparePlayer();
 		});
 	}
