@@ -6,7 +6,7 @@
     <h6>{{ episode.title }}</h6>
     <span *ngIf="episode.subtitle"><small>{{ episode.subtitle }}</small><br /></span>
     <div id="playerControllers" class="btn-group mb-2">
-      <button *ngFor="let c of controllers" mdbBtn mdbWavesEffect type="button" color="primary" rounded="true" (click)="controlPlayer(c)" class="btn btn-sm" id="ctrl{{ c | uppercase }}">
+      <button *ngFor="let c of controllers" mdbBtn mdbWavesEffect type="button" color="primary" rounded="true" (click)="controlPlayer(c)" class="btn btn-sm waves-effect" id="ctrl{{ c | uppercase }}">
         <i [class]="getIcon(c)"></i>
       </button>
       <span class='ml-2 text-justify'><i class="fa fa-hourglass-start" aria-hidden="true"></i> {{this.player.currentTime | duration}} / {{this.player.duration | duration}}</span>
