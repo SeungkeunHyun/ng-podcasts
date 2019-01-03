@@ -8,7 +8,7 @@ import * as selectors from '../../_store/cast.selectors';
 @Component({
 	selector: 'app-board-graph',
 	templateUrl: './board-graph.component.html',
-	styleUrls: [ './board-graph.component.css' ]
+	styleUrls: ['./board-graph.component.css']
 })
 export class BoardGraphComponent implements OnInit, OnDestroy {
 	categories: Category[];
@@ -24,11 +24,13 @@ export class BoardGraphComponent implements OnInit, OnDestroy {
 	constructor(private store: Store<AppState>) {}
 
 	ngOnInit() {
-		this.catSubs = this.store.select(selectors.selectCategories).subscribe((cats) => {
-			this.categories = cats;
-			this.drawGraph();
-			this.chartLoaded = true;
-		});
+		this.catSubs = this.store
+			.select(selectors.selectCategories)
+			.subscribe(cats => {
+				this.categories = cats;
+				this.drawGraph();
+				this.chartLoaded = true;
+			});
 	}
 
 	drawGraph() {
@@ -38,14 +40,15 @@ export class BoardGraphComponent implements OnInit, OnDestroy {
 			backgroundColor: [],
 			hoverBackgroundColor: []
 		};
+		let seq = 0;
 		for (const cat of this.categories) {
 			this.chartLabels.push(cat.key);
 			this.chartData.push(cat.doc_count);
 			chColors.hoverBorderColor.push('rgba(0, 0, 0, 0.1)');
-			chColors.backgroundColor.push(this.getRandomColor());
+			chColors.backgroundColor.push(this.getSeqColor(seq++));
 		}
 		chColors.hoverBackgroundColor = chColors.backgroundColor;
-		this.chartColors = [ chColors ];
+		this.chartColors = [chColors];
 		console.log('chart data loaded', this.chartColors);
 	}
 
@@ -61,11 +64,21 @@ export class BoardGraphComponent implements OnInit, OnDestroy {
 		if (e.active) {
 			const eventData = {
 				label: e.active[0]._chart.config.data.labels[e.active[0]._index],
-				data: e.active[0]._chart.config.data.datasets[0].data[e.active[0]._index]
+				data:
+					e.active[0]._chart.config.data.datasets[0].data[e.active[0]._index]
 			};
 			return eventData;
 		}
 		return null;
+	}
+
+	getSeqColor(seq) {
+		const letters = '0123456789ABCDEF';
+		let color = '#';
+		for (let i = 0; i < 6; i++) {
+			color += letters[Math.floor((seq * (i + 2)) % 16)];
+		}
+		return color;
 	}
 
 	getRandomColor() {

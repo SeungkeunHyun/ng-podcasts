@@ -1,3 +1,4 @@
+import { SearchMainComponent } from './search/search-main/search-main.component';
 import { ModalSearchComponent } from './home/modal-search/modal-search.component';
 import { CastReadComponent } from './casts/cast-read/cast-read.component';
 import { CastEditComponent } from './casts/cast-edit/cast-edit.component';
@@ -29,6 +30,10 @@ const appRoutes: Routes = [
 			{ path: ':id', component: CastReadComponent, pathMatch: 'full' },
 			{ path: ':id/edit', component: CastEditComponent }
 		]
+	},
+	{
+		path: 'searchCast',
+		component: SearchMainComponent
 	}
 ];
 

@@ -46,6 +46,9 @@ import {
 	CollapseModule
 } from 'angular-bootstrap-md';
 import { AlertifyService } from './_services/alertify.service';
+import { SearchMainComponent } from './search/search-main/search-main.component';
+import { SearchInputComponent } from './search/search-input/search-input.component';
+import { SearchResultComponent } from './search/search-result/search-result.component';
 
 @NgModule({
 	declarations: [
@@ -68,7 +71,10 @@ import { AlertifyService } from './_services/alertify.service';
 		ModalSearchComponent,
 		TimeAgoPipe,
 		PagingComponent,
-		DurationPipe
+		DurationPipe,
+		SearchMainComponent,
+		SearchInputComponent,
+		SearchResultComponent
 	],
 	imports: [
 		BrowserModule,

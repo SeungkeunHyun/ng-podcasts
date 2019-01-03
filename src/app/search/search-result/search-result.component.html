@@ -1,0 +1,57 @@
+<div class='mt-5' *ngIf="searchService.result$ | async">
+  <ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li class="nav-item" *ngIf="(searchService.result$ | async).itunes">
+    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#itunes" role="tab" aria-controls="home" aria-selected="true">iTunes</a>
+  </li>
+  <li class="nav-item" *ngIf="(searchService.result$ | async).podbbang">
+    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#podbbang" role="tab" aria-controls="profile" aria-selected="false">Podbbang</a>
+  </li>
+  <li class="nav-item" *ngIf="(searchService.result$ | async).podty">
+    <a class="nav-link" id="contact-tab" data-toggle="tab" href="#podty" role="tab" aria-controls="contact" aria-selected="false">Podty</a>
+  </li>
+</ul>
+<div class="tab-content" id="myTabContent">
+  <div class="tab-pane mb-2 fade show active" id="itunes" role="tabpanel" aria-labelledby="home-tab">
+    <div class='media' *ngFor="let item of(searchService.result$ | async).itunes">
+      <img class='mr-3 img-thumbnail img-responsive' src='{{ item.imageURL }}' height='60px'>
+      <div class='media-body'>
+        <h5 class='mt-0'>{{ item.name }} <small>({{item.category}})</small></h5>
+        <div class='form-inline'>
+        <select ngModel name='category' #category class='form-control'>
+          <option *ngFor="let cat of (categories$ | async)" [selected]="item.category && item.category.split(',').indexOf(cat.key) > -1">{{cat.key}}</option>
+        </select>
+        <button class='btn btn-success btn-sm' (click)='addCast(item, category.value)'>Add</button>
+      </div>
+      </div>
+    </div>
+  </div>
+  <div class="tab-pane fade" id="podbbang" role="tabpanel" aria-labelledby="profile-tab">
+    <div class='media' *ngFor="let item of(searchService.result$ | async).podbbang">
+      <img class='mr-3 img-thumbnail img-responsive' src='{{ item.imageURL }}' height='60px'>
+      <div class='media-body'>
+        <h5 class='mt-0'>{{ item.name }} ({{item.category}})</h5>
+        <div class='form-inline'>
+        <select class='form-control' name='category'>
+          <option *ngFor="let cat of (categories$ | async)" [selected]="item.category && item.category.split(',').indexOf(cat.key) > -1">{{cat.key}}</option>
+        </select>
+        <button class='btn btn-success btn-sm' (click)='addCast(item)'>Add</button>
+      </div>
+      </div>
+    </div>
+  </div>
+  <div class="tab-pane fade" id="podty" role="tabpanel" aria-labelledby="contact-tab">
+    <div class='media' *ngFor="let item of(searchService.result$ | async).podty">
+      <img class='mr-3 img-thumbnail img-responsive' src='{{ item.imageURL }}' height='60px'>
+      <div class='media-body'>
+        <h5 class='mt-0'>{{ item.name }} ({{item.category}})</h5>
+        <div class='form-inline'>
+        <select class='form-control' name='category'>
+          <option *ngFor="let cat of (categories$ | async)" [selected]="item.category && item.category.split(',').indexOf(cat.key) > -1">{{cat.key}}</option>
+        </select>
+        <button class='btn btn-success btn-sm' (click)='addCast(item)'>Add</button>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
