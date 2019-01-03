@@ -5,6 +5,7 @@ import { CastMainComponent } from './casts/cast-main/cast-main.component';
 import { CastEffect } from './_store/cast.effect';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { AppComponent } from './app.component';
 import { NavComponent } from './nav/nav.component';
@@ -98,7 +99,8 @@ import { SearchResultComponent } from './search/search-result/search-result.comp
 		AngularFontAwesomeModule,
 		ButtonsModule,
 		WavesModule,
-		CollapseModule
+		CollapseModule,
+		NgbModule
 	],
 	providers: [{ provide: LocationStrategy, useClass: HashLocationStrategy }],
 	bootstrap: [AppComponent]

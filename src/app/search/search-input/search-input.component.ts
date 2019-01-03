@@ -12,7 +12,7 @@ export class SearchInputComponent implements OnInit {
 	ngOnInit() {}
 
 	typeIn(e) {
-    const srchWord = e.target.value;
+		const srchWord = e.target.value;
 		if (e.key === 'Enter') {
 			if (srchWord && srchWord.length > 1) {
 				this.search(srchWord);
