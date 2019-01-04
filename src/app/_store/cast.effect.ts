@@ -7,12 +7,12 @@ import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {
-	map,
-	switchMap,
-	withLatestFrom,
-	filter,
-	take,
-	startWith,
+  map,
+  switchMap,
+  withLatestFrom,
+  filter,
+  take,
+  startWith,
 	mergeMap
 } from 'rxjs/operators';
 import * as fromCastActions from '../_store/cast.action';
@@ -34,7 +34,7 @@ export class CastEffect {
 
 	private castQuery = {
 		from: 0,
-		size: 100,
+		size: 200,
 		query: {
 			has_child: {
 				type: 'episode',
@@ -202,7 +202,7 @@ export class CastEffect {
 				category: src.category,
 				provider: src.provider ? src.provider : 'iTunes',
 				feedURL: src.feedURL,
-				imageURL: (src.imageURL ? src.imageURL : src.image),
+				imageURL: src.imageURL ? src.imageURL : src.image,
 				lastPub: itm.inner_hits
 					? itm.inner_hits.episode.hits.hits[0]._source.pubDate
 					: null,
