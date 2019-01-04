@@ -1,4 +1,35 @@
 <div class="container">
-  <app-search-input></app-search-input>
-  <app-search-result></app-search-result>
+  <div class="form-inline mt-3">
+    <div class="form-group mr-2">
+      <h5 class="pull-left">Search cast</h5>
+    </div>
+    <div class="form-group mr-2">
+      <input type="text" #word name="searchWord" required ngModel (keyup)="typeIn($event)" class="form-control pull-right" placeholder="input cast name" />
+    </div>
+    <button id="btnSearch" name="btnSearch" class="form-control btn-primary"><i class="fa fa-search" aria-hidden="true"></i>
+    </button>
+  </div>
+  <br />
+  <ngb-accordion *ngIf="searchResult != null" #acc="ngbAccordion" activeIds="ngb-panel-0">
+    <ngb-panel title="{{ provider }} ({{ searchResult[provider].length }})" *ngFor="let provider of providers">
+      <ng-template ngbPanelContent>
+        <div class="media" *ngFor="let item of searchResult[provider]">
+          <img class="mr-3 img-responsive" src="{{ item.imageURL }}" height="60px" />
+          <div class="media-body" title="{{ item.feedURL }}">
+            <h5 class="mt-0">
+              {{ item.name }} <small>({{ item.category }})</small>
+            </h5>
+            <div class="form-inline">
+              <select ngModel name="category" #category class="form-control">
+                <option *ngFor="let cat of (categories$ | async)" [value]="cat.key" [selected]="item.category === cat.key">{{ cat.key }}</option>
+              </select>
+              <button class="btn btn-success btn-sm" (click)="addCast(item, category.value)">
+                Add
+              </button>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </ngb-panel>
+  </ngb-accordion>
 </div>

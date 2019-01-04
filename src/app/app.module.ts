@@ -48,8 +48,6 @@ import {
 } from 'angular-bootstrap-md';
 import { AlertifyService } from './_services/alertify.service';
 import { SearchMainComponent } from './search/search-main/search-main.component';
-import { SearchInputComponent } from './search/search-input/search-input.component';
-import { SearchResultComponent } from './search/search-result/search-result.component';
 
 @NgModule({
 	declarations: [
@@ -73,9 +71,7 @@ import { SearchResultComponent } from './search/search-result/search-result.comp
 		TimeAgoPipe,
 		PagingComponent,
 		DurationPipe,
-		SearchMainComponent,
-		SearchInputComponent,
-		SearchResultComponent
+		SearchMainComponent
 	],
 	imports: [
 		BrowserModule,
