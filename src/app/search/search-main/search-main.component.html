@@ -23,7 +23,7 @@
               <select ngModel name="category" #category class="form-control">
                 <option *ngFor="let cat of (categories$ | async)" [value]="cat.key" [selected]="item.category === cat.key">{{ cat.key }}</option>
               </select>
-              <button class="btn btn-success btn-sm" (click)="addCast(item, category.value)">
+              <button class="btn btn-success btn-sm" (click)="addCast(item, category.value, $event)">
                 Add
               </button>
             </div>

@@ -34,11 +34,15 @@ export class SearchMainComponent implements OnInit, OnDestroy {
 		}
 	}
 
-	addCast(itm, cat) {
-		console.log(itm, cat);
+	addCast(itm, cat, e) {
+		console.log(itm, cat, e);
+		const pdiv = e.target.parentElement;
 		itm.category = cat;
 		const res = this.searchService.register(itm);
-		res.subscribe(dat => console.log(dat));
+		res.subscribe(dat => {
+			console.log(dat);
+			pdiv.hidden = true;
+		});
 	}
 
 	search(srchWord) {
