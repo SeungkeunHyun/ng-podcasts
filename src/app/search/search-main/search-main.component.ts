@@ -54,6 +54,8 @@ export class SearchMainComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnDestroy(): void {
-		this.subs.unsubscribe();
+		if (this.subs) {
+			this.subs.unsubscribe();
+		}
 	}
 }

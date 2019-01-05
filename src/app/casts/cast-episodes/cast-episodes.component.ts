@@ -81,6 +81,9 @@ export class CastEpisodesComponent implements OnInit, OnDestroy, AfterViewInit {
 				this.castID = params['id'];
 				console.log(params);
 				this.cast$ = this.store.select(selectors.getCastById(params['id']));
+				this.cast$.subscribe(cast => {
+					this.store.dispatch(new fromActions.EpisodesRequested(cast));
+				});
 				this.episodes$ = this.store.select(
 					selectors.getCastEpisodes(params['id'])
 				);

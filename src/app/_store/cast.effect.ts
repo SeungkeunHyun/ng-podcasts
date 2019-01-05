@@ -1,5 +1,6 @@
 import { EpisodePlayerService } from './../_services/episode-player.service';
 import { Episode } from './../_models/episode.model';
+import { Cast } from './../_models/cast.model';
 import { ElasticService } from './../_services/elastic.service';
 import { AppState } from './app.reducer';
 import { Store, select } from '@ngrx/store';
@@ -85,12 +86,28 @@ export class CastEffect {
 			fromCastActions.CastActionTypes.EPISODES_REQUESTED
 		),
 		switchMap((action: fromCastActions.EpisodesRequested) => {
-			return this.http.get(action.payload.feedURL);
+			const cast: Cast = action.payload;
+			return this.elastic.search('casts', {
+				from: 0,
+				size: 2000,
+				query: {
+					has_parent: {
+						parent_type: 'cast',
+						query: {
+							term: { podcastID: cast.id }
+						}
+					}
+				},
+				sort: [{ pubDate: { order: 'desc' } }]
+			});
 		}),
-		map(res => {
+		map((res: any) => {
+			console.log('result', res);
+			const hits = res.hits.hits;
+			const episodes = this.mapEpisodes(hits);
 			return {
 				type: fromCastActions.CastActionTypes.EPISODES_LOADED,
-				payload: { episodes: res }
+				payload: { episodes: episodes }
 			};
 		})
 	);
