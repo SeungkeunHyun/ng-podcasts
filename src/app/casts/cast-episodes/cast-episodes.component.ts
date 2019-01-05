@@ -4,12 +4,12 @@ import { Cast } from './../../_models/cast.model';
 import { Observable, Subscription, Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
 import {
-	Component,
-	OnInit,
-	EventEmitter,
-	Output,
-	OnDestroy,
-	ViewChild,
+  Component,
+  OnInit,
+  EventEmitter,
+  Output,
+  OnDestroy,
+  ViewChild,
 	AfterViewInit
 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -28,7 +28,7 @@ export class CastEpisodesComponent implements OnInit, OnDestroy, AfterViewInit {
 	dtSubject: Subject<Episode[]>;
 	cast$: Observable<Cast>;
 	castID: string;
-	episodes$: Observable<Episode[]>;
+	episodes: Episode[];
 	subscriptions: Subscription[] = [];
 	dtOptions = {
 		destroy: true,
@@ -68,58 +68,76 @@ export class CastEpisodesComponent implements OnInit, OnDestroy, AfterViewInit {
 		private store: Store<AppState>,
 		private playService: EpisodePlayerService
 	) {
-		console.log(this.route);
 		this.dtSubject = new Subject();
 	}
 
 	ngOnInit() {
 		this.subscriptions.push(
 			this.route.params.subscribe(params => {
-				if (!params['id']) {
-					return;
-				}
 				this.castID = params['id'];
-				console.log(params);
 				this.cast$ = this.store.select(selectors.getCastById(params['id']));
-				this.cast$.subscribe(cast => {
-					this.store.dispatch(new fromActions.EpisodesRequested(cast));
-				});
-				this.episodes$ = this.store.select(
-					selectors.getCastEpisodes(params['id'])
-				);
+				console.log('Test', this.route, this.cast$);
 			})
 		);
+		this.subscriptions.push(
+			this.route.data.subscribe(data => {
+				console.log('data loaded', data);
+				this.episodes = this.mapEpisodes(data.results.hits.hits);
+				console.log(this.episodes);
+			})
+		);
+	}
+
+	mapEpisodes(items): Episode[] {
+		const episodes = [];
+		for (const item of items) {
+			const ep = {
+				id: item._id,
+				castID: item._source.cast_episode.parent,
+				title: item._source.title,
+				subtitle: item._source.subtitle,
+				summary: item._source.summary,
+				duration: item._source.duration,
+				mediaURL: item._source.mediaURL,
+				pubDate: item._source.pubDate
+			};
+			episodes.push(ep);
+		}
+		return episodes;
+	}
+
+	processEpisodes(res) {
+		console.log('result', res);
 	}
 
 	ngAfterViewInit() {
-		this.subscriptions.push(
-			this.episodes$.subscribe(ep => {
-				this.dtOptions.data = ep;
-				const pservice = this.playService;
-				const dt = $('#tabEpisodes').DataTable(this.dtOptions);
-				$('#tabEpisodes')
-					.find('tbody tr td.sorting_2')
-					.on('click', function(e) {
-						pservice.subject.next(<Episode>dt.row(this.parentElement).data());
-					});
-				console.log(dt);
-			})
-		);
+		this.dtOptions.data = this.episodes;
+		const pservice = this.playService;
 		this.basicModal.show();
+		const dt = $('#tabEpisodes').DataTable(this.dtOptions);
+		$('#tabEpisodes')
+			.find('tbody tr td.sorting_2')
+			.on('click', function(e) {
+				pservice.subject.next(<Episode>dt.row(this.parentElement).data());
+			});
+		// this.dtSubject.next(this.episodes);
 	}
 
 	getAllEpisodes() {
-		this.store.dispatch(new fromActions.CastEpisodesRequested(this.castID));
+		// this.store.dispatch(new fromActions.CastEpisodesRequested(this.castID));
 		this.playService.subAll.subscribe(data => {
 			console.log('fetched all episodes', data);
 			this.dtOptions.data = data;
 			const $dt = $('#tabEpisodes').DataTable(this.dtOptions);
 			console.log($dt);
-			this.dtSubject.next(data);
+			// this.dtSubject.next(data);
 		});
 	}
 
 	ngOnDestroy() {
+		$('#tabEpisodes')
+			.DataTable()
+			.destroy();
 		this.subscriptions.forEach(sub => sub.unsubscribe());
 	}
 

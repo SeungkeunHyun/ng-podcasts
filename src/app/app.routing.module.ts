@@ -1,3 +1,4 @@
+import { CastResolver } from './_resolvers/cast-resolver';
 import { SearchMainComponent } from './search/search-main/search-main.component';
 import { ModalSearchComponent } from './home/modal-search/modal-search.component';
 import { CastReadComponent } from './casts/cast-read/cast-read.component';
@@ -21,6 +22,7 @@ const appRoutes: Routes = [
 	{
 		path: 'popup/:id',
 		component: CastEpisodesComponent,
+		resolve: { results: CastResolver },
 		outlet: 'modal'
 	},
 	{
