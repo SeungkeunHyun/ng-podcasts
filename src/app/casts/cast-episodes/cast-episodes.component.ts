@@ -10,7 +10,7 @@ import {
   Output,
   OnDestroy,
   ViewChild,
-	AfterViewInit
+  AfterViewInit
 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AppState } from 'src/app/_store/app.reducer';
@@ -18,7 +18,7 @@ import * as selectors from '../../_store/cast.selectors';
 import * as fromActions from '../../_store/cast.action';
 
 @Component({
-	selector: 'app-cast-episodes',
+  selector: 'app-cast-episodes',
 	templateUrl: './cast-episodes.component.html',
 	styleUrls: ['./cast-episodes.component.css']
 })
@@ -83,6 +83,9 @@ export class CastEpisodesComponent implements OnInit, OnDestroy, AfterViewInit {
 			this.route.data.subscribe(data => {
 				console.log('data loaded', data);
 				this.episodes = this.mapEpisodes(data.results.hits.hits);
+				this.store.dispatch(
+					new fromActions.EpisodesLoaded({ episodes: this.episodes })
+				);
 				console.log(this.episodes);
 			})
 		);
