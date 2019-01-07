@@ -31,6 +31,14 @@ export class NavComponent implements OnInit {
 		this.store.dispatch(new CastRequested());
 	}
 
+	deleteBookmark(ep: Episode) {
+		const strBookmarks = localStorage.getItem('bookmarks');
+		const jsonBM = JSON.parse(strBookmarks);
+		delete jsonBM[ep.id];
+		console.log(jsonBM, ep);
+		localStorage.setItem('bookmarks', JSON.stringify(jsonBM));
+	}
+
 	loadBookmarks() {
 		this.bookmarks = [];
 		const strBookmarks = localStorage.getItem('bookmarks');
