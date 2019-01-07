@@ -4,13 +4,13 @@ import { Cast } from './../../_models/cast.model';
 import { Observable, Subscription, Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
 import {
-  Component,
-  OnInit,
-  EventEmitter,
-  Output,
-  OnDestroy,
-  ViewChild,
-  AfterViewInit
+	Component,
+	OnInit,
+	EventEmitter,
+	Output,
+	OnDestroy,
+	ViewChild,
+	AfterViewInit
 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AppState } from 'src/app/_store/app.reducer';
@@ -18,7 +18,7 @@ import * as selectors from '../../_store/cast.selectors';
 import * as fromActions from '../../_store/cast.action';
 
 @Component({
-  selector: 'app-cast-episodes',
+	selector: 'app-cast-episodes',
 	templateUrl: './cast-episodes.component.html',
 	styleUrls: ['./cast-episodes.component.css']
 })
@@ -119,9 +119,9 @@ export class CastEpisodesComponent implements OnInit, OnDestroy, AfterViewInit {
 		this.basicModal.show();
 		const dt = $('#tabEpisodes').DataTable(this.dtOptions);
 		$('#tabEpisodes')
-			.find('tbody tr td.sorting_2')
-			.on('click', function(e) {
-				pservice.subject.next(<Episode>dt.row(this.parentElement).data());
+			.find('tbody')
+			.on('click', 'tr td a', function(e) {
+				pservice.subject.next(<Episode>dt.row(this.closest('tr')).data());
 			});
 		// this.dtSubject.next(this.episodes);
 	}
