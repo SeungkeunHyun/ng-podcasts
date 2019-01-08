@@ -1,18 +1,20 @@
 import { Subscription, Observable } from 'rxjs';
 import { Category } from './../../_models/category.model';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/_store/app.reducer';
 import * as selectors from '../../_store/cast.selectors';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
 	selector: 'app-board-graph',
 	templateUrl: './board-graph.component.html',
 	styleUrls: ['./board-graph.component.css']
 })
-export class BoardGraphComponent implements OnInit, OnDestroy {
+export class BoardGraphComponent implements OnInit, OnDestroy, AfterViewInit {
+	categories$: Observable<Category[]>;
 	categories: Category[];
-	catSubs: Subscription;
+	catSubs: Subscription[];
 	selectedCategory: string;
 	public chartData: Array<any> = [];
 	public chartLabels: Array<any> = [];
@@ -21,16 +23,27 @@ export class BoardGraphComponent implements OnInit, OnDestroy {
 	public chartOptions: any = {
 		responsive: true
 	};
-	constructor(private store: Store<AppState>) {}
+	constructor(private store: Store<AppState>, private route: ActivatedRoute) {
+		this.catSubs = [];
+	}
 
 	ngOnInit() {
-		this.catSubs = this.store
-			.select(selectors.selectCategories)
-			.subscribe(cats => {
+		this.categories$ = this.store.select(selectors.selectCategories);
+		this.catSubs.push(
+			this.categories$.subscribe(cats => {
+				console.log('categories', cats);
+				if (!cats || cats.length === 0) {
+					return;
+				}
 				this.categories = cats;
 				this.drawGraph();
-				this.chartLoaded = true;
-			});
+			})
+		);
+	}
+
+	ngAfterViewInit() {
+		const chart = document.querySelector('#dchart');
+		console.log('chart after viewinit', chart);
 	}
 
 	drawGraph() {
@@ -49,7 +62,8 @@ export class BoardGraphComponent implements OnInit, OnDestroy {
 		}
 		chColors.hoverBackgroundColor = chColors.backgroundColor;
 		this.chartColors = [chColors];
-		console.log('chart data loaded', this.chartColors);
+		console.log('chart data loaded', this.categories, this.chartColors);
+		this.chartLoaded = true;
 	}
 
 	public chartClicked(e: any): void {
@@ -91,6 +105,7 @@ export class BoardGraphComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnDestroy() {
-		this.catSubs.unsubscribe();
+		this.catSubs.forEach(sub => sub.unsubscribe());
+		this.chartLoaded = false;
 	}
 }

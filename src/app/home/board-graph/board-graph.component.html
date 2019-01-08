@@ -1,16 +1,20 @@
 <h2>Category 분포</h2>
 <div style="display: block">
-<canvas *ngIf="chartLoaded" mdbChart
-          chartType="doughnut"
-          [data]="chartData"
-          [labels]="chartLabels"
-          [colors]="chartColors"
-          [options]="chartOptions"
-          [legend]="true"
-          (chartHover)="chartHovered($event)"
-          (chartClick)="chartClicked($event)">
-</canvas>
+  <canvas
+    id="dchart"
+    *ngIf="chartLoaded"
+    mdbChart
+    chartType="doughnut"
+    [data]="chartData"
+    [labels]="chartLabels"
+    [colors]="chartColors"
+    [options]="chartOptions"
+    [legend]="true"
+    (chartHover)="chartHovered($event)"
+    (chartClick)="chartClicked($event)"
+  >
+  </canvas>
 </div>
-<div class='row'>
-    <app-board-casts category="{{ selectedCategory }}"></app-board-casts>
+<div class="row">
+  <app-board-casts category="{{ selectedCategory }}"></app-board-casts>
 </div>

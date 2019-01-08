@@ -21,7 +21,7 @@
         <a dropdownToggle mdbWavesEffect type="button" (click)="loadBookmarks()" class="nav-link dropdown-toggle waves-light">
           Bookmarks<span class="caret"></span></a>
         <div *dropdownMenu class="dropdown-menu dropdown dropdown-primary" role="menu">
-          <div class='inline-block' *ngFor="let bm of bookmarks">
+          <div class='ilnblock' *ngFor="let bm of bookmarks">
             <a class="dropdown-item waves-light" mdbWavesEffect (click)="playCast(bm)"><span title="{{bm.episode.title}}">{{ bm.episode.title | slice:0:25 }}</span>
               <span class="pull-right">({{ bm.pausedAt | duration }})</span></a>
             <i class="fa fa-trash-o" (click)="deleteBookmark(bm.episode)" aria-hidden="true"></i>
