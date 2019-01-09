@@ -14,7 +14,7 @@ export class StatResolver implements Resolve<any> {
 		query: {
 			range: {
 				pubDate: {
-					gte: 'now-7d/d',
+					gt: 'now-7d/d',
 					lte: 'now/d'
 				}
 			}
@@ -23,7 +23,7 @@ export class StatResolver implements Resolve<any> {
 			range: {
 				date_histogram: {
 					field: 'pubDate',
-					format: 'yyyy-MM-dd',
+					format: 'M/d(E)',
 					interval: 'day'
 				}
 			}
