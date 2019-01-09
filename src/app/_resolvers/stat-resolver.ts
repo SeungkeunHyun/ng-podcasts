@@ -15,7 +15,8 @@ export class StatResolver implements Resolve<any> {
 			range: {
 				pubDate: {
 					gt: 'now-7d/d',
-					lte: 'now/d'
+					lte: 'now/d',
+					time_zone: '+09:00'
 				}
 			}
 		},

@@ -9,10 +9,10 @@ import * as selectors from '../../_store/cast.selectors';
 @Component({
 	selector: 'app-board-casts',
 	templateUrl: './board-casts.component.html',
-	styleUrls: [ './board-casts.component.css' ]
+	styleUrls: ['./board-casts.component.css']
 })
 export class BoardCastsComponent implements OnInit {
-	private _category: string;
+	public _category: string;
 	@Input()
 	set category(value: string) {
 		this._category = value;
@@ -25,7 +25,9 @@ export class BoardCastsComponent implements OnInit {
 	ngOnInit() {}
 
 	fetchCastsOfCategory() {
-		this.castsOfCategory$ = this.store.select(selectors.getCastsByCategory(this._category));
+		this.castsOfCategory$ = this.store.select(
+			selectors.getCastsByCategory(this._category)
+		);
 	}
 
 	showCast(castId) {

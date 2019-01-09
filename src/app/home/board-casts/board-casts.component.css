@@ -3,6 +3,7 @@ small.pull-right {
 }
 
 ul {
+  width: 90%;
   max-height: 500px;
   overflow-y: auto;
 }

@@ -1,4 +1,5 @@
 ol {
+  width: 90%;
   max-height: 700px;
   overflow-y: auto;
 }
