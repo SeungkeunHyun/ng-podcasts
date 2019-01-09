@@ -1,20 +1,18 @@
 <h2>Category 분포</h2>
-<div style="display: block">
-  <canvas
-    id="dchart"
-    *ngIf="chartLoaded"
-    mdbChart
-    chartType="doughnut"
-    [data]="chartData"
-    [labels]="chartLabels"
-    [colors]="chartColors"
-    [options]="chartOptions"
-    [legend]="true"
-    (chartHover)="chartHovered($event)"
-    (chartClick)="chartClicked($event)"
-  >
-  </canvas>
-</div>
+<ngb-tabset>
+  <ngb-tab title='Category별 Cast분포'>
+    <ng-template ngbTabContent>
+      <canvas id="dchart" *ngIf="chartLoaded" mdbChart chartType="doughnut" [data]="chartData" [labels]="chartLabels" [colors]="chartColors" [options]="chartOptions" [legend]="true" (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)">
+      </canvas>
+    </ng-template>
+  </ngb-tab>
+  <ngb-tab title='일주일간 Episode 등록건수'>
+    <ng-template ngbTabContent>
+      <canvas mdbChart chartType="bar" [datasets]="statDataset" [labels]="statLabels" [colors]="chartColors" [options]="chartOptions" [legend]="true" (chartHover)="chartHovered($event)">
+      </canvas>
+    </ng-template>
+  </ngb-tab>
+</ngb-tabset>
 <div class="row">
   <app-board-casts category="{{ selectedCategory }}"></app-board-casts>
 </div>

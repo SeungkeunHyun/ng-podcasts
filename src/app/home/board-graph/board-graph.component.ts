@@ -7,17 +7,21 @@ import * as selectors from '../../_store/cast.selectors';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
-	selector: 'app-board-graph',
-	templateUrl: './board-graph.component.html',
-	styleUrls: ['./board-graph.component.css']
+  selector: 'app-board-graph',
+  templateUrl: './board-graph.component.html',
+  styleUrls: ['./board-graph.component.css']
 })
 export class BoardGraphComponent implements OnInit, OnDestroy, AfterViewInit {
-	categories$: Observable<Category[]>;
-	categories: Category[];
-	catSubs: Subscription[];
-	selectedCategory: string;
-	public chartData: Array<any> = [];
-	public chartLabels: Array<any> = [];
+  categories$: Observable<Category[]>;
+  categories: Category[];
+  catSubs: Subscription[];
+  selectedCategory: string;
+  l7dBuckets = [];
+  public statDataset: any;
+  public statData: Array<any> = [];
+  public statLabels: Array<any> = [];
+  public chartData: Array<any> = [];
+  public chartLabels: Array<any> = [];
 	public chartColors: Array<any> = null;
 	public chartLoaded = false;
 	public chartOptions: any = {
@@ -25,6 +29,18 @@ export class BoardGraphComponent implements OnInit, OnDestroy, AfterViewInit {
 	};
 	constructor(private store: Store<AppState>, private route: ActivatedRoute) {
 		this.catSubs = [];
+		this.catSubs.push(
+			this.route.data.subscribe(dat => {
+				this.l7dBuckets = dat.results.aggregations.range.buckets;
+				this.l7dBuckets.forEach(itm => {
+					this.statData.push(itm['doc_count']);
+					this.statLabels.push(itm['key_as_string']);
+					this.statDataset = [
+						{ data: this.statData, label: '일주일간 Ep. 등록건수' }
+					];
+				});
+			})
+		);
 	}
 
 	ngOnInit() {

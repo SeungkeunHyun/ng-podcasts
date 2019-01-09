@@ -9,10 +9,16 @@ import { NgModule } from '@angular/core';
 import { DashboardComponent } from './home/dashboard/dashboard.component';
 import { CastEpisodesComponent } from './casts/cast-episodes/cast-episodes.component';
 import { SearchResolver } from './_resolvers/search-resolver';
+import { StatResolver } from './_resolvers/stat-resolver';
 
 const appRoutes: Routes = [
 	{ path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-	{ path: 'dashboard', component: DashboardComponent, pathMatch: 'full' },
+	{
+		path: 'dashboard',
+		component: DashboardComponent,
+		resolve: { results: StatResolver },
+		pathMatch: 'full'
+	},
 	{
 		path: 'search',
 		component: ModalSearchComponent,
