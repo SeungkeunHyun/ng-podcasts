@@ -1,3 +1,4 @@
+import { Category } from 'src/app/_models/category.model';
 import { Router } from '@angular/router';
 import { Cast } from './../../_models/cast.model';
 import { Observable, Subject } from 'rxjs';
@@ -13,6 +14,7 @@ import * as selectors from '../../_store/cast.selectors';
 })
 export class BoardCastsComponent implements OnInit {
 	public _category: string;
+	public categories$: Observable<Category[]>;
 	@Input()
 	set category(value: string) {
 		this._category = value;
@@ -20,9 +22,18 @@ export class BoardCastsComponent implements OnInit {
 	}
 	subject: Subject<string> = new Subject<string>();
 	castsOfCategory$: Observable<Cast[]>;
-	constructor(private store: Store<AppState>, private router: Router) {}
+	constructor(private store: Store<AppState>, private router: Router) {
+		this.categories$ = store.select(selectors.selectCategories);
+	}
 
 	ngOnInit() {}
+
+	selectCategory(e) {
+		if (e.target.options[0].value === '') {
+			e.target.remove(0);
+		}
+		this.category = e.target.value;
+	}
 
 	fetchCastsOfCategory() {
 		this.castsOfCategory$ = this.store.select(
