@@ -2,7 +2,13 @@ import { Observable, Subscription } from 'rxjs';
 import { Category } from './../../_models/category.model';
 import { Cast } from './../../_models/cast.model';
 import { Store } from '@ngrx/store';
-import { Component, ViewChild, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
+import {
+	Component,
+	ViewChild,
+	OnInit,
+	OnDestroy,
+	AfterViewInit
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppState } from '../../_store/app.reducer';
 import * as fromActions from '../../_store/cast.action';
@@ -12,7 +18,7 @@ import * as selectors from '../../_store/cast.selectors';
 @Component({
 	selector: 'app-cast-edit',
 	templateUrl: './cast-edit.component.html',
-	styleUrls: [ './cast-edit.component.css' ]
+	styleUrls: ['./cast-edit.component.css']
 })
 export class CastEditComponent implements OnInit, OnDestroy, AfterViewInit {
 	id: string;
@@ -21,24 +27,34 @@ export class CastEditComponent implements OnInit, OnDestroy, AfterViewInit {
 	subsParam: Subscription;
 	subsCast: Subscription;
 	@ViewChild('f') castForm: FormGroup;
-	constructor(private route: ActivatedRoute, private router: Router, private store: Store<AppState>) {}
+	constructor(
+		private route: ActivatedRoute,
+		private router: Router,
+		private store: Store<AppState>
+	) {}
 
-	ngOnInit() {
+	ngOnInit() {}
+
+	initCastEdit() {
 		this.categories$ = this.store.select(selectors.selectCategories);
-		this.subsParam = this.route.params.subscribe((params) => {
+		this.subsParam = this.route.params.subscribe(params => {
 			this.id = params['id'];
-			this.subsCast = this.store.select(selectors.getCastById(this.id)).subscribe((cast) => {
-				if (!cast) {
-					console.log('Category was not fetched yet');
-					return this.router.navigate([ 'casts' ]);
-				}
-				this.cast = cast;
-				this.castForm.setValue(cast);
-			});
+			this.subsCast = this.store
+				.select(selectors.getCastById(this.id))
+				.subscribe(cast => {
+					if (!cast) {
+						console.log('Category was not fetched yet');
+						return this.router.navigate(['casts']);
+					}
+					this.cast = cast;
+					this.castForm.setValue(cast);
+				});
 		});
 	}
 
-	ngAfterViewInit() {}
+	ngAfterViewInit() {
+		this.initCastEdit();
+	}
 
 	ngOnDestroy() {
 		this.subsParam.unsubscribe();
@@ -46,7 +62,9 @@ export class CastEditComponent implements OnInit, OnDestroy, AfterViewInit {
 	}
 
 	onSubmit(f) {
-		this.store.dispatch(new fromActions.CastUpdate({ cast: this.castForm.value }));
+		this.store.dispatch(
+			new fromActions.CastUpdate({ cast: this.castForm.value })
+		);
 		return false;
 	}
 }

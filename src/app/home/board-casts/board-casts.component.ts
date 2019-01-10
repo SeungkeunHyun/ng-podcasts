@@ -14,7 +14,8 @@ import * as selectors from '../../_store/cast.selectors';
 })
 export class BoardCastsComponent implements OnInit {
 	public _category: string;
-	public categories$: Observable<Category[]>;
+	categories$: Observable<Category[]>;
+	public categories: Category[];
 	@Input()
 	set category(value: string) {
 		this._category = value;
@@ -23,7 +24,9 @@ export class BoardCastsComponent implements OnInit {
 	subject: Subject<string> = new Subject<string>();
 	castsOfCategory$: Observable<Cast[]>;
 	constructor(private store: Store<AppState>, private router: Router) {
-		this.categories$ = store.select(selectors.selectCategories);
+		store.select(selectors.selectCategories).subscribe(cats => {
+			if (cats && cats.length > 0) { this.categories = cats; }
+		});
 	}
 
 	ngOnInit() {}
