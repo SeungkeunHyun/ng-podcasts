@@ -48,6 +48,7 @@ import {
 } from 'angular-bootstrap-md';
 import { AlertifyService } from './_services/alertify.service';
 import { SearchMainComponent } from './search/search-main/search-main.component';
+import { DownloadFrameComponent } from './common/download-frame/download-frame.component';
 @NgModule({
 	declarations: [
 		AppComponent,
@@ -70,7 +71,8 @@ import { SearchMainComponent } from './search/search-main/search-main.component'
 		TimeAgoPipe,
 		PagingComponent,
 		DurationPipe,
-		SearchMainComponent
+		SearchMainComponent,
+		DownloadFrameComponent
 	],
 	imports: [
 		BrowserModule,

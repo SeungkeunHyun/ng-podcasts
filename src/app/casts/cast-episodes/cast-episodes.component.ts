@@ -1,3 +1,4 @@
+import { DownloadMediaService } from './../../_services/download-media.service';
 import { EpisodePlayerService } from './../../_services/episode-player.service';
 import { Episode } from './../../_models/episode.model';
 import { Cast } from './../../_models/cast.model';
@@ -66,7 +67,8 @@ export class CastEpisodesComponent implements OnInit, OnDestroy, AfterViewInit {
 		private router: Router,
 		private route: ActivatedRoute,
 		private store: Store<AppState>,
-		private playService: EpisodePlayerService
+		private playService: EpisodePlayerService,
+		private dlService: DownloadMediaService
 	) {
 		this.dtSubject = new Subject();
 	}
@@ -117,13 +119,23 @@ export class CastEpisodesComponent implements OnInit, OnDestroy, AfterViewInit {
 		this.dtOptions.data = this.episodes;
 		const pservice = this.playService;
 		this.basicModal.show();
+		const self = this;
 		const dt = $('#tabEpisodes').DataTable(this.dtOptions);
 		$('#tabEpisodes')
 			.find('tbody')
 			.on('click', 'tr td a', function(e) {
 				pservice.subject.next(<Episode>dt.row(this.closest('tr')).data());
 			});
+		$('#tabEpisodes')
+			.find('tbody')
+			.on('click', 'i.fa-download', function(e) {
+				self.downloadMedia(<Episode>dt.row(this.closest('tr')).data());
+			});
 		// this.dtSubject.next(this.episodes);
+	}
+
+	downloadMedia(ep: Episode) {
+		this.dlService.downloadMedia(ep);
 	}
 
 	getAllEpisodes() {

@@ -1,3 +1,4 @@
+import { DownloadMediaService } from './../../_services/download-media.service';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { DurationPipe } from './../../_pipes/duration.pipe';
 import { EpisodePlayerService } from './../../_services/episode-player.service';
@@ -27,22 +28,23 @@ export class PlayerComponent implements OnInit, OnDestroy, AfterViewInit {
   durpipe = new DurationPipe();
   controllers = ['fb', 'b', 'p', 'f', 'ff', 'dn'];
   constructor(
-    private store: Store<AppState>,
-    private playService: EpisodePlayerService,
-    private http: HttpClient
-  ) {
-    this.percent = new Subject<number>();
-  }
+		private store: Store<AppState>,
+		private playService: EpisodePlayerService,
+		private http: HttpClient,
+		private dlService: DownloadMediaService
+	) {
+		this.percent = new Subject<number>();
+	}
 
-  ngAfterViewInit() {
-    console.log('after view init');
-    this.setupPlayer();
-  }
+	ngAfterViewInit() {
+		console.log('after view init');
+		this.setupPlayer();
+	}
 
-  ngOnInit() {
-    this.subs = this.playService.subject.subscribe(ep => {
-      this.episode = ep;
-      this.cast$ = this.store.select(
+	ngOnInit() {
+		this.subs = this.playService.subject.subscribe(ep => {
+			this.episode = ep;
+			this.cast$ = this.store.select(
 				selectors.getCastById(this.episode.castID)
 			);
 			this.loaded = true;
@@ -226,16 +228,7 @@ export class PlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 	}
 
 	downloadCast() {
-		const frm = <HTMLFormElement>(
-			document.querySelector('#dnframe').querySelector('form')
-		);
-		frm.lnk.value = this.episode.mediaURL;
-		frm.img.value = document.querySelector('#imageInPlay').getAttribute('src');
-		frm.ttl.value = document.querySelector('#castInPlay').textContent;
-		frm.elements['title'].value = this.episode.title;
-		frm.artist.value = document.querySelector('#castInPlay').textContent;
-		frm.summary.value = this.episode.summary;
-		frm.submit();
+		this.dlService.downloadMedia(this.episode);
 	}
 
 	/* downloadFile(data: Response) {
