@@ -230,9 +230,10 @@ export class PlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 			document.querySelector('#dnframe').querySelector('form')
 		);
 		frm.lnk.value = this.episode.mediaURL;
-		frm.img.value = $('#imageInPlay').attr('src');
-		frm.title.value = this.episode.title;
-		frm.artist.value = $('#castInPlay').text();
+		frm.img.value = document.querySelector('#imageInPlay').getAttribute('src');
+		frm.ttl.value = document.querySelector('#castInPlay').textContent;
+		frm.elements['title'].value = this.episode.title;
+		frm.artist.value = document.querySelector('#castInPlay').textContent;
 		frm.summary.value = this.episode.summary;
 		frm.submit();
 	}
