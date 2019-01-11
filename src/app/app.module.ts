@@ -48,7 +48,6 @@ import {
 } from 'angular-bootstrap-md';
 import { AlertifyService } from './_services/alertify.service';
 import { SearchMainComponent } from './search/search-main/search-main.component';
-
 @NgModule({
 	declarations: [
 		AppComponent,

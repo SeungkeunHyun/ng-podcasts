@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { DurationPipe } from './../../_pipes/duration.pipe';
 import { EpisodePlayerService } from './../../_services/episode-player.service';
 import { AppState } from 'src/app/_store/app.reducer';
@@ -226,15 +226,15 @@ export class PlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 	}
 
 	downloadCast() {
-		const formData = {
-			lnk: this.episode.mediaURL,
-			img: $('#imageInPlay').attr('src'),
-			ttl: $('#castInPlay').text(),
-			title: this.episode.title,
-			summary: this.episode.summary
-		};
-		// this.http.post('                    ', formData).subscribe(data => this.downloadFile(data));
-		console.log(formData);
+		const frm = <HTMLFormElement>(
+			document.querySelector('#dnframe').querySelector('form')
+		);
+		frm.lnk.value = this.episode.mediaURL;
+		frm.img.value = $('#imageInPlay').attr('src');
+		frm.title.value = this.episode.title;
+		frm.artist.value = $('#castInPlay').text();
+		frm.summary.value = this.episode.summary;
+		frm.submit();
 	}
 
 	/* downloadFile(data: Response) {
