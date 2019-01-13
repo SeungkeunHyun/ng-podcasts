@@ -5,3 +5,8 @@ div.container {
 table.table {
   width: 100%
 }
+
+div.modal-body {
+  height: 400px;
+  overflow-y: auto;
+}
