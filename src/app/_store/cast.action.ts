@@ -1,6 +1,7 @@
 import { Cast } from './../_models/cast.model';
 import { Action } from '@ngrx/store';
 import { Episode } from '../_models/episode.model';
+import { Category } from '../_models/category.model';
 
 export enum CastActionTypes {
 	CAST_REQUESTED = '[Cast API] CAST REQUESTED',
@@ -41,6 +42,7 @@ export class CategoryRequested implements Action {
 }
 export class CategoryLoaded implements Action {
 	readonly type = CastActionTypes.CATEGORY_LOADED;
+	constructor(public payload: Category[]) {}
 }
 
 export class EpisodesRequested implements Action {

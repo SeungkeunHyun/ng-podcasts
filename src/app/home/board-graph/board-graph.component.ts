@@ -1,3 +1,4 @@
+import { CastCommonService } from './../../_services/cast-common.service';
 import { Subscription, Observable } from 'rxjs';
 import { Category } from './../../_models/category.model';
 import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
@@ -7,27 +8,30 @@ import * as selectors from '../../_store/cast.selectors';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-board-graph',
-  templateUrl: './board-graph.component.html',
-  styleUrls: ['./board-graph.component.css']
+	selector: 'app-board-graph',
+	templateUrl: './board-graph.component.html',
+	styleUrls: ['./board-graph.component.css']
 })
 export class BoardGraphComponent implements OnInit, OnDestroy, AfterViewInit {
-  categories$: Observable<Category[]>;
-  categories: Category[];
-  catSubs: Subscription[];
-  selectedCategory: string;
-  l7dBuckets = [];
-  public statDataset: any;
-  public statData: Array<any> = [];
-  public statLabels: Array<any> = [];
-  public chartData: Array<any> = [];
-  public chartLabels: Array<any> = [];
+	categories: Category[];
+	catSubs: Subscription[];
+	selectedCategory: string;
+	l7dBuckets = [];
+	public statDataset: any;
+	public statData: Array<any> = [];
+	public statLabels: Array<any> = [];
+	public chartData: Array<any> = [];
+	public chartLabels: Array<any> = [];
 	public chartColors: Array<any> = null;
 	public chartLoaded = false;
 	public chartOptions: any = {
 		responsive: true
 	};
-	constructor(private store: Store<AppState>, private route: ActivatedRoute) {
+	constructor(
+		private store: Store<AppState>,
+		private route: ActivatedRoute,
+		private castCommon: CastCommonService
+	) {
 		this.catSubs = [];
 		this.catSubs.push(
 			this.route.data.subscribe(dat => {
@@ -44,17 +48,15 @@ export class BoardGraphComponent implements OnInit, OnDestroy, AfterViewInit {
 	}
 
 	ngOnInit() {
-		this.categories$ = this.store.select(selectors.selectCategories);
-		this.catSubs.push(
-			this.categories$.subscribe(cats => {
-				console.log('categories', cats);
-				if (!cats || cats.length === 0) {
-					return;
-				}
-				this.categories = cats;
-				this.drawGraph();
-			})
-		);
+		if (this.castCommon.categories) {
+			this.categories = this.castCommon.categories;
+			console.log('category data loaded', this.categories);
+			this.drawGraph();
+		}
+		this.castCommon.categories$.subscribe(action => {
+			this.categories = action.payload;
+			this.drawGraph();
+		});
 	}
 
 	ngAfterViewInit() {

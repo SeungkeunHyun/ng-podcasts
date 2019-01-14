@@ -1,3 +1,4 @@
+import { CastCommonService } from './../../_services/cast-common.service';
 import { Observable, Subscription } from 'rxjs';
 import { Category } from './../../_models/category.model';
 import { Cast } from './../../_models/cast.model';
@@ -23,20 +24,24 @@ import * as selectors from '../../_store/cast.selectors';
 export class CastEditComponent implements OnInit, OnDestroy, AfterViewInit {
 	id: string;
 	cast: Cast;
-	categories$: Observable<Category[]>;
+	categories: Category[];
 	subsParam: Subscription;
 	subsCast: Subscription;
 	@ViewChild('f') castForm: FormGroup;
 	constructor(
 		private route: ActivatedRoute,
 		private router: Router,
-		private store: Store<AppState>
+		private store: Store<AppState>,
+		private castCommon: CastCommonService
 	) {}
 
-	ngOnInit() {}
+	ngOnInit() {
+		this.castCommon.categories$.subscribe(
+			action => (this.categories = action.payload)
+		);
+	}
 
 	initCastEdit() {
-		this.categories$ = this.store.select(selectors.selectCategories);
 		this.subsParam = this.route.params.subscribe(params => {
 			this.id = params['id'];
 			this.subsCast = this.store

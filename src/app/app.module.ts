@@ -1,3 +1,4 @@
+import { CastCommonService } from './_services/cast-common.service';
 import { DurationPipe } from './_pipes/duration.pipe';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { ModalSearchComponent } from './home/modal-search/modal-search.component';
@@ -89,7 +90,7 @@ import { DownloadFrameComponent } from './common/download-frame/download-frame.c
 			categories: categoryReducer,
 			episodes: episodeReducer
 		}),
-		EffectsModule.forRoot([CastEffect]),
+		EffectsModule.forRoot([CastEffect, CastCommonService]),
 		StoreDevtoolsModule.instrument({
 			maxAge: 25
 		}),

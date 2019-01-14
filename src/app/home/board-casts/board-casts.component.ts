@@ -1,3 +1,4 @@
+import { CastCommonService } from './../../_services/cast-common.service';
 import { Category } from 'src/app/_models/category.model';
 import { Router } from '@angular/router';
 import { Cast } from './../../_models/cast.model';
@@ -14,7 +15,6 @@ import * as selectors from '../../_store/cast.selectors';
 })
 export class BoardCastsComponent implements OnInit {
 	public _category: string;
-	categories$: Observable<Category[]>;
 	public categories: Category[];
 	@Input()
 	set category(value: string) {
@@ -23,13 +23,21 @@ export class BoardCastsComponent implements OnInit {
 	}
 	subject: Subject<string> = new Subject<string>();
 	castsOfCategory$: Observable<Cast[]>;
-	constructor(private store: Store<AppState>, private router: Router) {
-		store.select(selectors.selectCategories).subscribe(cats => {
-			if (cats && cats.length > 0) { this.categories = cats; }
-		});
-	}
+	constructor(
+		private store: Store<AppState>,
+		private router: Router,
+		private castCommon: CastCommonService
+	) {}
 
-	ngOnInit() {}
+	ngOnInit() {
+		if (this.castCommon.categories) {
+			this.categories = this.castCommon.categories;
+			return;
+		}
+		this.castCommon.categories$.subscribe(
+			action => (this.categories = action.payload)
+		);
+	}
 
 	selectCategory(e) {
 		if (e.target.options[0].value === '') {

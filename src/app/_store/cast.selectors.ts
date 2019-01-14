@@ -55,7 +55,7 @@ export const selectCategories = createSelector(
 	catState => {
 		if (!catState) {
 			console.log('category state is null', catState);
-			return [];
+			return;
 		}
 		const cats = [];
 		for (const id of catState.ids) {

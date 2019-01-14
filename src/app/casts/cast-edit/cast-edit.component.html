@@ -13,7 +13,7 @@
     <div class='form-group form-inline'>
       <label class='col-sm-2'>Category</label>
       <select ngModel name='category' id='category' required class='form-control'>
-        <option *ngFor='let cat of (categories$ | async)' [value]='cat.key' [selected]='cast.category === cat.key'>{{
+        <option *ngFor='let cat of categories' [value]='cat.key' [selected]='cast.category === cat.key'>{{
           cat.key }}
           ({{ cat.doc_count }})</option>
       </select>

@@ -1,3 +1,4 @@
+import { CastCommonService } from './../../_services/cast-common.service';
 import { Category } from 'src/app/_models/category.model';
 import { CastSearchService } from './../../_services/cast-search.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
@@ -13,14 +14,25 @@ import * as selectors from '../../_store/cast.selectors';
 export class SearchMainComponent implements OnInit, OnDestroy {
 	providers: string[];
 	searchResult: {};
-	subs: Subscription;
-	categories$: Observable<Category[]>;
+	subs: Subscription[] = [];
+	categories: Category[];
 
 	constructor(
 		private searchService: CastSearchService,
-		private store: Store<AppState>
+		private store: Store<AppState>,
+		private castCommon: CastCommonService
 	) {
-		this.categories$ = this.store.select(selectors.selectCategories);
+		if (this.castCommon.categories) {
+			this.categories = this.castCommon.categories;
+			console.log('category data loaded', this.categories);
+			return;
+		}
+		this.subs.push(
+			this.castCommon.categories$.subscribe(action => {
+				this.categories = action.payload;
+				console.log('category data loaded', this.categories);
+			})
+		);
 	}
 
 	ngOnInit() {}
@@ -46,16 +58,16 @@ export class SearchMainComponent implements OnInit, OnDestroy {
 	}
 
 	search(srchWord) {
-		this.subs = this.searchService.search(srchWord).subscribe(data => {
-			this.searchResult = data;
-			console.log(data);
-			this.providers = Object.keys(data);
-		});
+		this.subs.push(
+			this.searchService.search(srchWord).subscribe(data => {
+				this.searchResult = data;
+				console.log(data);
+				this.providers = Object.keys(data);
+			})
+		);
 	}
 
 	ngOnDestroy(): void {
-		if (this.subs) {
-			this.subs.unsubscribe();
-		}
+		this.subs.forEach(sub => sub.unsubscribe());
 	}
 }
