@@ -14,10 +14,27 @@ import { map } from 'rxjs/operators';
 	providedIn: 'root'
 })
 export class CastCommonService {
+	constructor(private store: Store<AppState>, private actions: Actions) {}
+	palette = [
+		'#001f3f',
+		'#0074D9',
+		'#7FDBFF',
+		'#39CCCC',
+		'#3D9970',
+		'#2ECC40',
+		'#01FF70',
+		'#FFDC00',
+		'#FF851B',
+		'#FF4136',
+		'#85144b',
+		'#F012BE',
+		'#B10DC9',
+		'#111111',
+		'#AAAAAA',
+		'#DDDDDD'
+	];
 	subs: Subscription[] = [];
 	categories: Category[];
-
-	constructor(private store: Store<AppState>, private actions: Actions) {}
 
 	@Effect()
 	categories$ = this.actions
@@ -26,9 +43,12 @@ export class CastCommonService {
 		)
 		.pipe(
 			map(action => {
+				const cats = <Category[]>action.payload;
+				const palette = this.palette.slice(0);
+				cats.forEach(cat => (cat['color'] = palette.shift()));
 				console.log('listen to the action', action);
-				this.categories = action.payload;
-				console.log('categorys loaded', this.categories);
+				this.categories = cats;
+				console.log('categories loaded', this, this.categories);
 				return { type: 'disposingAction', payload: this.categories };
 			})
 		);

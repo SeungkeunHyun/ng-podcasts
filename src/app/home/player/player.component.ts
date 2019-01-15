@@ -1,3 +1,4 @@
+import { CastCommonService } from './../../_services/cast-common.service';
 import { DownloadMediaService } from './../../_services/download-media.service';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { DurationPipe } from './../../_pipes/duration.pipe';
@@ -11,6 +12,7 @@ import * as $ from 'jquery';
 
 import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import * as selectors from '../../_store/cast.selectors';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-player',
@@ -20,6 +22,7 @@ import * as selectors from '../../_store/cast.selectors';
 export class PlayerComponent implements OnInit, OnDestroy, AfterViewInit {
   cast$: Observable<Cast>;
   episode: Episode;
+  catColor: string;
   interval = null;
   player: HTMLMediaElement;
   percent: Subject<number>;
@@ -29,9 +32,11 @@ export class PlayerComponent implements OnInit, OnDestroy, AfterViewInit {
   controllers = ['fb', 'b', 'p', 'f', 'ff', 'dn'];
   constructor(
 		private store: Store<AppState>,
+		private router: Router,
 		private playService: EpisodePlayerService,
 		private http: HttpClient,
-		private dlService: DownloadMediaService
+		private dlService: DownloadMediaService,
+		private castCommon: CastCommonService
 	) {
 		this.percent = new Subject<number>();
 	}
@@ -64,6 +69,20 @@ export class PlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 			};
 			this.preparePlayer();
 		});
+	}
+
+	getCategoryColor(catName: string) {
+		for (const cat of this.castCommon.categories) {
+			if (cat.key === catName) {
+				return cat.color;
+			}
+		}
+	}
+
+	showCast() {
+		this.router.navigate([
+			{ outlets: { modal: 'popup/' + this.episode.castID } }
+		]);
 	}
 
 	getProgressPct(): number {

@@ -8,21 +8,21 @@ import * as selectors from '../../_store/cast.selectors';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
-	selector: 'app-board-graph',
-	templateUrl: './board-graph.component.html',
-	styleUrls: ['./board-graph.component.css']
+  selector: 'app-board-graph',
+  templateUrl: './board-graph.component.html',
+  styleUrls: ['./board-graph.component.css']
 })
 export class BoardGraphComponent implements OnInit, OnDestroy, AfterViewInit {
-	categories: Category[];
-	catSubs: Subscription[];
-	selectedCategory: string;
-	l7dBuckets = [];
-	public statDataset: any;
-	public statData: Array<any> = [];
-	public statLabels: Array<any> = [];
-	public chartData: Array<any> = [];
-	public chartLabels: Array<any> = [];
-	public chartColors: Array<any> = null;
+  categories: Category[];
+  catSubs: Subscription[];
+  selectedCategory: string;
+  l7dBuckets = [];
+  public statDataset: any;
+  public statData: Array<any> = [];
+  public statLabels: Array<any> = [];
+  public chartData: Array<any> = [];
+  public chartLabels: Array<any> = [];
+  public chartColors: Array<any> = null;
 	public chartLoaded = false;
 	public chartOptions: any = {
 		responsive: true
@@ -71,12 +71,12 @@ export class BoardGraphComponent implements OnInit, OnDestroy, AfterViewInit {
 			backgroundColor: [],
 			hoverBackgroundColor: []
 		};
-		let seq = 0;
+		const seq = 0;
 		for (const cat of this.categories) {
 			this.chartLabels.push(cat.key);
 			this.chartData.push(cat.doc_count);
 			chColors.hoverBorderColor.push('rgba(0, 0, 0, 0.1)');
-			chColors.backgroundColor.push(this.getSeqColor(seq++));
+			chColors.backgroundColor.push(cat.color);
 		}
 		chColors.hoverBackgroundColor = chColors.backgroundColor;
 		this.chartColors = [chColors];

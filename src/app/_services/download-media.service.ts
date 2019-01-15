@@ -17,7 +17,12 @@ export class DownloadMediaService implements OnDestroy {
 			this.store.select(selectors.getCastById(ep.castID)).subscribe(cast => {
 				console.log(cast, ep);
 				const frm = document.querySelector('#dnframe').querySelector('form');
-				frm.elements['artist'].value = frm.elements['ttl'].value = cast.name;
+				if (cast.author) {
+					frm.elements['artist'].value = cast.author;
+				} else {
+					frm.elements['artist'].value = cast.name;
+				}
+				frm.elements['ttl'].value = cast.name;
 				frm.elements['img'].value = cast.imageURL;
 				frm.elements['lnk'].value = ep.mediaURL;
 				frm.elements['title'].value = ep.title;
