@@ -43,7 +43,9 @@ export class BoardCastsComponent implements OnInit {
 		if (e.target.options[0].value === '') {
 			e.target.remove(0);
 		}
-		this.category = e.target.value;
+		this.router.navigate(['dashboard'], {
+			queryParams: { category: e.target.value }
+		});
 	}
 
 	fetchCastsOfCategory() {

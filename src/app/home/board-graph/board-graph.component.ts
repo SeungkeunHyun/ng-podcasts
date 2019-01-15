@@ -5,34 +5,43 @@ import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/_store/app.reducer';
 import * as selectors from '../../_store/cast.selectors';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
-  selector: 'app-board-graph',
-  templateUrl: './board-graph.component.html',
-  styleUrls: ['./board-graph.component.css']
+	selector: 'app-board-graph',
+	templateUrl: './board-graph.component.html',
+	styleUrls: ['./board-graph.component.css']
 })
 export class BoardGraphComponent implements OnInit, OnDestroy, AfterViewInit {
-  categories: Category[];
-  catSubs: Subscription[];
-  selectedCategory: string;
-  l7dBuckets = [];
-  public statDataset: any;
-  public statData: Array<any> = [];
-  public statLabels: Array<any> = [];
-  public chartData: Array<any> = [];
-  public chartLabels: Array<any> = [];
-  public chartColors: Array<any> = null;
+	categories: Category[];
+	catSubs: Subscription[];
+	selectedCategory: string;
+	l7dBuckets = [];
+	public statDataset: any;
+	public statData: Array<any> = [];
+	public statLabels: Array<any> = [];
+	public chartData: Array<any> = [];
+	public chartLabels: Array<any> = [];
+	public chartColors: Array<any> = null;
 	public chartLoaded = false;
 	public chartOptions: any = {
 		responsive: true
 	};
 	constructor(
 		private store: Store<AppState>,
+		private router: Router,
 		private route: ActivatedRoute,
 		private castCommon: CastCommonService
 	) {
 		this.catSubs = [];
+		this.catSubs.push(
+			this.route.queryParams.subscribe(qry => {
+				console.log(qry);
+				if (qry['category']) {
+					this.selectedCategory = qry['category'];
+				}
+			})
+		);
 		this.catSubs.push(
 			this.route.data.subscribe(dat => {
 				this.l7dBuckets = dat.results.aggregations.range.buckets;
@@ -86,8 +95,9 @@ export class BoardGraphComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	public chartClicked(e: any): void {
 		const data = this.getDataOfEvent(e);
-		this.selectedCategory = data.label;
-		console.log(this.selectedCategory);
+		this.router.navigate(['dashboard'], {
+			queryParams: { category: data.label }
+		});
 	}
 
 	public chartHovered(e: any): void {}
