@@ -2,8 +2,8 @@ import { CastCommonService } from './../../_services/cast-common.service';
 import { Category } from 'src/app/_models/category.model';
 import { Router } from '@angular/router';
 import { Cast } from './../../_models/cast.model';
-import { Observable, Subject } from 'rxjs';
-import { Component, OnInit, Input } from '@angular/core';
+import { Observable, Subject, Subscription } from 'rxjs';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/_store/app.reducer';
 import * as selectors from '../../_store/cast.selectors';
@@ -13,11 +13,15 @@ import * as selectors from '../../_store/cast.selectors';
 	templateUrl: './board-casts.component.html',
 	styleUrls: ['./board-casts.component.css']
 })
-export class BoardCastsComponent implements OnInit {
+export class BoardCastsComponent implements OnInit, OnDestroy {
 	public _category: string;
 	public categories: Category[];
-	@Input()
+	subs: Subscription[] = [];
+	@Input('category')
 	set category(value: string) {
+		if (!value || value.length === 0) {
+			return;
+		}
 		this._category = value;
 		this.fetchCastsOfCategory();
 	}
@@ -34,15 +38,14 @@ export class BoardCastsComponent implements OnInit {
 			this.categories = this.castCommon.categories;
 			return;
 		}
-		this.castCommon.categories$.subscribe(
-			action => (this.categories = action.payload)
+		this.subs.push(
+			this.castCommon.categories$.subscribe(action => {
+				this.categories = action.payload;
+			})
 		);
 	}
 
 	selectCategory(e) {
-		if (e.target.options[0].value === '') {
-			e.target.remove(0);
-		}
 		this.router.navigate(['dashboard'], {
 			queryParams: { category: e.target.value }
 		});
@@ -56,8 +59,10 @@ export class BoardCastsComponent implements OnInit {
 
 	showCast(castId) {
 		console.log('cast id ' + castId);
-		this.router.navigate([
-			{ outlets: { modal: 'popup/' + castId } } // cast/' + castId + '/episodes' } }
-		]);
+		this.router.navigate([{ outlets: { modal: 'popup/' + castId } }]);
+	}
+
+	ngOnDestroy(): void {
+		this.subs.forEach(sub => sub.unsubscribe());
 	}
 }

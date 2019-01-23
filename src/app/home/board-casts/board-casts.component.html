@@ -1,44 +1,23 @@
 <div class="form-inline mb-1">
   <label class="mr-2" for="#selCategory">Category 선택</label>
-  <select
-    id="selCategory"
-    class="form-control pull-right"
-    name="selCategory"
-    (change)="selectCategory($event)"
-  >
-    <option value=""></option>
-    <option
-      *ngFor="let cat of categories"
-      [selected]="cat.key == _category"
-      value="{{ cat.key }}"
-      >{{ cat.key }} ({{ cat.doc_count }})</option
-    >
+  <select id="selCategory" class="form-control pull-right" name="selCategory" (change)="selectCategory($event)">
+    <option *ngIf="_category == null || _category == ''" value=""></option>
+    <option *ngFor="let cat of categories" [selected]="cat.key == _category" value="{{ cat.key }}">{{ cat.key }} ({{ cat.doc_count }})</option>
   </select>
 </div>
 <ul class="list-group">
-  <li
-    class="list-group-item mb-1"
-    (click)="showCast(cast.id)"
-    *ngFor="let cast of (castsOfCategory$ | async)"
-  >
+  <li class="list-group-item mb-1" (click)="showCast(cast.id)" *ngFor="let cast of (castsOfCategory$ | async)">
     <div class="media">
-      <img
-        class="d-flex mr-3 rounded"
-        width="60px"
-        src="{{ cast.imageURL }}"
-        alt="{{ cast.name }}"
-      />
+      <img class="d-flex mr-3 rounded" width="60px" src="{{ cast.imageURL }}" alt="{{ cast.name }}" />
       <div class="media-body">
         <div class="media-body">
           <h5>
             {{ cast.name }}
             <span class="badge badge-primary pull-right">{{
               cast.episodeCount
-            }}</span>
+              }}</span>
           </h5>
-          <small class="pull-right"
-            >Last published: {{ cast.lastPub | timeAgo }}</small
-          >
+          <small class="pull-right">Last published: {{ cast.lastPub | timeAgo }}</small>
         </div>
       </div>
     </div>

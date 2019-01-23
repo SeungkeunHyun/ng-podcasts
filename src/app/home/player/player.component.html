@@ -1,28 +1,67 @@
 <div class="row border rounded mt-2" *ngIf="episode">
   <div class="col-lg-1 col-sm-1">
-    <img id="imageInPlay" style="width:80px;height:80px" src="{{ (cast$ | async).imageURL }}" width="120px" class="zoom responsive mt-2 mr-1 rounded" />
-    <br /><small>{{ episode.pubDate }}</small>
+    <img
+      id="imageInPlay"
+      style="width:80px;height:80px"
+      src="{{ (cast$ | async).imageURL }}"
+      width="120px"
+      class="zoom responsive mt-2 mr-1 rounded"
+    />
+    <br /><small>{{ episode.pubDate | slice: 0:10 }}</small>
   </div>
   <div class="mt-2 col-sm-11">
-    <h6 class='mb-1'>
-      <span class='badge mr-2' [routerLink]="dashboard" [queryParams]="{category: (cast$|async).category}" [style.backgroundColor]="getCategoryColor((cast$|async).category)">{{(cast$|async).category}}</span>
+    <h6 class="mb-1">
+      <span
+        class="badge mr-2"
+        [routerLink]="dashboard"
+        [queryParams]="{ category: (cast$ | async).category }"
+        [style.backgroundColor]="getCategoryColor((cast$ | async).category)"
+        >{{ (cast$ | async).category }}</span
+      >
       <span class=" font-weight-bold" (click)="showCast()" id="castInPlay">{{
         (cast$ | async).name
-        }}</span>
+      }}</span>
       <br />{{ episode.title }}
     </h6>
-    <span *ngIf="episode.subtitle"><small>{{ episode.subtitle }}</small><br /></span>
+    <span *ngIf="episode.subtitle"
+      ><small [title]="episode.subtitle">{{ episode.subtitle }}</small
+      ><br
+    /></span>
     <div id="playerControllers" class="btn-group mb-2">
-      <button *ngFor="let c of controllers" mdbBtn mdbWavesEffect type="button" color="primary" rounded="true" (click)="controlPlayer(c)" class="btn btn-sm waves-effect" id="ctrl{{ c | uppercase }}">
+      <button
+        *ngFor="let c of controllers"
+        mdbBtn
+        mdbWavesEffect
+        type="button"
+        color="primary"
+        rounded="true"
+        (click)="controlPlayer(c)"
+        class="btn btn-sm waves-effect"
+        id="ctrl{{ c | uppercase }}"
+      >
         <i [class]="getIcon(c)"></i>
       </button>
-      <span class="ml-2 text-justify"><i class="fa fa-hourglass-start" aria-hidden="true"></i>
+      <span class="ml-2 text-justify"
+        ><i class="fa fa-hourglass-start" aria-hidden="true"></i>
         {{ this.player.currentTime | duration }} /
-        {{ this.player.duration | duration }}</span>
+        {{ this.player.duration | duration }}</span
+      >
     </div>
     <div id="divPlayer"></div>
-    <div id="divProgressWrapper" class="progress mb-2" (mouseenter)="getCursorTime($event)" (click)="movePlaytime($event)">
-      <div id="divProgress" class="progress-bar" role="progressbar" [attr.aria-valuenow]="this.player.currentTime" aria-valuemin="0" [attr.aria-valuemax]="this.player.duration"></div>
+    <div
+      id="divProgressWrapper"
+      class="progress mb-2"
+      (mouseenter)="getCursorTime($event)"
+      (click)="movePlaytime($event)"
+    >
+      <div
+        id="divProgress"
+        class="progress-bar"
+        role="progressbar"
+        [attr.aria-valuenow]="this.player.currentTime"
+        aria-valuemin="0"
+        [attr.aria-valuemax]="this.player.duration"
+      ></div>
     </div>
   </div>
 </div>
