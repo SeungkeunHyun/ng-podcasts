@@ -111,6 +111,6 @@ export const selectLatestEpisodes = createSelector(
 			// console.log(e1, e2);
 			return new Date(e2.pubDate).getTime() - new Date(e1.pubDate).getTime();
 		});
-		return episodes.slice(0, 10);
+		return episodes.slice(0, 15);
 	}
 );
