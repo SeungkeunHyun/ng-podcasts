@@ -17,7 +17,7 @@ export class CastResolver implements Resolve<any> {
 	): Observable<any> {
 		return this.elastic.search('casts', {
 			from: 0,
-			size: 2000,
+			size: 5000,
 			query: {
 				has_parent: {
 					parent_type: 'cast',
