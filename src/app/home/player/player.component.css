@@ -10,3 +10,8 @@
 .zoom:hover {
   transform: scale(3);
 }
+
+span.badge:hover,
+#castInPlay:hover {
+  cursor: pointer
+}

@@ -23,8 +23,13 @@
         <div *dropdownMenu class="dropdown-menu dropdown dropdown-primary" role="menu">
           <ul class='list-group' *ngFor="let bm of bookmarks">
             <li class='list-group-item'>
-              <span class="dropdown-item waves-light" mdbWavesEffect (click)="playCast(bm)" title="{{bm.episode.title}}">{{ bm.episode.title | slice:0:25 }} ({{ bm.pausedAt | duration}})</span>
-              <fa name="trash-o" class='pull-right' (click)="deleteBookmark(bm.episode)" aria-hidden="true"></fa>
+              <div class='media'>
+                <img height="50" [src]="(getCastById(bm.episode.castID) | async).imageURL" [title]="(getCastById(bm.episode.castID) | async).name">
+                <div class='media-body'>
+                  <span class="dropdown-item waves-light" mdbWavesEffect (click)="playCast(bm)" title="{{bm.episode.title}}">{{ bm.episode.title | slice:0:25 }} ({{ bm.pausedAt | duration}})</span>
+                  <fa name="trash-o" class='pull-right' (click)="deleteBookmark(bm.episode)" aria-hidden="true"></fa>
+                </div>
+              </div>
             </li>
           </ul>
         </div>

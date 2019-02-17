@@ -1,3 +1,4 @@
+import * as selectors from './../_store/cast.selectors';
 import { Episode } from 'src/app/_models/episode.model';
 import { EpisodePlayerService } from 'src/app/_services/episode-player.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -52,6 +53,10 @@ export class NavComponent implements OnInit {
 				return b.storedAt - a.storedAt;
 			});
 		}
+	}
+
+	getCastById(castId: string) {
+		return this.store.select(selectors.getCastById(castId));
 	}
 
 	playCast(bm) {
