@@ -31,23 +31,26 @@ export class PlayerComponent implements OnInit, OnDestroy, AfterViewInit {
   durpipe = new DurationPipe();
   controllers = ['fb', 'b', 'p', 'f', 'ff', 'dn'];
   constructor(
-		private store: Store<AppState>,
-		private router: Router,
-		private playService: EpisodePlayerService,
-		private http: HttpClient,
-		private dlService: DownloadMediaService,
-		private castCommon: CastCommonService
-	) {
-		this.percent = new Subject<number>();
-	}
+    private store: Store<AppState>,
+    private router: Router,
+    private playService: EpisodePlayerService,
+    private http: HttpClient,
+    private dlService: DownloadMediaService,
+    private castCommon: CastCommonService
+  ) {
+    this.percent = new Subject<number>();
+  }
 
-	ngAfterViewInit() {
-		console.log('after view init');
-		this.setupPlayer();
-	}
+  ngAfterViewInit() {
+    console.log('after view init');
+    this.setupPlayer();
+  }
 
-	ngOnInit() {
+  ngOnInit() {
 		this.subs = this.playService.subject.subscribe(ep => {
+			if (this.episode) {
+				this.storePausedEpisode();
+			}
 			this.episode = ep;
 			this.cast$ = this.store.select(
 				selectors.getCastById(this.episode.castID)
@@ -112,9 +115,6 @@ export class PlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 			return;
 		}
 		console.log('player', this.player);
-		this.player.onplay = () => {
-			console.log('player started!');
-		};
 		this.player.ontimeupdate = () => {
 			const pct = this.getProgressPct();
 			const $pgbar = $('#divProgress');
@@ -124,25 +124,20 @@ export class PlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 		this.player.onended = () => {
 			this.deleteEndedEpisode();
 		};
+		this.player.onplay = () => {
+			$('#ctrlP i')
+				.removeClass('fa-play')
+				.addClass('fa-pause');
+		};
 		this.player.onpause = () => {
 			console.log('player paused');
 			$('#ctrlP i')
 				.removeClass('fa-pause')
 				.addClass('fa-play');
-			const history = {
-				episode: this.episode,
-				pausedAt: this.player.currentTime,
-				storedAt: new Date().getTime()
-			};
-			this.storePausedEpisode(history);
+			this.storePausedEpisode();
 		};
 		this.player.onabort = () => {
-			const history = {
-				episode: this.episode,
-				pausedAt: this.player.currentTime,
-				storedAt: new Date().getTime()
-			};
-			this.storePausedEpisode(history);
+			this.storePausedEpisode();
 		};
 	}
 
@@ -178,7 +173,15 @@ export class PlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 		return null;
 	}
 
-	storePausedEpisode(hist) {
+	storePausedEpisode() {
+		if (!this.episode) {
+			return;
+		}
+		const hist = {
+			episode: this.episode,
+			pausedAt: this.player.currentTime,
+			storedAt: new Date().getTime()
+		};
 		const strBookmarks = localStorage.getItem('bookmarks');
 		let bookmarks = {};
 		if (!strBookmarks) {
@@ -258,12 +261,7 @@ export class PlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	ngOnDestroy() {
 		if (this.player) {
-			const hist = {
-				episode: this.episode,
-				pausedAt: this.player.currentTime
-			};
-			console.log(hist);
-			this.storePausedEpisode(hist);
+			this.storePausedEpisode();
 		}
 		this.subs.unsubscribe();
 	}
