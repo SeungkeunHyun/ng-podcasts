@@ -1,3 +1,4 @@
+import { ElasticService } from './../../_services/elastic.service';
 import { EpisodePlayerService } from './../../_services/episode-player.service';
 import { Episode } from './../../_models/episode.model';
 import { Observable, Subscription } from 'rxjs';
@@ -9,16 +10,34 @@ import * as selectors from '../../_store/cast.selectors';
 @Component({
 	selector: 'app-board-latest',
 	templateUrl: './board-latest.component.html',
-	styleUrls: [ './board-latest.component.css' ]
+	styleUrls: ['./board-latest.component.css']
 })
 export class BoardLatestComponent implements OnInit, OnDestroy {
-	latestEpisodes: Observable<Episode[]>;
+	latestEpisodes: Episode[];
 	subs: Subscription[] = [];
-	constructor(private store: Store<AppState>, private playService: EpisodePlayerService) {}
+	ep_label = 'Latest';
+	constructor(
+		private store: Store<AppState>,
+		private playService: EpisodePlayerService,
+		private elasticService: ElasticService
+	) {
+		this.subs.push(
+			this.elasticService.episodes.subscribe(episodes => {
+				this.latestEpisodes = episodes;
+			})
+		);
+		this.subs.push(
+			this.elasticService.ep_label.subscribe(
+				ep_label => (this.ep_label = ep_label)
+			)
+		);
+	}
 
 	ngOnInit() {
-		const sub = this.store.select('casts').subscribe((casts) => {
-			this.latestEpisodes = this.store.select(selectors.selectLatestEpisodes);
+		const sub = this.store.select('casts').subscribe(casts => {
+			this.store.select(selectors.selectLatestEpisodes).subscribe(eps => {
+				this.latestEpisodes = eps;
+			});
 		});
 		this.subs.push(sub);
 	}

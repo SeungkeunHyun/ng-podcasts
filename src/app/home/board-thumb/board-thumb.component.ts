@@ -8,14 +8,15 @@ import * as selectors from '../../_store/cast.selectors';
 @Component({
 	selector: 'app-board-thumb',
 	templateUrl: './board-thumb.component.html',
-	styleUrls: [ './board-thumb.component.css' ]
+	styleUrls: ['./board-thumb.component.css']
 })
 export class BoardThumbComponent implements OnInit {
-	@Input() catId: string;
+	@Input() castId: string;
 	castInfo$: Observable<Cast>;
 	constructor(private store: Store<AppState>) {}
 
 	ngOnInit() {
-		this.castInfo$ = this.store.select(selectors.getCastById(this.catId));
+		console.log('cast thumb', this.castId);
+		this.castInfo$ = this.store.select(selectors.getCastById(this.castId));
 	}
 }

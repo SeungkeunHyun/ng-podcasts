@@ -8,7 +8,7 @@
   </ngb-tab>
   <ngb-tab title='일주일간 Episode 등록건수'>
     <ng-template ngbTabContent>
-      <canvas mdbChart chartType="bar" [datasets]="statDataset" [labels]="statLabels" [colors]="chartColors" [options]="chartOptions" [legend]="true" (chartHover)="chartHovered($event)">
+      <canvas mdbChart chartType="bar" [datasets]="statDataset" [labels]="statLabels" [colors]="chartColors" [options]="chartOptions" [legend]="true" (chartHover)="chartHovered($event)" (chartClick)="barchartClicked($event)">
       </canvas>
     </ng-template>
   </ngb-tab>
