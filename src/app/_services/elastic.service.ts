@@ -8,10 +8,10 @@ import { Episode } from '../_models/episode.model';
 export class ElasticService {
 	private client: Client;
 	public episodes: Subject<Episode[]>;
-	public ep_label: Subject<String>;
+	public ep_label: Subject<string>;
 	constructor() {
 		this.episodes = new Subject<Episode[]>();
-		this.ep_label = new Subject<String>();
+		this.ep_label = new Subject<string>();
 		if (!this.client) {
 			this.connect();
 		}
