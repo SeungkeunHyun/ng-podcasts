@@ -20,7 +20,7 @@ export class BoardGraphComponent implements OnInit, OnDestroy, AfterViewInit {
   l7dBuckets = [];
   public statDataset: any;
   public statData: Array<any> = [];
-	public statLabels: Array<any> = [];
+  public statLabels: Array<any> = [];
 	public chartData: Array<any> = [];
 	public chartLabels: Array<any> = [];
 	public chartColors: Array<any> = null;
@@ -110,7 +110,10 @@ export class BoardGraphComponent implements OnInit, OnDestroy, AfterViewInit {
 			new Date().getFullYear() +
 			'/' +
 			data.label.replace(/(\d+)\/(\d+).+/, '$1/$2');
-		dtstr = dtstr.replace(/\/(\d)(\D)/g, '/0$1$2');
+		dtstr = dtstr
+			.split('/')
+			.map(num => (num.length === 1 ? '0' + num : num))
+			.join('/');
 		console.log('clicked data', data, dtstr);
 		const qry = {
 			from: 0,
