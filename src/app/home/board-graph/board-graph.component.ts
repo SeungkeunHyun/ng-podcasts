@@ -108,12 +108,10 @@ export class BoardGraphComponent implements OnInit, OnDestroy, AfterViewInit {
 		const data = this.getDataOfEvent(e);
 		let dtstr =
 			new Date().getFullYear() +
-			'-' +
-			data.label.replace(/(\d+)\/(\d+).+/, '$1-$2');
-		dtstr = new Date(dtstr)
-			.toISOString()
-			.substring(0, 10)
-			.replace(/-/g, '/');
+			'/' +
+			data.label.replace(/(\d+)\/(\d+).+/, '$1/$2');
+		dtstr = dtstr.replace(/\/(\d)(\D)/g, '/0$1$2');
+		console.log('clicked data', data, dtstr);
 		const qry = {
 			from: 0,
 			size: 500,
@@ -147,10 +145,11 @@ export class BoardGraphComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	getDataOfEvent(e: any) {
 		if (e.active) {
+			const idx = e.active[0]._index;
+			console.log('chart index', idx);
 			const eventData = {
-				label: e.active[0]._chart.config.data.labels[e.active[0]._index],
-				data:
-					e.active[0]._chart.config.data.datasets[0].data[e.active[0]._index]
+				label: e.active[0]._chart.config.data.labels[idx],
+				data: e.active[0]._chart.config.data.datasets[0].data[idx]
 			};
 			return eventData;
 		}

@@ -16,7 +16,7 @@ export class BoardThumbComponent implements OnInit {
 	constructor(private store: Store<AppState>) {}
 
 	ngOnInit() {
-		console.log('cast thumb', this.castId);
+		// console.log('cast thumb', this.castId);
 		this.castInfo$ = this.store.select(selectors.getCastById(this.castId));
 	}
 }
