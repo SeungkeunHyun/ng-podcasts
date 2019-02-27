@@ -21,16 +21,16 @@ export class BoardGraphComponent implements OnInit, OnDestroy, AfterViewInit {
   public statDataset: any;
   public statData: Array<any> = [];
   public statLabels: Array<any> = [];
-	public chartData: Array<any> = [];
-	public chartLabels: Array<any> = [];
-	public chartColors: Array<any> = null;
-	public chartLoaded = false;
-	public chartOptions: any = {
-		responsive: true
-	};
-	constructor(
-		private store: Store<AppState>,
-		private router: Router,
+  public chartData: Array<any> = [];
+  public chartLabels: Array<any> = [];
+  public chartColors: Array<any> = null;
+  public chartLoaded = false;
+  public chartOptions: any = {
+    responsive: true
+  };
+  constructor(
+    private store: Store<AppState>,
+    private router: Router,
 		private route: ActivatedRoute,
 		private castCommon: CastCommonService,
 		private elasticService: ElasticService
@@ -99,6 +99,9 @@ export class BoardGraphComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	public chartClicked(e: any): void {
 		const data = this.getDataOfEvent(e);
+		if (!data) {
+			return;
+		}
 		this.router.navigate(['dashboard'], {
 			queryParams: { category: data.label }
 		});
@@ -106,6 +109,9 @@ export class BoardGraphComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	public barchartClicked(e: any): void {
 		const data = this.getDataOfEvent(e);
+		if (!data) {
+			return;
+		}
 		let dtstr =
 			new Date().getFullYear() +
 			'/' +
@@ -147,7 +153,7 @@ export class BoardGraphComponent implements OnInit, OnDestroy, AfterViewInit {
 	public chartHovered(e: any): void {}
 
 	getDataOfEvent(e: any) {
-		if (e.active) {
+		if (e.active.length) {
 			const idx = e.active[0]._index;
 			console.log('chart index', idx);
 			const eventData = {
