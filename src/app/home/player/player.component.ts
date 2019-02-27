@@ -47,7 +47,7 @@ export class PlayerComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit() {
-		this.subs = this.playService.subject.subscribe(ep => {
+    this.subs = this.playService.subject.subscribe(ep => {
 			if (this.episode) {
 				this.storePausedEpisode();
 			}
@@ -122,23 +122,29 @@ export class PlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 			$pgbar.text(pct + '%');
 		};
 		this.player.onended = () => {
+			this.togglePlaybutton(!this.player.paused);
 			this.deleteEndedEpisode();
 		};
 		this.player.onplay = () => {
-			$('#ctrlP i')
-				.removeClass('fa-play')
-				.addClass('fa-pause');
+			this.togglePlaybutton(!this.player.paused);
 		};
 		this.player.onpause = () => {
 			console.log('player paused');
-			$('#ctrlP i')
-				.removeClass('fa-pause')
-				.addClass('fa-play');
+			this.togglePlaybutton(!this.player.paused);
 			this.storePausedEpisode();
 		};
-		this.player.onabort = () => {
+		this.player.onabort = this.player.onerror = () => {
+			this.togglePlaybutton(!this.player.paused);
 			this.storePausedEpisode();
 		};
+	}
+
+	togglePlaybutton(onAir: boolean) {
+		const rmclass = onAir ? 'fa-play' : 'fa-pause';
+		const addclass = onAir ? 'fa-pause' : 'fa-play';
+		$('#ctrlP i')
+			.removeClass(rmclass)
+			.addClass(addclass);
 	}
 
 	deleteEndedEpisode() {
