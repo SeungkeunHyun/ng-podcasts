@@ -5,6 +5,7 @@ import * as selectors from '../_store/cast.selectors';
 import { Episode } from '../_models/episode.model';
 import { Subscription } from 'rxjs';
 
+// TODO: Add Angular decorator.
 @Injectable({
 	providedIn: 'root'
 })

@@ -14,7 +14,7 @@ import { AlertifyService } from '../_services/alertify.service';
 	styleUrls: ['./nav.component.css']
 })
 export class NavComponent implements OnInit {
-	@ViewChild('searchWord') searchWord;
+	@ViewChild('searchWord', { static: true }) searchWord;
 	bookmarks = null;
 	constructor(
 		private store: Store<AppState>,

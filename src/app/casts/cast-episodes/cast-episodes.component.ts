@@ -25,7 +25,7 @@ import * as fromActions from '../../_store/cast.action';
 })
 export class CastEpisodesComponent implements OnInit, OnDestroy, AfterViewInit {
 	@Output() modalClose: EventEmitter<any> = new EventEmitter<any>();
-	@ViewChild('basicModal') basicModal;
+	@ViewChild('basicModal', { static: true }) basicModal;
 	dtSubject: Subject<Episode[]>;
 	cast$: Observable<Cast>;
 	castID: string;

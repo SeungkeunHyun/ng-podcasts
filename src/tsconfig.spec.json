@@ -1,6 +1,7 @@
 {
-  "extends": "../tsconfig.json",
+  "extends": "../tsconfig.base.json",
   "compilerOptions": {
+    "enableIvy": false,
     "outDir": "../out-tsc/spec",
     "types": [
       "jasmine",

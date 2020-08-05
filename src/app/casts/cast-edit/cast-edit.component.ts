@@ -27,7 +27,7 @@ export class CastEditComponent implements OnInit, OnDestroy, AfterViewInit {
 	categories: Category[];
 	subsParam: Subscription;
 	subsCast: Subscription;
-	@ViewChild('f') castForm: FormGroup;
+	@ViewChild('f', { static: true }) castForm: FormGroup;
 	constructor(
 		private route: ActivatedRoute,
 		private router: Router,

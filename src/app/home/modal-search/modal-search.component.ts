@@ -25,7 +25,7 @@ import { AlertifyService } from 'src/app/_services/alertify.service';
 	styleUrls: ['./modal-search.component.css']
 })
 export class ModalSearchComponent implements OnInit, AfterViewInit, OnDestroy {
-	@ViewChild('basicModal') basicModal;
+	@ViewChild('basicModal', { static: true }) basicModal;
 	@Output() modalClose: EventEmitter<any> = new EventEmitter<any>();
 	searchWord: string;
 	dicCast: {};

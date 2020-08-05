@@ -15,7 +15,7 @@ import 'datatables.net';
 	styleUrls: [ './main.component.css' ]
 })
 export class MainComponent implements OnInit, OnDestroy, AfterViewInit {
-	@ViewChild(DataTableDirective) dtElement: DataTableDirective;
+	@ViewChild(DataTableDirective, {static: true}) dtElement: DataTableDirective;
 
 	casts$: any;
 	subject = new Subject<Cast[]>();

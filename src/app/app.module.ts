@@ -40,7 +40,6 @@ import { ModalComponent } from './home/modal/modal.component';
 import { FooterComponent } from './home/footer/footer.component';
 import { PlayerComponent } from './home/player/player.component';
 import { TimeAgoPipe } from 'time-ago-pipe';
-import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { PagingComponent } from './common/paging/paging.component';
 import {
 	ButtonsModule,
@@ -94,7 +93,6 @@ import { DownloadFrameComponent } from './common/download-frame/download-frame.c
 		StoreDevtoolsModule.instrument({
 			maxAge: 25
 		}),
-		AngularFontAwesomeModule,
 		ButtonsModule,
 		WavesModule,
 		CollapseModule,
