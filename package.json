@@ -47,8 +47,8 @@
   },
   "devDependencies": {
     "@angular/cli": "^9.1.12",
-    "@angular/compiler-cli": "^10.0.7",
-    "@angular/language-service": "^10.0.7",
+    "@angular/compiler-cli": "^10.0.8",
+    "@angular/language-service": "^10.0.8",
     "@ngrx/store-devtools": "^6.1.2",
     "@types/datatables.net": "^1.10.19",
     "@types/jasmine": "^2.8.17",
